@@ -28,9 +28,13 @@ class Song(BaseModel):
     title: str
     artists: List[Artist]
 
+class Genre(BaseModel):
+    title: str
+
 
 class Album(BaseModel):
     title: str
-    genre: str
+    artist: Artist
+    genre: Genre
     release_date: date
     songs: List[Song]

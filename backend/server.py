@@ -1,7 +1,7 @@
 import datetime
 from typing import Optional
 from fastapi import FastAPI
-from models import BaseUser, PasswordUser, PrivateUser, PublicUser, Song, Artist, Album
+from models import BaseUser, PasswordUser, PrivateUser, PublicUser, Song, Artist, Album, Genre
 
 app = FastAPI()
 
@@ -30,3 +30,16 @@ def get_song_by_id(song_id: int) -> Song:
     song = Song(title='Nothing Else Matters', artists=[artist])
 
     return song
+
+@app.get('/albums/{album_id}', response_model=Album)
+def get_album_by_id(album_id: int) -> Album:
+    artist = Artist(name='Metallica')
+
+    songs = [
+        Song(title='Nothing Else Matters', artists=[artist]),
+        Song(title='Sad But True', artists=[artist]),
+    ]
+
+    album = Album(title='Metallica', artist= artist, genre=Genre(title='Metal'), songs=songs, release_date=datetime.date(1991, 8, 12))
+
+    return album
