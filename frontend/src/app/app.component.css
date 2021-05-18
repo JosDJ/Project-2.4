@@ -1,0 +1,10 @@
+.mainscreen {
+    height: 90vh;
+    background-color: coral;
+  }
+
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+  
