@@ -2,23 +2,22 @@ from pydantic import BaseModel
 from typing import Optional, List
 from datetime import date
 
+class Token(BaseModel):
+    access_token: str
+    token_type: str
 
-class BaseUser(BaseModel):
+class UserCredentials(BaseModel):
     email: str
-
-
-class PasswordUser(BaseUser):
     password: str
 
+class User(BaseModel):
+    email: str
+    birthday: Optional[date]
+    country: Optional[str]
 
-class PublicUser(BaseUser):
-    birthday: date
-    country: str
 
-
-class PrivateUser(PublicUser, PasswordUser):
-    pass
-
+class UserWithPassword(User):
+    hashed_password: str
 
 class Artist(BaseModel):
     name: str
