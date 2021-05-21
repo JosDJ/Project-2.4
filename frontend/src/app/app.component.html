@@ -12,21 +12,13 @@
     </body>
 
     <div class="bottomrow">
-        <mat-grid-list cols="2" rowHeight="{{desired_rowHeight}}" gutterSize="0">
-            <mat-grid-tile>
-                <div class="toprow">
-                    <app-musicplayerbuttons></app-musicplayerbuttons>
-                </div>
+        <mat-grid-list cols="10" rowHeight="{{desired_rowHeight}}" gutterSize="0">
+            <mat-grid-tile colspan="3">
+                <app-musicplayerbuttons></app-musicplayerbuttons>
             </mat-grid-tile>
-            <mat-grid-tile>
-                <div class="toprow">
-                    <app-musicplayertimer></app-musicplayertimer>
-                </div>
+            <mat-grid-tile colspan="7">
+                <app-musicplayertimer></app-musicplayertimer>
             </mat-grid-tile>
         </mat-grid-list>
     </div>
 </div>
-
-
-
-

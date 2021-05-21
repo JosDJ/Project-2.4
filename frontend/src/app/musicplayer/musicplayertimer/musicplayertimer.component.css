@@ -54,3 +54,11 @@
     text-align: left;
   }
   }
+
+  label{
+    color: white;
+  }
+
+  progress{
+      width: 300px;
+  }
