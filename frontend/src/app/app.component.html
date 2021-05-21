@@ -5,18 +5,16 @@
 
     <body>
     <div class="mainscreen">
-        <h1>testtesttesttesttesttesttesttest</h1>
-
-        <p>testtesttesttesttesttesttesttest</p>
+        <app-home></app-home>
     </div>
     </body>
 
     <div class="bottomrow">
         <mat-grid-list cols="10" rowHeight="{{desired_rowHeight}}" gutterSize="0">
-            <mat-grid-tile colspan="3">
+            <mat-grid-tile colspan="5">
                 <app-musicplayerbuttons></app-musicplayerbuttons>
             </mat-grid-tile>
-            <mat-grid-tile colspan="7">
+            <mat-grid-tile colspan="5">
                 <app-musicplayertimer></app-musicplayertimer>
             </mat-grid-tile>
         </mat-grid-list>

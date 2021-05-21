@@ -5,11 +5,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { NavigationbarModule } from './navigationbar/navigationbar.module';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MainscreenModule } from './mainscreen/mainscreen.module';
 import { MusicplayerModule } from './musicplayer/musicplayer.module';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
-import {MatGridListModule} from '@angular/material/grid-list';
+import { MatGridListModule } from '@angular/material/grid-list';
+
 
 @NgModule({
   declarations: [
@@ -23,6 +25,7 @@ import {MatGridListModule} from '@angular/material/grid-list';
     MusicplayerModule,
     MatSliderModule,
     MatGridListModule,
+    MainscreenModule
   ],
   providers: [],
   bootstrap: [AppComponent]

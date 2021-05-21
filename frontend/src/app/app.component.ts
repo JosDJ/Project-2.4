@@ -9,4 +9,6 @@ export class AppComponent {
   title = 'frontend';
 
   desired_rowHeight = '3rem';
+
+  
 }
