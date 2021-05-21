@@ -1,0 +1,5 @@
+/* Add a black background color to the bottom music player */
+.bottomplayer {
+    background-color: #333;
+    overflow: hidden;
+  }
