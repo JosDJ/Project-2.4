@@ -10,6 +10,10 @@ import { MusicplayerbuttonsComponent } from './musicplayerbuttons/musicplayerbut
     MusicplayertimerComponent,
     MusicplayerbuttonsComponent
   ],
+  exports: [
+    MusicplayertimerComponent,
+    MusicplayerbuttonsComponent
+  ],
   imports: [
     CommonModule
   ]

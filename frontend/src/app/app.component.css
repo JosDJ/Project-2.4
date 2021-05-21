@@ -1,5 +1,6 @@
 .mainscreen {
-    height: 90vh;
+    /* height: 70vh; */
+    height: calc(100vh - 6rem);
     background-color: coral;
   }
 
@@ -8,3 +9,6 @@
     margin: 0;
   }
   
+  mat-grid-tile {
+    background: #333;
+  }

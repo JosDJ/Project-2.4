@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="row">
+    <div class="toprow">
         <app-navigationbuttons></app-navigationbuttons>
     </div>
 
@@ -11,9 +11,22 @@
     </div>
     </body>
 
-    <!-- <div class="row">
-        hier komt de musicplayer
-    </div> -->
+    <div class="bottomrow">
+        <mat-grid-list cols="2" rowHeight="{{desired_rowHeight}}" gutterSize="0">
+            <mat-grid-tile>
+                <div class="toprow">
+                    <app-musicplayerbuttons></app-musicplayerbuttons>
+                </div>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <div class="toprow">
+                    <app-musicplayertimer></app-musicplayertimer>
+                </div>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
 </div>
+
+
 
 

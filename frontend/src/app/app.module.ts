@@ -6,6 +6,10 @@ import { AppComponent } from './app.component';
 
 import { NavigationbarModule } from './navigationbar/navigationbar.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MusicplayerModule } from './musicplayer/musicplayer.module';
+
+import { MatSliderModule } from '@angular/material/slider';
+import {MatGridListModule} from '@angular/material/grid-list';
 
 @NgModule({
   declarations: [
@@ -15,7 +19,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrowserModule,
     AppRoutingModule,
     NavigationbarModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MusicplayerModule,
+    MatSliderModule,
+    MatGridListModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
