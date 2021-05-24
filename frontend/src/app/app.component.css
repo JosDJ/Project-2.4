@@ -1,10 +1,13 @@
 .mainscreen {
-    height: 90vh;
-    background-color: coral;
-  }
+  height: calc(100vh - 6rem);
+  background-color: rgb(114, 67, 49);
+}
 
-  html, body {
-    height: 100%;
-    margin: 0;
-  }
-  
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+mat-grid-tile {
+  background: #333;
+}

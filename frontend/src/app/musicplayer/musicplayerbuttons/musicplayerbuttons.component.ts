@@ -7,9 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MusicplayerbuttonsComponent implements OnInit {
 
+  showFirst!: boolean;
+
   constructor() { }
 
   ngOnInit(): void {
   }
-
 }

@@ -5,6 +5,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { NavigationbarModule } from './navigationbar/navigationbar.module';
+import { MainscreenModule } from './mainscreen/mainscreen.module';
+import { MusicplayerModule } from './musicplayer/musicplayer.module';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatGridListModule } from '@angular/material/grid-list';
+
 
 @NgModule({
   declarations: [
@@ -13,7 +20,12 @@ import { NavigationbarModule } from './navigationbar/navigationbar.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NavigationbarModule
+    NavigationbarModule,
+    BrowserAnimationsModule,
+    MusicplayerModule,
+    MatSliderModule,
+    MatGridListModule,
+    MainscreenModule
   ],
   providers: [],
   bootstrap: [AppComponent]
