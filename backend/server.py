@@ -1,6 +1,8 @@
 from datetime import timedelta
 import datetime
 from typing import List, Optional
+import pathlib
+import uuid
 
 from fastapi import Depends, FastAPI, File, HTTPException, UploadFile, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -8,7 +10,7 @@ from jose import JWTError, jwt
 from jose.constants import ALGORITHMS
 from passlib.context import CryptContext
 
-from models import UserWithPassword, User, Song, Artist, Album, Genre, UserCredentials
+from models import UserWithPassword, User, Song, Artist, Album, Genre, UserCredentials, SongPath
 
 # openssl rand -hex 32
 SECRET_KEY = 'a25570ca1b7c0a5ae1e0d2d0a542746e0a78ef042bd08de3644a556eafc45ea6'
@@ -17,6 +19,10 @@ ACCESS_TOKEN_EXPIRES_MINUTES = 30
 
 pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
+
+# create music directory if it doesn't exist already
+MUSIC_DIRECTORY = pathlib.Path(__file__).parent / 'data'
+MUSIC_DIRECTORY.mkdir(exist_ok=True, parents=True)
 
 app = FastAPI()
 
@@ -76,15 +82,33 @@ async def get_song_by_id(song_id: int) -> Song:
 
     return song
 
+saved_songs = {
 
-@app.post('/songs/upload', status_code=status.HTTP_201_CREATED)
-async def upload_songs(files: List[UploadFile] = File(None)):
+}
+
+async def save_song_to_disk(file: UploadFile = File(None)) -> SongPath:
+    filename = f'{uuid.uuid4().hex}.mp3'
+    
+    filepath = pathlib.Path(f'{MUSIC_DIRECTORY}/{filename}')
+
+    with open(filepath, 'wb+') as f:
+        f.write(file.file.read())
+
+    res = SongPath() # TODO: fix this
+
+    return res
+
+
+@app.post('/songs/upload', status_code=status.HTTP_201_CREATED, response_model=Song)
+async def upload_song(title: str, file: UploadFile = File(None)):
     # this api end point requires you to use Content-Type: multipart/form-data
-    # TODO: save files
+    # TODO: save file to disk
 
-    return {
-        'filenames': [file.filename for file in files]
-    }
+    artists = [Artist(name="Metallica")]
+
+    song = await save_song_to_disk(title, artists, file)
+
+    return song
 
 
 @app.get('/albums/{album_id}', response_model=Album)

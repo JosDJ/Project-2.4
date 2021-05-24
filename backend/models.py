@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional, List
 from datetime import date
+from pathlib import Path
 
 class Token(BaseModel):
     access_token: str
@@ -26,6 +27,10 @@ class Artist(BaseModel):
 class Song(BaseModel):
     title: str
     artists: List[Artist]
+
+class SongPath(BaseModel):
+    song_id: int
+    filepath: Path
 
 class Genre(BaseModel):
     title: str
