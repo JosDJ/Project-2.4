@@ -10,6 +10,7 @@ from jose import JWTError, jwt
 from jose.constants import ALGORITHMS
 
 import pydantic_schemas
+import models
 import database
 
 # openssl rand -hex 32
@@ -76,12 +77,11 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> pydantic_sche
         raise credentials_exception
 
 
-# @app.get('/users/{user_id}', response_model=User)
-# async def get_user_by_id(user_id: int) -> User:
-#     user = User(email='d.p.reitsma@gmail.com',
-#                       birthday=datetime.date(1998, 4, 5), country='The Netherlands')
+@app.get('/users/{user_id}', response_model=pydantic_schemas.User)
+async def get_user_by_id(user_id: int) -> pydantic_schemas.User:
+    user = database.get_user_by_id(user_id)
 
-#     return user
+    return pydantic_schemas.User.from_orm(user)
 
 
 # @app.post('/users/register', response_model=DbUser)
@@ -128,17 +128,9 @@ async def upload_song_file(file: UploadFile = File(None)):
 
 @app.get('/albums/{album_id}', response_model=pydantic_schemas.Album)
 async def get_album_by_id(album_id: int) -> pydantic_schemas.Album:
-    artist = pydantic_schemas.Artist(name='Metallica')
+    album = database.get_album_by_id(album_id)
 
-    songs = [
-        pydantic_schemas.Song(title='Nothing Else Matters', artists=[artist]),
-        pydantic_schemas.Song(title='Sad But True', artists=[artist]),
-    ]
-
-    album = pydantic_schemas.Album(title='Metallica', artist=artist, genre=pydantic_schemas.Genre(
-        title='Metal'), release_date=datetime.date(1991, 8, 12))
-
-    return album
+    return pydantic_schemas.Album.from_orm(album)
 
 
 @app.post('/albums/create', response_model=pydantic_schemas.Album)
