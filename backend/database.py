@@ -1,6 +1,10 @@
 from config import config
 
-from models import *
+import models
+from models import Base
+
+import schemas
+
 from passlib.context import CryptContext
 from typing import Optional, List
 
@@ -32,13 +36,17 @@ users = [
 ]
 
 
-def get_user(email: str) -> Optional[User]:
-    for u in users:
-        if u["email"] == email:
-            return User(**u)
+def get_user(email: str) -> Optional[models.User]:
+    s = Session()
+
+    user = s.query(models.User).filter_by(email=email).first()
+
+    s.close()
+
+    return user
 
 
-def validate_user(email: str, password: str) -> Optional[User]:
+def validate_user(email: str, password: str) -> Optional[models.User]:
     if user := get_user(email):
         if verify_password(password, user.hashed_password):
             return user

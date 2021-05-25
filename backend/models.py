@@ -1,19 +1,8 @@
-from os import name
-from pydantic import BaseModel
-from typing import Optional, List
-from datetime import date
-from pathlib import Path
-
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy import Column, Integer, String, Date
 from sqlalchemy.sql.schema import ForeignKey
 
 Base = declarative_base()
-
-
-class Token(BaseModel):
-    access_token: str
-    token_type: str
 
 
 class User(Base):

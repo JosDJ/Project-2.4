@@ -9,7 +9,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from jose.constants import ALGORITHMS
 
-from schemas import Album, Token, Song, Artist, Genre, User, RegistrationUser
+from pydantic_schemas import Album, Token, Song, Artist, Genre, User, RegistrationUser
 
 import database
 
@@ -58,7 +58,7 @@ async def register(user_data: RegistrationUser):
             headers={"WWW-Authenticate": "Bearer"}
         )
 
-    user = 
+    user = User()
 
     pass
 
