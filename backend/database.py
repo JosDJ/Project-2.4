@@ -28,14 +28,6 @@ def get_password_hash(password) -> str:
     return pwd_context.hash(password)
 
 
-users = [
-    {
-        'email': 'd.p.reitsma@gmail.com',
-        'hashed_password': get_password_hash('qwerty123')
-    }
-]
-
-
 def get_user(email: str) -> Optional[models.User]:
     s = Session()
 
