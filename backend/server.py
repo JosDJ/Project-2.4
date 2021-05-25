@@ -135,7 +135,7 @@ async def get_album_by_id(album_id: int) -> pydantic_schemas.Album:
         pydantic_schemas.Song(title='Sad But True', artists=[artist]),
     ]
 
-    album = pydantic_schemas.Album(title='Metallica', artist=artist, genre=Genre(
+    album = pydantic_schemas.Album(title='Metallica', artist=artist, genre=pydantic_schemas.Genre(
         title='Metal'), release_date=datetime.date(1991, 8, 12))
 
     return album
