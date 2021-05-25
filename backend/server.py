@@ -1,5 +1,6 @@
 from datetime import timedelta
 import datetime
+from os import stat
 from typing import List, Optional
 import pathlib
 import uuid
@@ -95,9 +96,10 @@ async def get_user_by_id(user_id: int) -> pydantic_schemas.User:
 
 @app.get('/songs/{song_id}', response_model=pydantic_schemas.Song)
 async def get_song_by_id(song_id: int) -> pydantic_schemas.Song:
-    artist = pydantic_schemas.Artist(name='Metallica')
+    song = database.get_song_by_id(song_id)
 
-    song = pydantic_schemas.Song(title='Nothing Else Matters', artists=[artist])
+    if not song:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Song not found')
 
     return song
 
@@ -127,12 +129,15 @@ async def upload_song_file(file: UploadFile = File(None)):
 
 
 @app.get('/albums/{album_id}', response_model=pydantic_schemas.Album)
-async def get_album_by_id(album_id: int) -> pydantic_schemas.Album:
+def get_album_by_id(album_id: int) -> pydantic_schemas.Album:
     album = database.get_album_by_id(album_id)
+
+    if not album:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Album not found")
 
     return pydantic_schemas.Album.from_orm(album)
 
 
 @app.post('/albums/create', response_model=pydantic_schemas.Album)
-async def create_album(album: pydantic_schemas.Album) -> pydantic_schemas.Album:
+def create_album(album: pydantic_schemas.Album) -> pydantic_schemas.Album:
     pass
