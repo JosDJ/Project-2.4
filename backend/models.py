@@ -14,6 +14,9 @@ class User(Base):
     birthday = Column(Date)
     country = Column(String(50))
 
+    def __repr__(self) -> str:
+        return f"<User(id={self.id}, email='{self.email}', hashed_password='{self.hashed_password}', birthday='{self.birthday}', country='{self.country}'"
+
 
 class Artist(Base):
     __tablename__ = 'artists'
@@ -32,7 +35,7 @@ class Song(Base):
     album_id = Column(Integer, ForeignKey('albums.id'))
     filepath = Column(String(200))
 
-    album = relationship('Album', back_populates='songs')
+    album = relationship('Album', backref='songs')
 
 class Genre(Base):
     __tablename__ = 'genres'

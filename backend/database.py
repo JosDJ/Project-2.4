@@ -3,7 +3,7 @@ from config import config
 import models
 from models import Base
 
-import schemas
+import pydantic_schemas
 
 from passlib.context import CryptContext
 from typing import Optional, List
