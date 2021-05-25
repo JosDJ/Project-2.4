@@ -95,7 +95,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> pydantic_sche
 
 @app.get('/songs/{song_id}', response_model=pydantic_schemas.Song)
 async def get_song_by_id(song_id: int) -> pydantic_schemas.Song:
-    artist = Artist(name='Metallica')
+    artist = pydantic_schemas.Artist(name='Metallica')
 
     song = pydantic_schemas.Song(title='Nothing Else Matters', artists=[artist])
 
@@ -110,7 +110,7 @@ async def save_song_to_disk(file: UploadFile = File(None)) -> pydantic_schemas.S
     with open(filepath, 'wb+') as f:
         f.write(file.file.read())
 
-    song = Song(title='test', artists=[Artist(name='TestArtist')])
+    song = pydantic_schemas.Song(title='test', artists=[pydantic_schemas.Artist(name='TestArtist')])
 
     return song
 
