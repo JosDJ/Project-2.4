@@ -9,8 +9,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from jose.constants import ALGORITHMS
 
-from pydantic_schemas import Album, Token, Song, Artist, Genre, User, RegistrationUser
-
+import pydantic_schemas
 import database
 
 # openssl rand -hex 32
@@ -27,8 +26,8 @@ MUSIC_DIRECTORY.mkdir(exist_ok=True, parents=True)
 app = FastAPI()
 
 
-@app.post('/login', response_model=Token)
-async def login(form_data: OAuth2PasswordRequestForm = Depends()) -> Token:
+@app.post('/login', response_model=pydantic_schemas.Token)
+async def login(form_data: OAuth2PasswordRequestForm = Depends()) -> pydantic_schemas.Token:
 
     user = database.validate_user(form_data.username, form_data.password)
 
@@ -45,10 +44,10 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()) -> Token:
 
     access_token = jwt.encode(data, SECRET_KEY, access_token=ALGORITHM)
 
-    return Token(access_token=access_token, token_type="bearer")
+    return pydantic_schemas.Token(access_token=access_token, token_type="bearer")
 
-@app.post('/register', response_model=Token)
-async def register(user_data: RegistrationUser):
+@app.post('/register', response_model=pydantic_schemas.Token)
+async def register(user_data: pydantic_schemas.RegistrationUser):
     user = database.get_user(user_data.email) # check if user exists already
 
     if user:
@@ -58,12 +57,8 @@ async def register(user_data: RegistrationUser):
             headers={"WWW-Authenticate": "Bearer"}
         )
 
-    user = User()
 
-    pass
-
-
-async def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
+async def get_current_user(token: str = Depends(oauth2_scheme)) -> pydantic_schemas.User:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -98,16 +93,16 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
 
 #     return user
 
-@app.get('/songs/{song_id}', response_model=Song)
-async def get_song_by_id(song_id: int) -> Song:
+@app.get('/songs/{song_id}', response_model=pydantic_schemas.Song)
+async def get_song_by_id(song_id: int) -> pydantic_schemas.Song:
     artist = Artist(name='Metallica')
 
-    song = Song(title='Nothing Else Matters', artists=[artist])
+    song = pydantic_schemas.Song(title='Nothing Else Matters', artists=[artist])
 
     return song
 
 
-async def save_song_to_disk(file: UploadFile = File(None)) -> Song:
+async def save_song_to_disk(file: UploadFile = File(None)) -> pydantic_schemas.Song:
     filename = f'{uuid.uuid4().hex}.mp3'
 
     filepath = pathlib.Path(f'{MUSIC_DIRECTORY}/{filename}')
@@ -120,7 +115,7 @@ async def save_song_to_disk(file: UploadFile = File(None)) -> Song:
     return song
 
 
-@app.post('/songs/upload', status_code=status.HTTP_201_CREATED, response_model=Song)
+@app.post('/songs/upload', status_code=status.HTTP_201_CREATED, response_model=pydantic_schemas.Song)
 async def upload_song_file(file: UploadFile = File(None)):
     if file.content_type != 'audio/mpeg':
         raise HTTPException(
@@ -131,21 +126,21 @@ async def upload_song_file(file: UploadFile = File(None)):
     return song
 
 
-@app.get('/albums/{album_id}', response_model=Album)
-async def get_album_by_id(album_id: int) -> Album:
-    artist = Artist(name='Metallica')
+@app.get('/albums/{album_id}', response_model=pydantic_schemas.Album)
+async def get_album_by_id(album_id: int) -> pydantic_schemas.Album:
+    artist = pydantic_schemas.Artist(name='Metallica')
 
     songs = [
-        Song(title='Nothing Else Matters', artists=[artist]),
-        Song(title='Sad But True', artists=[artist]),
+        pydantic_schemas.Song(title='Nothing Else Matters', artists=[artist]),
+        pydantic_schemas.Song(title='Sad But True', artists=[artist]),
     ]
 
-    album = Album(title='Metallica', artist=artist, genre=Genre(
+    album = pydantic_schemas.Album(title='Metallica', artist=artist, genre=Genre(
         title='Metal'), release_date=datetime.date(1991, 8, 12))
 
     return album
 
 
-@app.post('/albums/create', response_model=Album)
-async def create_album(album: Album) -> Album:
+@app.post('/albums/create', response_model=pydantic_schemas.Album)
+async def create_album(album: pydantic_schemas.Album) -> pydantic_schemas.Album:
     pass
