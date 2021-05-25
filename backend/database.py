@@ -1,9 +1,20 @@
+from config import config
+
 from models import *
 from passlib.context import CryptContext
 from typing import Optional, List
 
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+engine = create_engine(config["DATABASE_URI"])
+Session = sessionmaker(bind=engine)
+
 pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
+def recreate_database():
+    Base.metadata.drop_all(engine)
+    Base.metadata.create_all(engine)
 
 def verify_password(password, hashed_password) -> bool:
     return pwd_context.verify(password, hashed_password)
