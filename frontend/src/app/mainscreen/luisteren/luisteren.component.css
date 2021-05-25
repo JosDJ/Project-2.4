@@ -1,0 +1,14 @@
+.button {
+    font-size: 50px;
+    min-width: 500px;
+    min-height: 250px;
+}
+
+.button:hover{
+    background-color: #dfdddd;
+    color: rgb(0, 0, 0);
+}
+
+.mygridlist {
+    height: 100%;
+}
