@@ -5,7 +5,7 @@ import { UploadComponent } from './upload/upload.component';
 import { LuisterenComponent } from './luisteren/luisteren.component';
 import { ZoekenComponent } from './zoeken/zoeken.component';
 import { MijnaccountComponent } from './mijnaccount/mijnaccount.component';
-
+import { MatGridListModule } from '@angular/material/grid-list';
 
 @NgModule({
   declarations: [
@@ -20,7 +20,8 @@ import { MijnaccountComponent } from './mijnaccount/mijnaccount.component';
     UploadComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    MatGridListModule
   ]
 })
 export class MainscreenModule { }
