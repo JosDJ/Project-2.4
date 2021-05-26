@@ -1,4 +1,6 @@
 import datetime
+
+from fastapi.exceptions import HTTPException
 from config import config
 
 import models
@@ -96,6 +98,13 @@ def validate_user(email: str, password: str) -> Optional[models.User]:
         if verify_password(password, user.hashed_password):
             return user
 
+
+def get_song_by_id(id: int) -> Optional[models.Song]:
+    s = Session()
+
+    song = s.query(models.Song).filter_by(id=id).first()
+
+    return song
 
 def get_album_by_id(id: int) -> Optional[models.Album]:
     s = Session()

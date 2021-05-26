@@ -33,6 +33,7 @@ class Song(BaseModel):
     id: int
     title: str = None
     artists: List[Artist] = []
+    filepath: str = None
 
     class Config:
         orm_mode = True
