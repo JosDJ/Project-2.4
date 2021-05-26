@@ -1,4 +1,4 @@
-.tile1 {
+.maintiles {
     position: center;
 }
 
@@ -8,4 +8,40 @@
 
 textarea {
     height: 50vh;
+}
+
+img {
+    width: 27vw;
+}
+ label {
+     color: white;
+ }
+
+.secondarytiles {
+    position: center;
+}
+
+input {
+    width: 25vw;
+}
+
+.uploadbuttondiv {
+    position: fixed;
+    bottom: 3rem;
+    right: 0;
+}
+
+.uploadbutton {
+    height: 30px;
+    width: 33vw;
+}
+
+.addsongbuttondiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.addsongbutton {
+    height: 30px;
 }

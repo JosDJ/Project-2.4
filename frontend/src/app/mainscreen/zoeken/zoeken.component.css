@@ -1,0 +1,27 @@
+.container {
+    display: grid;
+    grid-template-columns: repeat( auto-fit, minmax(120px, 1fr) );
+    grid-gap: 2vh;
+    height: 75vh;
+    width: 45vw;
+    align-items: start;
+    overflow-y: scroll;
+}
+
+.item {
+    min-width: none;
+}
+
+.mygridlist {
+    height: 100%;
+}
+ .zoekbalk {
+    height: 50%;
+    width: 80%;
+ }
+
+ img {
+    max-width: 120px;
+ }
+
+ 

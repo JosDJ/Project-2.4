@@ -8,6 +8,6 @@ html, body {
   margin: 0;
 }
 
-mat-grid-tile {
+.bottombar {
   background: #333;
 }

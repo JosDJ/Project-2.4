@@ -1,7 +1,9 @@
 .button {
     font-size: 50px;
-    min-width: 500px;
-    min-height: 250px;
+    min-width: 280px;
+    min-height: 80px;
+    width: 30vw;
+    height: 20vh;
 }
 
 .button:hover{
