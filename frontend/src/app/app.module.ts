@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { NavigationbarModule } from './navigationbar/navigationbar.module';
 import { MainscreenModule } from './mainscreen/mainscreen.module';
 import { MusicplayerModule } from './musicplayer/musicplayer.module';
+import { LoginscreenModule } from './loginscreen/loginscreen.module';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
@@ -25,9 +26,12 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MusicplayerModule,
     MatSliderModule,
     MatGridListModule,
-    MainscreenModule
+    MainscreenModule,
+    LoginscreenModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+
