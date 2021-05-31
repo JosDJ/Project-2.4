@@ -24,3 +24,7 @@ input {
     font-size: large;
     width: 25vw;
 }
+
+.hide {
+    display: none;
+}

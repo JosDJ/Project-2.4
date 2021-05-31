@@ -1,7 +1,7 @@
-<div>
-    <app-login></app-login>
+<div [ngClass]="{hide: visible, show: !visible}">
+    <app-login (exampleOutput)="exampleMethodParent($event)"></app-login>
 </div>
-<div class="container">
+<div [ngClass]="{show: visible, hide: !visible}">
     <div class="toprow">
         <app-navigationbuttons></app-navigationbuttons>
     </div>

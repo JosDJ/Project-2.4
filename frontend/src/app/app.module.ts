@@ -12,7 +12,7 @@ import { LoginscreenModule } from './loginscreen/loginscreen.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatGridListModule } from '@angular/material/grid-list';
-
+import { LoginComponent } from './loginscreen/login/login.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +29,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MainscreenModule,
     LoginscreenModule
   ],
-  providers: [],
+  providers: [LoginComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

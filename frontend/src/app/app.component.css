@@ -12,6 +12,10 @@ html, body {
   background: #333;
 }
 
-/* div.container {
+div.invisible {
   display: none;
-} */
+}
+
+.hide {
+  display: none;
+}
