@@ -1,6 +1,7 @@
 import datetime
 
 from fastapi.exceptions import HTTPException
+from sqlalchemy.inspection import inspect
 from config import config
 
 import models
@@ -72,13 +73,13 @@ def create_dummy_data():
 
     s.commit()
 
+    s.close()
+
 
 def get_user_by_id(id: int) -> Optional[models.User]:
     s = Session()
 
     user = s.query(models.User).filter_by(id=id).first()
-
-    s.close()
 
     return user
 
@@ -87,8 +88,6 @@ def get_user_by_email(email: str) -> Optional[models.User]:
     s = Session()
 
     user = s.query(models.User).filter_by(email=email).first()
-
-    s.close()
 
     return user
 
@@ -112,3 +111,27 @@ def get_album_by_id(id: int) -> Optional[models.Album]:
     album = s.query(models.Album).filter_by(id=id).first()
 
     return album
+
+def create_album(album: models.Album) -> Optional[models.Album]:
+    s = Session()
+
+    s.add(album)
+    s.commit()
+    
+    return album
+
+
+def get_genre_by_id(id: int) -> Optional[models.Genre]:
+    s = Session()
+
+    genre = s.query(models.Genre).filter_by(id=id).first()
+
+    return genre
+
+
+def get_artist_by_id(id: int) -> Optional[models.Artist]:
+    s = Session()
+
+    artist = s.query(models.Artist).filter_by(id=id).first()
+
+    return artist

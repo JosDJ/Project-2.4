@@ -34,7 +34,7 @@ class Artist(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(50))
 
-    albums = relationship('Album', backref='artist')
+    albums = relationship('Album', backref='artist', lazy='subquery')
     songs = relationship('Song', secondary=artist_song_table, back_populates='artists')
 
 
@@ -46,7 +46,7 @@ class Song(Base):
     album_id = Column(Integer, ForeignKey('albums.id'))
     filepath = Column(String(200))
 
-    album = relationship('Album', backref='songs')
+    album = relationship('Album', backref='songs', lazy='subquery')
     artists = relationship('Artist', secondary=artist_song_table, back_populates='songs')
 
 
@@ -56,7 +56,7 @@ class Genre(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String(50))
 
-    albums = relationship('Album', backref='genre')
+    albums = relationship('Album', backref='genre', lazy='subquery')
 
 
 class Album(Base):

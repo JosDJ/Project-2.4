@@ -48,9 +48,10 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()) -> pydantic_sc
 
     return pydantic_schemas.Token(access_token=access_token, token_type="bearer")
 
+
 @app.post('/register', response_model=pydantic_schemas.Token)
 async def register(user_data: pydantic_schemas.RegistrationUser):
-    user = database.get_user(user_data.email) # check if user exists already
+    user = database.get_user(user_data.email)  # check if user exists already
 
     if user:
         raise HTTPException(
@@ -99,7 +100,8 @@ async def get_song_by_id(song_id: int) -> pydantic_schemas.Song:
     song = database.get_song_by_id(song_id)
 
     if not song:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Song not found')
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail='Song not found')
 
     return song
 
@@ -112,7 +114,8 @@ async def save_song_to_disk(file: UploadFile = File(None)) -> pydantic_schemas.S
     with open(filepath, 'wb+') as f:
         f.write(file.file.read())
 
-    song = pydantic_schemas.Song(title='test', artists=[pydantic_schemas.Artist(name='TestArtist')])
+    song = pydantic_schemas.Song(title='test', artists=[
+                                 pydantic_schemas.Artist(name='TestArtist')])
 
     return song
 
@@ -133,11 +136,21 @@ def get_album_by_id(album_id: int) -> pydantic_schemas.Album:
     album = database.get_album_by_id(album_id)
 
     if not album:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Album not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Album not found")
 
     return pydantic_schemas.Album.from_orm(album)
 
 
 @app.post('/albums/create', response_model=pydantic_schemas.Album)
-def create_album(album: pydantic_schemas.Album) -> pydantic_schemas.Album:
-    pass
+def create_album(album: pydantic_schemas.AlbumIn) -> pydantic_schemas.Album:
+    songs = [database.get_song_by_id(song_id) for song_id in album.song_ids]
+    genre = database.get_genre_by_id(album.genre_id)
+    artist = database.get_artist_by_id(album.artist_id)
+
+    album_model = models.Album(title=album.title, artist=artist,
+                               release_date=album.release_date, genre=genre, songs=songs)
+                               
+    result = database.create_album(album_model)
+
+    return pydantic_schemas.Album.from_orm(result)
