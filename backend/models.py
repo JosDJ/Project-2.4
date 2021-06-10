@@ -1,8 +1,16 @@
-from sqlalchemy.orm import declarative_base, relationship
+from sqlalchemy.orm import backref, declarative_base, relationship
 from sqlalchemy import Column, Integer, String, Date
 from sqlalchemy.sql.schema import ForeignKey, ForeignKeyConstraint, Table
 
 Base = declarative_base()
+
+
+class File(Base):
+    __tablename__ = 'files'
+
+    id = Column(Integer, primary_key=True)
+    filetype = Column(String(50))
+    filepath = Column(String(260))
 
 
 class User(Base):
@@ -27,7 +35,6 @@ artist_song_table = Table('artist_song',
                           Column('song_id', Integer, ForeignKey('songs.id'))
                           )
 
-
 class Artist(Base):
     __tablename__ = 'artists'
 
@@ -35,7 +42,8 @@ class Artist(Base):
     name = Column(String(50))
 
     albums = relationship('Album', backref='artist', lazy='subquery')
-    songs = relationship('Song', secondary=artist_song_table, back_populates='artists')
+    songs = relationship('Song', secondary=artist_song_table,
+                         back_populates='artists')
 
 
 class Song(Base):
@@ -44,10 +52,12 @@ class Song(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String(50))
     album_id = Column(Integer, ForeignKey('albums.id'))
-    filepath = Column(String(200))
+    file_id = Column(Integer, ForeignKey('files.id'))
 
     album = relationship('Album', backref='songs', lazy='subquery')
-    artists = relationship('Artist', secondary=artist_song_table, back_populates='songs')
+    artists = relationship(
+        'Artist', secondary=artist_song_table, back_populates='songs')
+    file = relationship('File', uselist=False)
 
 
 class Genre(Base):
@@ -67,6 +77,9 @@ class Album(Base):
 
     artist_id = Column(Integer, ForeignKey('artists.id'))
     genre_id = Column(Integer, ForeignKey('genres.id'))
+    album_cover_id = Column(Integer, ForeignKey('files.id'))
+
+    album_cover = relationship('File', uselist=False)
 
     release_date = Column(Date)
 

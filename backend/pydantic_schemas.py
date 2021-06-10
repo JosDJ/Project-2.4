@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import ForwardRef, List, Optional
 from datetime import date
 
@@ -13,9 +13,9 @@ class Country(BaseModel):
         orm_mode = True
 
 class User(BaseModel):
-    email: str = None
-    birthday: date = None
-    country: Country = None
+    email: EmailStr
+    birthday: date
+    country: Country
 
     class Config:
         orm_mode = True
@@ -37,7 +37,6 @@ class Song(BaseModel):
     id: int
     title: str = None
     artists: List[Artist] = []
-    filepath: str = None
 
     class Config:
         orm_mode = True
@@ -46,6 +45,16 @@ class SongIn(BaseModel):
     id: int
     title: str = None
     artist_ids: List[int] = []
+
+class FileUploaded(BaseModel):
+    id: int
+    filetype: str
+    filepath: str
+
+    original_filename: str
+
+    class Config:
+        orm_mode = True
 
 class Genre(BaseModel):
     id: str
@@ -57,6 +66,12 @@ class Genre(BaseModel):
 class GenreIn(BaseModel):
     title: str = None
 
+class AlbumCover(BaseModel):
+    filepath: str
+
+    class Config:
+        orm_mode = True
+
 class Album(BaseModel):
     id: int
     title: str = None
@@ -64,6 +79,7 @@ class Album(BaseModel):
     release_date: date = None
     genre: Genre = None
     songs: List[Song] = []
+    album_cover: AlbumCover = None
 
     class Config:
         orm_mode = True
@@ -74,3 +90,4 @@ class AlbumIn(BaseModel):
     release_date: date = None
     genre_id: int = None
     song_ids: List[int] = []
+    album_cover_id: int = None

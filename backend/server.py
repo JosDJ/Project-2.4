@@ -4,11 +4,13 @@ from os import stat
 from typing import List, Optional
 import pathlib
 import uuid
+from PIL import Image
 
 from fastapi import Depends, FastAPI, File, HTTPException, UploadFile, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from jose.constants import ALGORITHMS
+from sqlalchemy.sql.coercions import expect
 
 import pydantic_schemas
 import models
@@ -22,8 +24,11 @@ ACCESS_TOKEN_EXPIRES_MINUTES = 30
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/login')
 
 # create music directory if it doesn't exist already
-MUSIC_DIRECTORY = pathlib.Path(__file__).parent / 'data'
+MUSIC_DIRECTORY = pathlib.Path(__file__).parent / 'data' / 'music'
 MUSIC_DIRECTORY.mkdir(exist_ok=True, parents=True)
+
+IMAGES_DIRECTORY = pathlib.Path(__file__).parent / 'data' / 'images'
+IMAGES_DIRECTORY.mkdir(exist_ok=True, parents=True)
 
 app = FastAPI()
 
@@ -147,10 +152,55 @@ def create_album(album: pydantic_schemas.AlbumIn) -> pydantic_schemas.Album:
     songs = [database.get_song_by_id(song_id) for song_id in album.song_ids]
     genre = database.get_genre_by_id(album.genre_id)
     artist = database.get_artist_by_id(album.artist_id)
+    album_cover = database.get_file_by_id(album.album_cover_id)
 
-    album_model = models.Album(title=album.title, artist=artist,
-                               release_date=album.release_date, genre=genre, songs=songs)
-                               
+    if None in songs:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="One or more songs not found")
+
+    for song in songs:
+        if song.album != None:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                                detail="One or more songs already belong to an album")
+
+    if not genre:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Genre not found")
+
+    if not artist:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Artist not found")
+
+    if not album_cover:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Album cover not found")
+
+    album_model = models.Album(title=album.title,
+                               release_date=album.release_date, artist=artist, genre=genre, songs=songs, album_cover=album_cover)
+
     result = database.create_album(album_model)
 
     return pydantic_schemas.Album.from_orm(result)
+
+
+def save_album_cover_to_file(file: UploadFile = File(None)) -> pathlib.Path:
+    filename = f'{uuid.uuid4().hex}.png'
+
+    filepath = pathlib.Path(f'{IMAGES_DIRECTORY}/{filename}')
+
+    image = Image.open(file.file)
+
+    image.save(filepath)
+
+    return filepath
+
+@app.post('/albums/upload_album_cover')
+def upload_album_cover(file: UploadFile = File(None)) -> pydantic_schemas.FileUploaded:
+    if file.content_type != 'image/png' and file.content_type != 'image/jpeg' and file.content_type != 'image/bmp':
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Only files with 'Content-Type: image/[jpeg/bmp/png]' are accepted")
+
+    filepath = save_album_cover_to_file(file)
+
+    result = database.create_file(models.File(
+        filepath=str(filepath), filetype="image"))
+
+    return pydantic_schemas.FileUploaded(id=result.id, filetype=result.filetype, filepath=result.filepath, original_filename=file.filename)
