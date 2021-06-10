@@ -201,6 +201,6 @@ def upload_album_cover(file: UploadFile = File(None)) -> pydantic_schemas.FileUp
     filepath = save_album_cover_to_file(file)
 
     result = database.create_file(models.File(
-        filepath=str(filepath), filetype="image"))
+        filepath=str(filepath), filetype="image/png"))
 
     return pydantic_schemas.FileUploaded(id=result.id, filetype=result.filetype, filepath=result.filepath, original_filename=file.filename)
