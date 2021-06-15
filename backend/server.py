@@ -33,7 +33,26 @@ MUSIC_DIRECTORY.mkdir(exist_ok=True, parents=True)
 IMAGES_DIRECTORY = pathlib.Path(__file__).parent / 'static_files' / 'images'
 IMAGES_DIRECTORY.mkdir(exist_ok=True, parents=True)
 
-app = FastAPI()
+tags_metadata = [
+    {
+        "name" : "albums",
+        "description" : "Operations with albums."
+    },
+    {
+        "name" : "genres",
+        "description" : "Operations with genres."
+    },
+    {
+        "name" : "songs",
+        "description" : "Operations with songs"
+    },
+    {
+        "name" : "artists",
+        "descriptions" : "Operations with artists"
+    }
+]
+
+app = FastAPI(openapi_tags=tags_metadata)
 
 app.mount('/static_files', StaticFiles(directory='static_files'), name="static_files")
 
@@ -104,7 +123,7 @@ async def get_user_by_id(user_id: int) -> pydantic_schemas.User:
 
 #     return user
 
-@app.get('/songs/{song_id}', response_model=pydantic_schemas.Song)
+@app.get('/songs/{song_id}', response_model=pydantic_schemas.Song, tags=["songs"])
 async def get_song_by_id(song_id: int) -> pydantic_schemas.Song:
     song = database.get_song_by_id(song_id)
 
@@ -129,7 +148,7 @@ async def save_song_to_disk(file: UploadFile = File(None)) -> pydantic_schemas.S
     return song
 
 
-@app.post('/songs/upload', status_code=status.HTTP_201_CREATED, response_model=pydantic_schemas.Song)
+@app.post('/songs/upload', status_code=status.HTTP_201_CREATED, response_model=pydantic_schemas.Song, tags=["songs"])
 async def upload_song_file(file: UploadFile = File(None)):
     if file.content_type != 'audio/mpeg':
         raise HTTPException(
@@ -140,7 +159,7 @@ async def upload_song_file(file: UploadFile = File(None)):
     return song
 
 
-@app.get('/albums/{album_id}', response_model=pydantic_schemas.Album)
+@app.get('/albums/{album_id}', response_model=pydantic_schemas.Album, tags=["albums"])
 def get_album_by_id(album_id: int) -> pydantic_schemas.Album:
     album = database.get_album_by_id(album_id)
 
@@ -151,7 +170,7 @@ def get_album_by_id(album_id: int) -> pydantic_schemas.Album:
     return pydantic_schemas.Album.from_orm(album)
 
 
-@app.post('/albums/create', response_model=pydantic_schemas.Album)
+@app.post('/albums/create', response_model=pydantic_schemas.Album, tags=["albums"])
 def create_album(album: pydantic_schemas.AlbumIn) -> pydantic_schemas.Album:
     songs = [database.get_song_by_id(song_id) for song_id in album.song_ids]
     genre = database.get_genre_by_id(album.genre_id)
@@ -197,7 +216,7 @@ def save_album_cover_to_file(file: UploadFile = File(None)) -> pathlib.Path:
 
     return filepath
 
-@app.post('/albums/upload_album_cover', response_model=pydantic_schemas.FileUploaded)
+@app.post('/albums/upload_album_cover', response_model=pydantic_schemas.FileUploaded, tags=["albums"])
 def upload_album_cover(file: UploadFile = File(None)) -> pydantic_schemas.FileUploaded:
     if file.content_type != 'image/png' and file.content_type != 'image/jpeg' and file.content_type != 'image/bmp':
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Only files with 'Content-Type: image/[jpeg/bmp/png]' are accepted")
@@ -209,7 +228,7 @@ def upload_album_cover(file: UploadFile = File(None)) -> pydantic_schemas.FileUp
 
     return pydantic_schemas.FileUploaded(id=result.id, filetype=result.filetype, filepath=result.filepath, original_filename=file.filename)
 
-@app.put('/albums/{id}', response_model=pydantic_schemas.Album)
+@app.put('/albums/{id}', response_model=pydantic_schemas.Album, tags=["albums"])
 def update_album_by_id(id: int, album: pydantic_schemas.AlbumIn):
     songs = [database.get_song_by_id(song_id) for song_id in album.song_ids]
     genre = database.get_genre_by_id(album.genre_id)
@@ -242,11 +261,11 @@ def update_album_by_id(id: int, album: pydantic_schemas.AlbumIn):
 
     return pydantic_schemas.Album.from_orm(updated_album)
 
-@app.delete('/albums/{id}')
+@app.delete('/albums/{id}', tags=["albums"])
 def delete_album_by_id(id: int):
     database.delete_album_by_id(id)
 
-@app.post('/artists/create', response_model=pydantic_schemas.Artist)
+@app.post('/artists/create', response_model=pydantic_schemas.Artist, tags=["artists"])
 def create_artist(artist: pydantic_schemas.ArtistIn) -> pydantic_schemas.Artist:
     result = database.create_artist(models.Artist(name=artist.name))
 
@@ -255,7 +274,7 @@ def create_artist(artist: pydantic_schemas.ArtistIn) -> pydantic_schemas.Artist:
 
     return pydantic_schemas.Artist.from_orm(result)
 
-@app.get('/artists/{id}', response_model=pydantic_schemas.Artist)
+@app.get('/artists/{id}', response_model=pydantic_schemas.Artist, tags=["artists"])
 def get_artist_by_id(id: int):
     artist = database.get_artist_by_id(id)
 
@@ -264,7 +283,7 @@ def get_artist_by_id(id: int):
 
     return pydantic_schemas.Artist.from_orm(artist)
 
-@app.put('/artists/{id}', response_model=pydantic_schemas.Artist)
+@app.put('/artists/{id}', response_model=pydantic_schemas.Artist, tags=["artists"])
 def update_artist_by_id(id: int, artist: pydantic_schemas.ArtistIn):
     updated_artist = database.update_artist_by_id(id, models.Artist(name=artist.name))
 
@@ -273,11 +292,11 @@ def update_artist_by_id(id: int, artist: pydantic_schemas.ArtistIn):
 
     return pydantic_schemas.Artist.from_orm(updated_artist)
 
-@app.delete('/artists/{id}')
+@app.delete('/artists/{id}', tags=["artists"])
 def delete_artist_by_id(id: int):
     database.delete_artist_by_id(id)
 
-@app.post('/genres/create', response_model=pydantic_schemas.Genre)
+@app.post('/genres/create', response_model=pydantic_schemas.Genre, tags=["genres"])
 def create_genre(genre: pydantic_schemas.GenreIn):
     created_genre = database.create_genre(models.Genre(title=genre.title))
 
@@ -286,7 +305,7 @@ def create_genre(genre: pydantic_schemas.GenreIn):
 
     return pydantic_schemas.Genre.from_orm(created_genre)
 
-@app.get('/genres/{id}', response_model=pydantic_schemas.Genre)
+@app.get('/genres/{id}', response_model=pydantic_schemas.Genre, tags=["genres"])
 def get_genre_by_id(id: int):
     genre = database.get_genre_by_id(id)
 
@@ -295,7 +314,7 @@ def get_genre_by_id(id: int):
 
     return pydantic_schemas.Genre.from_orm(genre)
 
-@app.put('/genre/{id}', response_model=pydantic_schemas.Genre)
+@app.put('/genre/{id}', response_model=pydantic_schemas.Genre, tags=["genres"])
 def update_genre_by_id(id: int, genre: pydantic_schemas.GenreIn):
     updated_genre = database.update_genre_by_id(id, models.Genre(title=genre.title))
 
@@ -304,6 +323,6 @@ def update_genre_by_id(id: int, genre: pydantic_schemas.GenreIn):
 
     return pydantic_schemas.Genre.from_orm(updated_genre)
 
-@app.delete('/genre/{id}')
+@app.delete('/genre/{id}', tags=["genres"])
 def delete_genre_by_id(id: int):
     database.delete_genre_by_id(id)
