@@ -11,6 +11,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from jose.constants import ALGORITHMS
 from sqlalchemy.sql.coercions import expect
+from sqlalchemy.sql.expression import update
 
 import pydantic_schemas
 import models
@@ -193,7 +194,7 @@ def save_album_cover_to_file(file: UploadFile = File(None)) -> pathlib.Path:
 
     return filepath
 
-@app.post('/albums/upload_album_cover')
+@app.post('/albums/upload_album_cover', response_model=pydantic_schemas.FileUploaded)
 def upload_album_cover(file: UploadFile = File(None)) -> pydantic_schemas.FileUploaded:
     if file.content_type != 'image/png' and file.content_type != 'image/jpeg' and file.content_type != 'image/bmp':
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Only files with 'Content-Type: image/[jpeg/bmp/png]' are accepted")
@@ -204,3 +205,102 @@ def upload_album_cover(file: UploadFile = File(None)) -> pydantic_schemas.FileUp
         filepath=str(filepath), filetype="image/png"))
 
     return pydantic_schemas.FileUploaded(id=result.id, filetype=result.filetype, filepath=result.filepath, original_filename=file.filename)
+
+@app.put('/albums/{id}', response_model=pydantic_schemas.Album)
+def update_album_by_id(id: int, album: pydantic_schemas.AlbumIn):
+    songs = [database.get_song_by_id(song_id) for song_id in album.song_ids]
+    genre = database.get_genre_by_id(album.genre_id)
+    artist = database.get_artist_by_id(album.artist_id)
+    album_cover = database.get_file_by_id(album.album_cover_id)
+
+    if None in songs:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="One or more songs not found")
+
+    if not genre:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Genre not found")
+
+    if not artist:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Artist not found")
+
+    if not album_cover:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Album cover not found")
+
+    album_model = models.Album(title=album.title,
+                               release_date=album.release_date, artist=artist, genre=genre, songs=songs, album_cover=album_cover)
+
+
+    updated_album = database.update_album_by_id(id, album_model)
+
+    if not updated_album:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not update album")
+
+    return pydantic_schemas.Album.from_orm(updated_album)
+
+@app.delete('/albums/{id}')
+def delete_album_by_id(id: int):
+    database.delete_album_by_id(id)
+
+@app.post('/artists/create', response_model=pydantic_schemas.Artist)
+def create_artist(artist: pydantic_schemas.ArtistIn) -> pydantic_schemas.Artist:
+    result = database.create_artist(models.Artist(name=artist.name))
+
+    if not result:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    return pydantic_schemas.Artist.from_orm(result)
+
+@app.get('/artists/{id}', response_model=pydantic_schemas.Artist)
+def get_artist_by_id(id: int):
+    artist = database.get_artist_by_id(id)
+
+    if not artist:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Artist not found")
+
+    return pydantic_schemas.Artist.from_orm(artist)
+
+@app.put('/artists/{id}', response_model=pydantic_schemas.Artist)
+def update_artist_by_id(id: int, artist: pydantic_schemas.ArtistIn):
+    updated_artist = database.update_artist_by_id(id, models.Artist(name=artist.name))
+
+    if not updated_artist:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not update artist")
+
+    return pydantic_schemas.Artist.from_orm(updated_artist)
+
+@app.delete('/artists/{id}')
+def delete_artist_by_id(id: int):
+    database.delete_artist_by_id(id)
+
+@app.post('/genres/create', response_model=pydantic_schemas.Genre)
+def create_genre(genre: pydantic_schemas.GenreIn):
+    created_genre = database.create_genre(models.Genre(title=genre.title))
+
+    if not created_genre:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not create genre")
+
+    return pydantic_schemas.Genre.from_orm(created_genre)
+
+@app.get('/genres/{id}', response_model=pydantic_schemas.Genre)
+def get_genre_by_id(id: int):
+    genre = database.get_genre_by_id(id)
+
+    if not genre:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Genre not found")
+
+    return pydantic_schemas.Genre.from_orm(genre)
+
+@app.put('/genre/{id}', response_model=pydantic_schemas.Genre)
+def update_genre_by_id(id: int, genre: pydantic_schemas.GenreIn):
+    updated_genre = database.update_genre_by_id(id, models.Genre(title=genre.title))
+
+    if not updated_genre:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not update genre")
+
+    return pydantic_schemas.Genre.from_orm(updated_genre)
+
+@app.delete('/genre/{id}')
+def delete_genre_by_id(id: int):
+    database.delete_genre_by_id(id)

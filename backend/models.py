@@ -31,9 +31,11 @@ class User(Base):
 artist_song_table = Table('artist_song',
                           Base.metadata,
                           Column('artist_id', Integer,
-                                 ForeignKey('artists.id')),
-                          Column('song_id', Integer, ForeignKey('songs.id'))
+                                 ForeignKey('artists.id', ondelete='CASCADE')),
+                          Column('song_id', Integer, ForeignKey(
+                              'songs.id', ondelete='CASCADE'))
                           )
+
 
 class Artist(Base):
     __tablename__ = 'artists'
@@ -41,7 +43,8 @@ class Artist(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(50))
 
-    albums = relationship('Album', backref='artist', lazy='subquery')
+    albums = relationship('Album', backref='artist',
+                          lazy='subquery', cascade="all, delete-orphan")
     songs = relationship('Song', secondary=artist_song_table,
                          back_populates='artists')
 
@@ -51,10 +54,11 @@ class Song(Base):
 
     id = Column(Integer, primary_key=True)
     title = Column(String(50))
-    album_id = Column(Integer, ForeignKey('albums.id'))
-    file_id = Column(Integer, ForeignKey('files.id'))
+    album_id = Column(Integer, ForeignKey('albums.id', ondelete='CASCADE'))
+    file_id = Column(Integer, ForeignKey('files.id', ondelete='CASCADE'))
 
-    album = relationship('Album', backref='songs', lazy='subquery')
+    album = relationship('Album', backref='songs',
+                         lazy='subquery')
     artists = relationship(
         'Artist', secondary=artist_song_table, back_populates='songs')
     file = relationship('File', uselist=False)
@@ -66,7 +70,8 @@ class Genre(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String(50))
 
-    albums = relationship('Album', backref='genre', lazy='subquery')
+    albums = relationship('Album', backref='genre',
+                          lazy='subquery', cascade="all, delete-orphan")
 
 
 class Album(Base):
@@ -75,11 +80,13 @@ class Album(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String(50))
 
-    artist_id = Column(Integer, ForeignKey('artists.id'))
-    genre_id = Column(Integer, ForeignKey('genres.id'))
-    album_cover_id = Column(Integer, ForeignKey('files.id'))
+    artist_id = Column(Integer, ForeignKey('artists.id', ondelete='CASCADE'))
+    genre_id = Column(Integer, ForeignKey('genres.id', ondelete='CASCADE'))
+    album_cover_id = Column(Integer, ForeignKey(
+        'files.id', ondelete='CASCADE'))
 
-    album_cover = relationship('File', uselist=False)
+    album_cover = relationship(
+        'File', uselist=False)
 
     release_date = Column(Date)
 
