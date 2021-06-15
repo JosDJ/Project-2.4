@@ -5,13 +5,13 @@ from sqlalchemy.inspection import inspect
 from config import config
 
 import models
-from models import Album, Artist, Base
+from models import Album, Artist, Base, User
 
 from passlib.context import CryptContext
 from typing import Optional, List
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm import sessionmaker, scoped_session, Session
 
 engine = create_engine(config["DATABASE_URI"])
 session = scoped_session(sessionmaker(bind=engine))
@@ -102,6 +102,15 @@ def get_album_by_id(id: int) -> Optional[models.Album]:
     album = session.query(models.Album).filter_by(id=id).first()
 
     return album
+
+
+
+def create_new_user(user: User) -> Optional[models.User]:
+    session.add(user)
+
+    session.commit()
+
+    return user
 
 
 def create_album(album: models.Album) -> Optional[models.Album]:
