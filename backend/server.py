@@ -25,10 +25,10 @@ ACCESS_TOKEN_EXPIRES_MINUTES = 30
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/login')
 
 # create music directory if it doesn't exist already
-MUSIC_DIRECTORY = pathlib.Path(__file__).parent / 'data' / 'music'
+MUSIC_DIRECTORY = pathlib.Path(__file__).parent / 'static_files' / 'music'
 MUSIC_DIRECTORY.mkdir(exist_ok=True, parents=True)
 
-IMAGES_DIRECTORY = pathlib.Path(__file__).parent / 'data' / 'images'
+IMAGES_DIRECTORY = pathlib.Path(__file__).parent / 'static_files' / 'images'
 IMAGES_DIRECTORY.mkdir(exist_ok=True, parents=True)
 
 app = FastAPI()
