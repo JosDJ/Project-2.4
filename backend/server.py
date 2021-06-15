@@ -8,6 +8,8 @@ from PIL import Image
 
 from fastapi import Depends, FastAPI, File, HTTPException, UploadFile, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.staticfiles import StaticFiles
+
 from jose import JWTError, jwt
 from jose.constants import ALGORITHMS
 from sqlalchemy.sql.coercions import expect
@@ -33,6 +35,7 @@ IMAGES_DIRECTORY.mkdir(exist_ok=True, parents=True)
 
 app = FastAPI()
 
+app.mount('/static_files', StaticFiles(directory='static_files'), name="static_files")
 
 @app.post('/login', response_model=pydantic_schemas.Token)
 async def login(form_data: OAuth2PasswordRequestForm = Depends()) -> pydantic_schemas.Token:
@@ -202,7 +205,7 @@ def upload_album_cover(file: UploadFile = File(None)) -> pydantic_schemas.FileUp
     filepath = save_album_cover_to_file(file)
 
     result = database.create_file(models.File(
-        filepath=str(filepath), filetype="image/png"))
+        filepath=filepath.as_posix(), filetype="image/png"))
 
     return pydantic_schemas.FileUploaded(id=result.id, filetype=result.filetype, filepath=result.filepath, original_filename=file.filename)
 
