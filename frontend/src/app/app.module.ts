@@ -13,6 +13,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { LoginComponent } from './loginscreen/login/login.component';
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { AuthService } from './services';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -27,9 +31,14 @@ import { LoginComponent } from './loginscreen/login/login.component';
     MatSliderModule,
     MatGridListModule,
     MainscreenModule,
-    LoginscreenModule
+    LoginscreenModule,
+    ReactiveFormsModule,
+    HttpClientModule
   ],
-  providers: [LoginComponent],
+  providers: [
+    LoginComponent,
+    AuthService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

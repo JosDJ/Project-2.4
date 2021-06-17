@@ -1,6 +1,6 @@
 .loginscreen {
-    height: calc(100vh);
-    background-color: rgb(114, 67, 49);
+    height: calc(100vh - 6rem);
+    /* background-color: rgb(114, 67, 49); */
   }
 
 html, body {

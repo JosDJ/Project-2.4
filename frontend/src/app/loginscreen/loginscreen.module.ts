@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { LoginComponent } from './login/login.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 
-
 @NgModule({
   declarations: [
     LoginComponent
@@ -13,7 +12,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
   ],
   imports: [
     CommonModule,
-    MatGridListModule
+    MatGridListModule,
   ]
 })
 export class LoginscreenModule { }
