@@ -12,6 +12,9 @@ class File(Base):
     filetype = Column(String(50))
     filepath = Column(String(260))
 
+    def __repr__(self) -> str:
+        return f"<File(id={self.id}, filetype='{self.filetype}', filepath='{self.filepath}'"
+
 
 class User(Base):
     __tablename__ = 'users'
@@ -25,7 +28,7 @@ class User(Base):
     country = relationship('Country', lazy='subquery')
 
     def __repr__(self) -> str:
-        return f"<User(id={self.id}, email='{self.email}', hashed_password='{self.hashed_password}', birthday='{self.birthday}', country='{self.country}'"
+        return f"<User(id={self.id}, email='{self.email}', hashed_password='{self.hashed_password}', birthday='{self.birthday}', country_id={self.country_id})>"
 
 
 artist_song_table = Table('artist_song',
@@ -48,6 +51,9 @@ class Artist(Base):
     songs = relationship('Song', secondary=artist_song_table,
                          back_populates='artists')
 
+    def __repr__(self) -> str:
+        return f"<Artist(id={self.id}, name={self.name})>"
+
 
 class Song(Base):
     __tablename__ = 'songs'
@@ -63,6 +69,9 @@ class Song(Base):
         'Artist', secondary=artist_song_table, back_populates='songs')
     file = relationship('File', uselist=False)
 
+    def __repr__(self) -> str:
+        return f"<Song(id={self.id}, title='{self.title}', album_id={self.album_id}, file_id={self.file_id})>"
+
 
 class Genre(Base):
     __tablename__ = 'genres'
@@ -73,12 +82,16 @@ class Genre(Base):
     albums = relationship('Album', backref='genre',
                           lazy='subquery', cascade="all, delete-orphan")
 
+    def __repr__(self) -> str:
+        return f"<Genre(id={self.id}, title='{self.title}')>"
+
 
 class Album(Base):
     __tablename__ = 'albums'
 
     id = Column(Integer, primary_key=True)
     title = Column(String(50))
+    release_date = Column(Date)
 
     artist_id = Column(Integer, ForeignKey('artists.id', ondelete='CASCADE'))
     genre_id = Column(Integer, ForeignKey('genres.id', ondelete='CASCADE'))
@@ -88,7 +101,8 @@ class Album(Base):
     album_cover = relationship(
         'File', uselist=False)
 
-    release_date = Column(Date)
+    def __repr__(self) -> str:
+        return f"<Album(id={self.id}, title='{self.title}', release_date='{self.release_date}', artist_id={self.artist_id}, genre_id={self.genre_id}, album_cover_id={self.album_cover_id})>"
 
 
 class Country(Base):
@@ -96,3 +110,6 @@ class Country(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(50))
+
+    def __repr__(self) -> str:
+        return f"<Country(id={self.id}, name='{self.name}')>"
