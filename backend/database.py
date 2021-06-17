@@ -1,21 +1,20 @@
 import datetime
 
 from fastapi.exceptions import HTTPException
+from sqlalchemy.inspection import inspect
 from config import config
 
 import models
-from models import Album, Artist, Base
-
-import pydantic_schemas
+from models import Base
 
 from passlib.context import CryptContext
 from typing import Optional, List
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 
 engine = create_engine(config["DATABASE_URI"])
-Session = sessionmaker(bind=engine)
+session = scoped_session(sessionmaker(bind=engine))
 
 pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
@@ -34,8 +33,6 @@ def recreate_database():
 
 
 def create_dummy_data():
-    s = Session()
-
     country = models.Country(name='The Netherlands')
 
     user = models.User(
@@ -44,7 +41,7 @@ def create_dummy_data():
         birthday=datetime.date(1998, 5, 4),
         country=country)
 
-    s.add(user)
+    session.add(user)
 
     artist = models.Artist(name='Metallica')
 
@@ -68,27 +65,26 @@ def create_dummy_data():
     album = models.Album(title='Metallica', artist=artist,
                          songs=songs, release_date=datetime.date(1991, 8, 12), genre=genre)
 
-    s.add(album)
+    session.add(album)
 
-    s.commit()
+    song_with_no_album = models.Song(title='No Album!@#!@#', artists=[artist])
 
+    session.add(song_with_no_album)
+
+    session.commit()
+
+def recreate_and_create_dummy_data():
+    recreate_database()
+    create_dummy_data()
 
 def get_user_by_id(id: int) -> Optional[models.User]:
-    s = Session()
-
-    user = s.query(models.User).filter_by(id=id).first()
-
-    s.close()
+    user = session.query(models.User).filter_by(id=id).first()
 
     return user
 
 
 def get_user_by_email(email: str) -> Optional[models.User]:
-    s = Session()
-
-    user = s.query(models.User).filter_by(email=email).first()
-
-    s.close()
+    user = session.query(models.User).filter_by(email=email).first()
 
     return user
 
@@ -100,15 +96,110 @@ def validate_user(email: str, password: str) -> Optional[models.User]:
 
 
 def get_song_by_id(id: int) -> Optional[models.Song]:
-    s = Session()
-
-    song = s.query(models.Song).filter_by(id=id).first()
+    song = session.query(models.Song).filter_by(id=id).first()
 
     return song
 
-def get_album_by_id(id: int) -> Optional[models.Album]:
-    s = Session()
 
-    album = s.query(models.Album).filter_by(id=id).first()
+def create_album(album: models.Album) -> Optional[models.Album]:
+    session.add(album)
+
+    session.commit()
 
     return album
+
+def get_album_by_id(id: int) -> Optional[models.Album]:
+    album = session.query(models.Album).filter_by(id=id).first()
+
+    return album
+
+def update_album_by_id(id: int, album: models.Album):
+    album_to_update = get_album_by_id(id)
+
+    if album_to_update:
+        album_to_update.title = album.title
+        album_to_update.artist = album.artist
+        album_to_update.genre = album.genre
+        album_to_update.songs = album.songs
+        album_to_update.release_date = album.release_date
+        album_to_update.album_cover = album.album_cover
+
+    session.commit()
+
+    return album_to_update
+
+def delete_album_by_id(id: int):
+    session.query(models.Album).filter_by(id=id).delete()
+
+    session.commit()
+
+
+def create_genre(genre: models.Genre):
+    session.add(genre)
+
+    session.commit()
+
+    return genre
+
+def get_genre_by_id(id: int) -> Optional[models.Genre]:
+    genre = session.query(models.Genre).filter_by(id=id).first()
+
+    return genre
+
+def update_genre_by_id(id: int, genre: models.Genre) -> Optional[models.Genre]:
+    genre_to_update = get_genre_by_id(id)
+
+    if genre_to_update:
+        genre_to_update.title = genre.title
+
+    session.commit()
+
+    return genre_to_update
+
+def delete_genre_by_id(id: int):
+    session.query(models.Genre).filter_by(id=id).delete()
+
+    session.commit()
+
+
+def create_artist(artist: models.Artist):
+    session.add(artist)
+
+    session.commit()
+
+    return artist
+
+def get_artist_by_id(id: int) -> Optional[models.Artist]:
+    artist = session.query(models.Artist).filter_by(id=id).first()
+
+    return artist
+
+def update_artist_by_id(id: int, artist: models.Artist) -> Optional[models.Artist]:
+    artist_to_update = get_artist_by_id(id)
+
+    if artist_to_update:
+        artist_to_update.name = artist.name
+
+    session.commit()
+
+    return artist_to_update
+
+def delete_artist_by_id(id: int):
+    session.query(models.Artist).filter_by(id=id).delete()
+    session.commit()
+
+def create_file(file: models.File) -> Optional[models.File]:
+    session.add(file)
+
+    session.commit()
+
+    return file
+
+def get_file_by_id(id: int) -> Optional[models.File]:
+    file = session.query(models.File).filter_by(id=id).first()
+
+    return file
+
+def delete_file_by_id(id: int):
+    session.query(models.File).filter_by(id=id).delete()
+    session.commit()
