@@ -12,7 +12,6 @@ from fastapi.staticfiles import StaticFiles
 
 from jose import JWTError, jwt
 from jose.constants import ALGORITHMS
-import pydantic
 from sqlalchemy.sql.coercions import expect
 from sqlalchemy.sql.expression import update
 
@@ -115,7 +114,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> pydantic_sche
 
 
 @app.get('/users/{user_id}', response_model=pydantic_schemas.User)
-async def get_user_by_id(user_id: int) -> pydantic_schemas.User:
+async def get_user_by_id(user_id: int, token: str = Depends(oauth2_scheme)) -> pydantic_schemas.User:
     user = database.get_user_by_id(user_id)
 
     return pydantic_schemas.User.from_orm(user)
@@ -131,7 +130,7 @@ async def get_user_by_id(user_id: int) -> pydantic_schemas.User:
 #     return user
 
 @app.post('/songs/create', response_model=pydantic_schemas.Song, tags=['songs'])
-def create_song(song: pydantic_schemas.SongIn):
+def create_song(song: pydantic_schemas.SongIn, token: str = Depends(oauth2_scheme)):
     file = database.get_file_by_id(song.file_id)
     artists = [database.get_artist_by_id(artist_id)
                for artist_id in song.artist_ids]
@@ -151,7 +150,7 @@ def create_song(song: pydantic_schemas.SongIn):
 
 
 @app.get('/songs/{id}', response_model=pydantic_schemas.Song, tags=["songs"])
-async def get_song_by_id(song_id: int) -> pydantic_schemas.Song:
+async def get_song_by_id(song_id: int, token: str = Depends(oauth2_scheme)) -> pydantic_schemas.Song:
     song = database.get_song_by_id(song_id)
 
     if not song:
@@ -162,7 +161,7 @@ async def get_song_by_id(song_id: int) -> pydantic_schemas.Song:
 
 
 @app.put('/songs/{id}', response_model=pydantic_schemas.Song, tags=["songs"])
-def update_song_by_id(id: int, song: pydantic_schemas.SongIn) -> pydantic_schemas.Song:
+def update_song_by_id(id: int, song: pydantic_schemas.SongIn, token: str = Depends(oauth2_scheme)) -> pydantic_schemas.Song:
     file = database.get_file_by_id(song.file_id)
     artists = [database.get_artist_by_id(artist_id)
                for artist_id in song.artist_ids]
@@ -182,7 +181,7 @@ def update_song_by_id(id: int, song: pydantic_schemas.SongIn) -> pydantic_schema
 
 
 @app.delete('/songs/{id}', tags=["songs"])
-def delete_song_by_id(id: int):
+def delete_song_by_id(id: int, token: str = Depends(oauth2_scheme)):
     database.delete_song_by_id(id)
 
 
@@ -201,7 +200,7 @@ async def save_song_to_disk(file: UploadFile = File(None)) -> pydantic_schemas.S
 
 
 @app.post('/songs/upload', status_code=status.HTTP_201_CREATED, response_model=pydantic_schemas.Song, tags=["songs"])
-async def upload_song_file(file: UploadFile = File(None)):
+async def upload_song_file(file: UploadFile = File(None), token: str = Depends(oauth2_scheme)):
     if file.content_type != 'audio/mpeg':
         raise HTTPException(
             status_code=415, detail="Only files with 'Content-Type: audio/mpeg' are allowed")
@@ -212,7 +211,7 @@ async def upload_song_file(file: UploadFile = File(None)):
 
 
 @app.get('/albums/{album_id}', response_model=pydantic_schemas.Album, tags=["albums"])
-def get_album_by_id(album_id: int) -> pydantic_schemas.Album:
+def get_album_by_id(album_id: int, token: str = Depends(oauth2_scheme)) -> pydantic_schemas.Album:
     album = database.get_album_by_id(album_id)
 
     if not album:
@@ -223,7 +222,7 @@ def get_album_by_id(album_id: int) -> pydantic_schemas.Album:
 
 
 @app.post('/albums/create', response_model=pydantic_schemas.Album, tags=["albums"])
-def create_album(album: pydantic_schemas.AlbumIn) -> pydantic_schemas.Album:
+def create_album(album: pydantic_schemas.AlbumIn, token: str = Depends(oauth2_scheme)) -> pydantic_schemas.Album:
     songs = [database.get_song_by_id(song_id) for song_id in album.song_ids]
     genre = database.get_genre_by_id(album.genre_id)
     artist = database.get_artist_by_id(album.artist_id)
@@ -271,7 +270,7 @@ def save_album_cover_to_file(file: UploadFile = File(None)) -> pathlib.Path:
 
 
 @app.post('/albums/upload_album_cover', response_model=pydantic_schemas.FileUploaded, tags=["albums"])
-def upload_album_cover(file: UploadFile = File(None)) -> pydantic_schemas.FileUploaded:
+def upload_album_cover(file: UploadFile = File(None), token: str = Depends(oauth2_scheme)) -> pydantic_schemas.FileUploaded:
     if file.content_type != 'image/png' and file.content_type != 'image/jpeg' and file.content_type != 'image/bmp':
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail="Only files with 'Content-Type: image/[jpeg/bmp/png]' are accepted")
@@ -285,7 +284,7 @@ def upload_album_cover(file: UploadFile = File(None)) -> pydantic_schemas.FileUp
 
 
 @app.put('/albums/{id}', response_model=pydantic_schemas.Album, tags=["albums"])
-def update_album_by_id(id: int, album: pydantic_schemas.AlbumIn):
+def update_album_by_id(id: int, album: pydantic_schemas.AlbumIn, token: str = Depends(oauth2_scheme)):
     songs = [database.get_song_by_id(song_id) for song_id in album.song_ids]
     genre = database.get_genre_by_id(album.genre_id)
     artist = database.get_artist_by_id(album.artist_id)
@@ -320,12 +319,12 @@ def update_album_by_id(id: int, album: pydantic_schemas.AlbumIn):
 
 
 @app.delete('/albums/{id}', tags=["albums"])
-def delete_album_by_id(id: int):
+def delete_album_by_id(id: int, token: str = Depends(oauth2_scheme)):
     database.delete_album_by_id(id)
 
 
 @app.post('/artists/create', response_model=pydantic_schemas.Artist, tags=["artists"])
-def create_artist(artist: pydantic_schemas.ArtistIn) -> pydantic_schemas.Artist:
+def create_artist(artist: pydantic_schemas.ArtistIn, token: str = Depends(oauth2_scheme)) -> pydantic_schemas.Artist:
     result = database.create_artist(models.Artist(name=artist.name))
 
     if not result:
@@ -335,7 +334,7 @@ def create_artist(artist: pydantic_schemas.ArtistIn) -> pydantic_schemas.Artist:
 
 
 @app.get('/artists/{id}', response_model=pydantic_schemas.Artist, tags=["artists"])
-def get_artist_by_id(id: int):
+def get_artist_by_id(id: int, token: str = Depends(oauth2_scheme)):
     artist = database.get_artist_by_id(id)
 
     if not artist:
@@ -346,7 +345,7 @@ def get_artist_by_id(id: int):
 
 
 @app.put('/artists/{id}', response_model=pydantic_schemas.Artist, tags=["artists"])
-def update_artist_by_id(id: int, artist: pydantic_schemas.ArtistIn):
+def update_artist_by_id(id: int, artist: pydantic_schemas.ArtistIn, token: str = Depends(oauth2_scheme)):
     updated_artist = database.update_artist_by_id(
         id, models.Artist(name=artist.name))
 
@@ -358,12 +357,12 @@ def update_artist_by_id(id: int, artist: pydantic_schemas.ArtistIn):
 
 
 @app.delete('/artists/{id}', tags=["artists"])
-def delete_artist_by_id(id: int):
+def delete_artist_by_id(id: int, token: str = Depends(oauth2_scheme)):
     database.delete_artist_by_id(id)
 
 
 @app.post('/genres/create', response_model=pydantic_schemas.Genre, tags=["genres"])
-def create_genre(genre: pydantic_schemas.GenreIn):
+def create_genre(genre: pydantic_schemas.GenreIn, token: str = Depends(oauth2_scheme)):
     created_genre = database.create_genre(models.Genre(title=genre.title))
 
     if not created_genre:
@@ -374,7 +373,7 @@ def create_genre(genre: pydantic_schemas.GenreIn):
 
 
 @app.get('/genres/{id}', response_model=pydantic_schemas.Genre, tags=["genres"])
-def get_genre_by_id(id: int):
+def get_genre_by_id(id: int, token: str = Depends(oauth2_scheme)):
     genre = database.get_genre_by_id(id)
 
     if not genre:
@@ -385,7 +384,7 @@ def get_genre_by_id(id: int):
 
 
 @app.put('/genre/{id}', response_model=pydantic_schemas.Genre, tags=["genres"])
-def update_genre_by_id(id: int, genre: pydantic_schemas.GenreIn):
+def update_genre_by_id(id: int, genre: pydantic_schemas.GenreIn, token: str = Depends(oauth2_scheme)):
     updated_genre = database.update_genre_by_id(
         id, models.Genre(title=genre.title))
 
@@ -397,12 +396,12 @@ def update_genre_by_id(id: int, genre: pydantic_schemas.GenreIn):
 
 
 @app.delete('/genre/{id}', tags=["genres"])
-def delete_genre_by_id(id: int):
+def delete_genre_by_id(id: int, token: str = Depends(oauth2_scheme)):
     database.delete_genre_by_id(id)
 
 
 @app.post('/playlists/create', response_model=pydantic_schemas.Playlist, tags=['playlists'])
-def create_playlist(playlist: pydantic_schemas.PlaylistIn) -> pydantic_schemas.Playlist:
+def create_playlist(playlist: pydantic_schemas.PlaylistIn, token: str = Depends(oauth2_scheme)) -> pydantic_schemas.Playlist:
     songs = [database.get_song_by_id(song_id) for song_id in playlist.song_ids]
 
     created_playlist = database.create_playlist(
@@ -412,7 +411,7 @@ def create_playlist(playlist: pydantic_schemas.PlaylistIn) -> pydantic_schemas.P
 
 
 @app.get('/playlists/{id}', response_model=pydantic_schemas.Playlist, tags=['playlists'])
-def get_playlist_by_id(id: int) -> pydantic_schemas.Playlist:
+def get_playlist_by_id(id: int, token: str = Depends(oauth2_scheme)) -> pydantic_schemas.Playlist:
     playlist = database.get_playlist_by_id(id)
 
     if not playlist:
@@ -423,7 +422,7 @@ def get_playlist_by_id(id: int) -> pydantic_schemas.Playlist:
 
 
 @app.put('/playlists/{id}', response_model=pydantic_schemas.Playlist, tags=['playlists'])
-def update_playlist_by_id(id: int, playlist: pydantic_schemas.PlaylistIn) -> pydantic_schemas.Playlist:
+def update_playlist_by_id(id: int, playlist: pydantic_schemas.PlaylistIn, token: str = Depends(oauth2_scheme)) -> pydantic_schemas.Playlist:
     songs = [database.get_song_by_id(song_id) for song_id in playlist.song_ids]
 
     updated_playlist = database.update_playlist_by_id(
@@ -433,5 +432,5 @@ def update_playlist_by_id(id: int, playlist: pydantic_schemas.PlaylistIn) -> pyd
 
 
 @app.delete('/playlists/{id}', tags=['playlists'])
-def delete_playlist_by_id(id: int):
+def delete_playlist_by_id(id: int, token: str = Depends(oauth2_scheme)):
     database.delete_playlist_by_id(id)
