@@ -4,6 +4,22 @@ from sqlalchemy.sql.schema import ForeignKey, ForeignKeyConstraint, Table
 
 Base = declarative_base()
 
+artist_song_table = Table('artist_song',
+                          Base.metadata,
+                          Column('artist_id', Integer,
+                                 ForeignKey('artists.id', ondelete='CASCADE')),
+                          Column('song_id', Integer, ForeignKey(
+                              'songs.id', ondelete='CASCADE'))
+                          )
+
+playlist_song_table = Table('playlist_song',
+                            Base.metadata,
+                            Column('playlist_id', Integer,
+                                   ForeignKey('playlists.id', ondelete='CASCADE')),
+                            Column('song_id', Integer, ForeignKey(
+                                'songs.id', ondelete='CASCADE'))
+                            )
+
 
 class File(Base):
     __tablename__ = 'files'
@@ -29,15 +45,6 @@ class User(Base):
 
     def __repr__(self) -> str:
         return f"<User(id={self.id}, email='{self.email}', hashed_password='{self.hashed_password}', birthday='{self.birthday}', country_id={self.country_id})>"
-
-
-artist_song_table = Table('artist_song',
-                          Base.metadata,
-                          Column('artist_id', Integer,
-                                 ForeignKey('artists.id', ondelete='CASCADE')),
-                          Column('song_id', Integer, ForeignKey(
-                              'songs.id', ondelete='CASCADE'))
-                          )
 
 
 class Artist(Base):
@@ -67,6 +74,10 @@ class Song(Base):
                          lazy='subquery')
     artists = relationship(
         'Artist', secondary=artist_song_table, back_populates='songs')
+
+    playlists = relationship('Playlist', secondary=playlist_song_table,
+                             back_populates='songs')
+
     file = relationship('File', uselist=False)
 
     def __repr__(self) -> str:
@@ -113,3 +124,16 @@ class Country(Base):
 
     def __repr__(self) -> str:
         return f"<Country(id={self.id}, name='{self.name}')>"
+
+
+class Playlist(Base):
+    __tablename__ = 'playlists'
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String(50))
+
+    songs = relationship('Song', secondary=playlist_song_table,
+                         back_populates='playlists')
+
+    def __repr__(self) -> str:
+        return f"<Playlist(id={self.id}, title='{self.title}')>"

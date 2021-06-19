@@ -12,6 +12,7 @@ from fastapi.staticfiles import StaticFiles
 
 from jose import JWTError, jwt
 from jose.constants import ALGORITHMS
+import pydantic
 from sqlalchemy.sql.coercions import expect
 from sqlalchemy.sql.expression import update
 
@@ -35,26 +36,32 @@ IMAGES_DIRECTORY.mkdir(exist_ok=True, parents=True)
 
 tags_metadata = [
     {
-        "name" : "albums",
-        "description" : "Operations with albums."
+        "name": "albums",
+        "description": "Operations with albums."
     },
     {
-        "name" : "genres",
-        "description" : "Operations with genres."
+        "name": "genres",
+        "description": "Operations with genres."
     },
     {
-        "name" : "songs",
-        "description" : "Operations with songs"
+        "name": "songs",
+        "description": "Operations with songs"
     },
     {
-        "name" : "artists",
-        "descriptions" : "Operations with artists"
+        "name": "artists",
+        "descriptions": "Operations with artists"
+    },
+    {
+        "name": "playlists",
+        "descriptions": "Operations with playlists"
     }
 ]
 
 app = FastAPI(openapi_tags=tags_metadata)
 
-app.mount('/static_files', StaticFiles(directory='static_files'), name="static_files")
+app.mount('/static_files', StaticFiles(directory='static_files'),
+          name="static_files")
+
 
 @app.post('/login', response_model=pydantic_schemas.Token)
 async def login(form_data: OAuth2PasswordRequestForm = Depends()) -> pydantic_schemas.Token:
@@ -123,7 +130,16 @@ async def get_user_by_id(user_id: int) -> pydantic_schemas.User:
 
 #     return user
 
-@app.get('/songs/{song_id}', response_model=pydantic_schemas.Song, tags=["songs"])
+@app.post('/songs/create', response_model=pydantic_schemas.Song, tags=['songs'])
+def create_song(song: pydantic_schemas.SongIn):
+    file = database.get_file_by_id(song.file_id)
+    artists = [database.get_artist_by_id(artist_id) for artist_id in song.artist_ids]
+
+    created_song = database.create_song(models.Song(title=song.title, file=file, artists=artists))
+
+    return pydantic_schemas.Song.from_orm(created_song)
+
+@app.get('/songs/{id}', response_model=pydantic_schemas.Song, tags=["songs"])
 async def get_song_by_id(song_id: int) -> pydantic_schemas.Song:
     song = database.get_song_by_id(song_id)
 
@@ -131,7 +147,21 @@ async def get_song_by_id(song_id: int) -> pydantic_schemas.Song:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail='Song not found')
 
-    return song
+    return pydantic_schemas.Song.from_orm(song)
+
+@app.put('/songs/{id}', response_model=pydantic_schemas.Song, tags=["songs"])
+def update_song_by_id(id: int, song: pydantic_schemas.SongIn) -> pydantic_schemas.Song:
+    file = database.get_file_by_id(song.file_id)
+    artists = [database.get_artist_by_id(artist_id) for artist_id in song.artist_ids]
+
+    updated_song = database.update_song_by_id(id, models.Song(title=song.title, file=file, artists=artists))
+
+    return pydantic_schemas.Song.from_orm(updated_song)
+
+
+@app.delete('/songs/{id}', tags=["songs"])
+def delete_song_by_id(id: int):
+    database.delete_song_by_id(id)
 
 
 async def save_song_to_disk(file: UploadFile = File(None)) -> pydantic_schemas.Song:
@@ -195,7 +225,8 @@ def create_album(album: pydantic_schemas.AlbumIn) -> pydantic_schemas.Album:
             status_code=status.HTTP_400_BAD_REQUEST, detail="Artist not found")
 
     if not album_cover:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Album cover not found")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Album cover not found")
 
     album_model = models.Album(title=album.title,
                                release_date=album.release_date, artist=artist, genre=genre, songs=songs, album_cover=album_cover)
@@ -216,10 +247,12 @@ def save_album_cover_to_file(file: UploadFile = File(None)) -> pathlib.Path:
 
     return filepath
 
+
 @app.post('/albums/upload_album_cover', response_model=pydantic_schemas.FileUploaded, tags=["albums"])
 def upload_album_cover(file: UploadFile = File(None)) -> pydantic_schemas.FileUploaded:
     if file.content_type != 'image/png' and file.content_type != 'image/jpeg' and file.content_type != 'image/bmp':
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Only files with 'Content-Type: image/[jpeg/bmp/png]' are accepted")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="Only files with 'Content-Type: image/[jpeg/bmp/png]' are accepted")
 
     filepath = save_album_cover_to_file(file)
 
@@ -227,6 +260,7 @@ def upload_album_cover(file: UploadFile = File(None)) -> pydantic_schemas.FileUp
         filepath=filepath.as_posix(), filetype="image/png"))
 
     return pydantic_schemas.FileUploaded(id=result.id, filetype=result.filetype, filepath=result.filepath, original_filename=file.filename)
+
 
 @app.put('/albums/{id}', response_model=pydantic_schemas.Album, tags=["albums"])
 def update_album_by_id(id: int, album: pydantic_schemas.AlbumIn):
@@ -248,22 +282,25 @@ def update_album_by_id(id: int, album: pydantic_schemas.AlbumIn):
             status_code=status.HTTP_400_BAD_REQUEST, detail="Artist not found")
 
     if not album_cover:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Album cover not found")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Album cover not found")
 
     album_model = models.Album(title=album.title,
                                release_date=album.release_date, artist=artist, genre=genre, songs=songs, album_cover=album_cover)
 
-
     updated_album = database.update_album_by_id(id, album_model)
 
     if not updated_album:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not update album")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not update album")
 
     return pydantic_schemas.Album.from_orm(updated_album)
+
 
 @app.delete('/albums/{id}', tags=["albums"])
 def delete_album_by_id(id: int):
     database.delete_album_by_id(id)
+
 
 @app.post('/artists/create', response_model=pydantic_schemas.Artist, tags=["artists"])
 def create_artist(artist: pydantic_schemas.ArtistIn) -> pydantic_schemas.Artist:
@@ -274,55 +311,104 @@ def create_artist(artist: pydantic_schemas.ArtistIn) -> pydantic_schemas.Artist:
 
     return pydantic_schemas.Artist.from_orm(result)
 
+
 @app.get('/artists/{id}', response_model=pydantic_schemas.Artist, tags=["artists"])
 def get_artist_by_id(id: int):
     artist = database.get_artist_by_id(id)
 
     if not artist:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Artist not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Artist not found")
 
     return pydantic_schemas.Artist.from_orm(artist)
 
+
 @app.put('/artists/{id}', response_model=pydantic_schemas.Artist, tags=["artists"])
 def update_artist_by_id(id: int, artist: pydantic_schemas.ArtistIn):
-    updated_artist = database.update_artist_by_id(id, models.Artist(name=artist.name))
+    updated_artist = database.update_artist_by_id(
+        id, models.Artist(name=artist.name))
 
     if not updated_artist:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not update artist")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not update artist")
 
     return pydantic_schemas.Artist.from_orm(updated_artist)
+
 
 @app.delete('/artists/{id}', tags=["artists"])
 def delete_artist_by_id(id: int):
     database.delete_artist_by_id(id)
+
 
 @app.post('/genres/create', response_model=pydantic_schemas.Genre, tags=["genres"])
 def create_genre(genre: pydantic_schemas.GenreIn):
     created_genre = database.create_genre(models.Genre(title=genre.title))
 
     if not created_genre:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not create genre")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not create genre")
 
     return pydantic_schemas.Genre.from_orm(created_genre)
+
 
 @app.get('/genres/{id}', response_model=pydantic_schemas.Genre, tags=["genres"])
 def get_genre_by_id(id: int):
     genre = database.get_genre_by_id(id)
 
     if not genre:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Genre not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Genre not found")
 
     return pydantic_schemas.Genre.from_orm(genre)
 
+
 @app.put('/genre/{id}', response_model=pydantic_schemas.Genre, tags=["genres"])
 def update_genre_by_id(id: int, genre: pydantic_schemas.GenreIn):
-    updated_genre = database.update_genre_by_id(id, models.Genre(title=genre.title))
+    updated_genre = database.update_genre_by_id(
+        id, models.Genre(title=genre.title))
 
     if not updated_genre:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not update genre")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not update genre")
 
     return pydantic_schemas.Genre.from_orm(updated_genre)
+
 
 @app.delete('/genre/{id}', tags=["genres"])
 def delete_genre_by_id(id: int):
     database.delete_genre_by_id(id)
+
+
+@app.post('/playlists/create', response_model=pydantic_schemas.Playlist, tags=['playlists'])
+def create_playlist(playlist: pydantic_schemas.PlaylistIn) -> pydantic_schemas.Playlist:
+    songs = [database.get_song_by_id(song_id) for song_id in playlist.song_ids]
+
+    created_playlist = database.create_playlist(
+        models.Playlist(title=playlist.title, songs=songs))
+
+    return pydantic_schemas.Playlist.from_orm(created_playlist)
+
+
+@app.get('/playlists/{id}', response_model=pydantic_schemas.Playlist, tags=['playlists'])
+def get_playlist_by_id(id: int) -> pydantic_schemas.Playlist:
+    playlist = database.get_playlist_by_id(id)
+
+    if not playlist:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Playlist not found')
+
+    return pydantic_schemas.Playlist.from_orm(playlist)
+
+
+@app.put('/playlists/{id}', response_model=pydantic_schemas.Playlist, tags=['playlists'])
+def update_playlist_by_id(id: int, playlist: pydantic_schemas.PlaylistIn) -> pydantic_schemas.Playlist:
+    songs = [database.get_song_by_id(song_id) for song_id in playlist.song_ids]
+
+    updated_playlist = database.update_playlist_by_id(
+        id, models.Playlist(title=playlist.title, songs=songs))
+
+    return pydantic_schemas.Playlist.from_orm(updated_playlist)
+
+
+@app.delete('/playlists/{id}', tags=['playlists'])
+def delete_playlist_by_id(id: int):
+    database.delete_playlist_by_id(id)

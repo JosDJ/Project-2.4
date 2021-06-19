@@ -91,3 +91,15 @@ class AlbumIn(BaseModel):
     genre_id: int
     song_ids: List[int]
     album_cover_id: int
+
+class Playlist(BaseModel):
+    id: int
+    title: str
+    songs: List[Song] = []
+
+    class Config:
+        orm_mode = True
+
+class PlaylistIn(BaseModel):
+    title: str
+    song_ids: List[int] = []
