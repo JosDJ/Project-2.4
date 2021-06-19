@@ -133,11 +133,22 @@ async def get_user_by_id(user_id: int) -> pydantic_schemas.User:
 @app.post('/songs/create', response_model=pydantic_schemas.Song, tags=['songs'])
 def create_song(song: pydantic_schemas.SongIn):
     file = database.get_file_by_id(song.file_id)
-    artists = [database.get_artist_by_id(artist_id) for artist_id in song.artist_ids]
+    artists = [database.get_artist_by_id(artist_id)
+               for artist_id in song.artist_ids]
 
-    created_song = database.create_song(models.Song(title=song.title, file=file, artists=artists))
+    if not file:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="Song file not found")
+
+    if None in artists:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="One or more artists not found")
+
+    created_song = database.create_song(models.Song(
+        title=song.title, file=file, artists=artists))
 
     return pydantic_schemas.Song.from_orm(created_song)
+
 
 @app.get('/songs/{id}', response_model=pydantic_schemas.Song, tags=["songs"])
 async def get_song_by_id(song_id: int) -> pydantic_schemas.Song:
@@ -149,12 +160,23 @@ async def get_song_by_id(song_id: int) -> pydantic_schemas.Song:
 
     return pydantic_schemas.Song.from_orm(song)
 
+
 @app.put('/songs/{id}', response_model=pydantic_schemas.Song, tags=["songs"])
 def update_song_by_id(id: int, song: pydantic_schemas.SongIn) -> pydantic_schemas.Song:
     file = database.get_file_by_id(song.file_id)
-    artists = [database.get_artist_by_id(artist_id) for artist_id in song.artist_ids]
+    artists = [database.get_artist_by_id(artist_id)
+               for artist_id in song.artist_ids]
 
-    updated_song = database.update_song_by_id(id, models.Song(title=song.title, file=file, artists=artists))
+    if not file:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="Song file not found")
+
+    if None in artists:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="One or more artists not found")
+
+    updated_song = database.update_song_by_id(
+        id, models.Song(title=song.title, file=file, artists=artists))
 
     return pydantic_schemas.Song.from_orm(updated_song)
 
@@ -394,7 +416,8 @@ def get_playlist_by_id(id: int) -> pydantic_schemas.Playlist:
     playlist = database.get_playlist_by_id(id)
 
     if not playlist:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Playlist not found')
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail='Playlist not found')
 
     return pydantic_schemas.Playlist.from_orm(playlist)
 
