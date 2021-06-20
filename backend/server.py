@@ -63,7 +63,7 @@ app.mount('/static_files', StaticFiles(directory='static_files'),
 
 
 @app.post('/login', response_model=pydantic_schemas.Token)
-async def login(form_data: OAuth2PasswordRequestForm = Depends()) -> pydantic_schemas.Token:
+def login(form_data: OAuth2PasswordRequestForm = Depends()) -> pydantic_schemas.Token:
 
     user = database.validate_user(form_data.username, form_data.password)
 
@@ -78,7 +78,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()) -> pydantic_sc
         "email": user.email
     }
 
-    access_token = jwt.encode(data, SECRET_KEY, access_token=ALGORITHM)
+    access_token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
 
     return pydantic_schemas.Token(access_token=access_token, token_type="bearer")
 
@@ -95,7 +95,7 @@ async def register(user_data: pydantic_schemas.RegistrationUser):
         )
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme)) -> pydantic_schemas.User:
+def get_current_user(token: str = Depends(oauth2_scheme)) -> models.User:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -106,7 +106,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> pydantic_sche
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
 
         if email := payload.get("email"):
-            return database.get_user(email)
+            return database.get_user_by_email(email)
         else:
             raise credentials_exception
     except JWTError:
@@ -114,7 +114,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> pydantic_sche
 
 
 @app.get('/users/{user_id}', response_model=pydantic_schemas.User)
-async def get_user_by_id(user_id: int, token: str = Depends(oauth2_scheme)) -> pydantic_schemas.User:
+def get_user_by_id(user_id: int, token: str = Depends(oauth2_scheme)) -> pydantic_schemas.User:
     user = database.get_user_by_id(user_id)
 
     return pydantic_schemas.User.from_orm(user)
@@ -401,11 +401,11 @@ def delete_genre_by_id(id: int, token: str = Depends(oauth2_scheme)):
 
 
 @app.post('/playlists/create', response_model=pydantic_schemas.Playlist, tags=['playlists'])
-def create_playlist(playlist: pydantic_schemas.PlaylistIn, token: str = Depends(oauth2_scheme)) -> pydantic_schemas.Playlist:
+def create_playlist(playlist: pydantic_schemas.PlaylistIn, user: models.User = Depends(get_current_user)) -> pydantic_schemas.Playlist:
     songs = [database.get_song_by_id(song_id) for song_id in playlist.song_ids]
 
     created_playlist = database.create_playlist(
-        models.Playlist(title=playlist.title, songs=songs))
+        models.Playlist(title=playlist.title, songs=songs, author=user))
 
     return pydantic_schemas.Playlist.from_orm(created_playlist)
 
@@ -422,11 +422,11 @@ def get_playlist_by_id(id: int, token: str = Depends(oauth2_scheme)) -> pydantic
 
 
 @app.put('/playlists/{id}', response_model=pydantic_schemas.Playlist, tags=['playlists'])
-def update_playlist_by_id(id: int, playlist: pydantic_schemas.PlaylistIn, token: str = Depends(oauth2_scheme)) -> pydantic_schemas.Playlist:
+def update_playlist_by_id(id: int, playlist: pydantic_schemas.PlaylistIn, user: models.User = Depends(get_current_user)) -> pydantic_schemas.Playlist:
     songs = [database.get_song_by_id(song_id) for song_id in playlist.song_ids]
 
     updated_playlist = database.update_playlist_by_id(
-        id, models.Playlist(title=playlist.title, songs=songs))
+        id, models.Playlist(title=playlist.title, songs=songs, author=user))
 
     return pydantic_schemas.Playlist.from_orm(updated_playlist)
 

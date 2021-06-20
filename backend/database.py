@@ -260,6 +260,7 @@ def update_playlist_by_id(id: int, playlist: models.Playlist) -> Optional[models
     if playlist_to_update:
         playlist_to_update.title = playlist.title
         playlist_to_update.songs = playlist.songs
+        playlist_to_update.author = playlist.author
 
     session.commit()
 

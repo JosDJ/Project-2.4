@@ -43,6 +43,8 @@ class User(Base):
 
     country = relationship('Country', lazy='subquery')
 
+    playlists = relationship('Playlist', back_populates='author')
+
     def __repr__(self) -> str:
         return f"<User(id={self.id}, email='{self.email}', hashed_password='{self.hashed_password}', birthday='{self.birthday}', country_id={self.country_id})>"
 
@@ -131,9 +133,12 @@ class Playlist(Base):
 
     id = Column(Integer, primary_key=True)
     title = Column(String(50))
+    author_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'))
 
     songs = relationship('Song', secondary=playlist_song_table,
                          back_populates='playlists')
+
+    author = relationship('User', back_populates='playlists')
 
     def __repr__(self) -> str:
         return f"<Playlist(id={self.id}, title='{self.title}')>"
