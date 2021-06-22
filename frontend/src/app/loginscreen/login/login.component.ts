@@ -8,6 +8,7 @@ import { first } from 'rxjs/operators';
 import { AuthService } from "../../services";
 
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -50,6 +51,7 @@ export class LoginComponent implements OnInit {
 
       // stop here if form is invalid
       if (this.loginForm.invalid) {
+          console.log("invalid loginform");
           return;
       }
 
@@ -63,6 +65,7 @@ export class LoginComponent implements OnInit {
               error => {
                   this.error = error;
                   this.loading = false;
+                  this.error = "this username and password are incorrect";
               });
   }
 

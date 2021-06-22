@@ -10,8 +10,8 @@ import { UploadComponent } from './mainscreen/upload/upload.component';
 import { ZoekenComponent } from './mainscreen/zoeken/zoeken.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
+  { path: '', redirectTo: '/loginnn', pathMatch: 'full' },
+  { path: 'loginnn', component: LoginComponent },
   { path: 'home', component: HomeComponent,
     canActivate: [AuthGuard] },
   { path: 'luisteren', component: LuisterenComponent,
