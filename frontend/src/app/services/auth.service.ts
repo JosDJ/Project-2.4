@@ -44,7 +44,8 @@ export class AuthService {
 
     const body = new HttpParams()
       .set('username', username)
-      .set('password', password);
+      .set('password', password)
+      .set('grant_type', 'password');
 
     return this.http
       .post<any>(`${environment.apiUrl}/login`, body, httpOptions)
