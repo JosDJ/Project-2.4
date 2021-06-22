@@ -118,11 +118,11 @@ def update_song_by_id(id: int, song: models.Song) -> Optional[models.Song]:
 
     return song_to_update
 
+
 def delete_song_by_id(id: int):
     session.query(models.Song).filter_by(id=id).delete()
 
     session.commit()
-
 
 
 def create_new_user(user: User) -> Optional[models.User]:
@@ -131,6 +131,26 @@ def create_new_user(user: User) -> Optional[models.User]:
     session.commit()
 
     return user
+
+
+def update_user_by_id(id: int, user: models.User) -> Optional[models.User]:
+    user_to_update = get_user_by_id(id)
+
+    if user_to_update:
+        user_to_update.email = user.email
+        user_to_update.birthday = user.birthday
+        user_to_update.country = user.country
+        user_to_update.hashed_password = user.hashed_password
+
+    session.commit()
+
+    return user_to_update
+
+
+def delete_user_by_id(id: int):
+    session.query(models.User).filter_by(id=id).delete()
+
+    session.commit()
 
 
 def create_album(album: models.Album) -> Optional[models.Album]:
