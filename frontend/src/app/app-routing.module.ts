@@ -13,15 +13,20 @@ const routes: Routes = [
   { path: '', redirectTo: '/loginnn', pathMatch: 'full' },
   { path: 'loginnn', component: LoginComponent },
   { path: 'home', component: HomeComponent,
-    canActivate: [AuthGuard] },
+    canActivate: [AuthGuard] 
+  },
   { path: 'luisteren', component: LuisterenComponent,
-    canActivate: [AuthGuard] },
+    canActivate: [AuthGuard] 
+  },
   { path: 'mijnaccount', component: MijnaccountComponent,
-    canActivate: [AuthGuard] },
+    canActivate: [AuthGuard] 
+  },
   { path: 'upload', component: UploadComponent,
-    canActivate: [AuthGuard] },
+    canActivate: [AuthGuard] 
+  },
   { path: 'zoeken', component: ZoekenComponent,
-    canActivate: [AuthGuard] },
+    canActivate: [AuthGuard] 
+  },
 ];
 
 @NgModule({
