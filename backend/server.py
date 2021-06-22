@@ -6,6 +6,7 @@ import pathlib
 import uuid
 from PIL import Image
 
+from models import User
 from fastapi import Depends, FastAPI, File, HTTPException, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -102,6 +103,15 @@ async def register(user_data: pydantic_schemas.RegistrationUser):
             detail='An account with this email address already exists',
             headers={"WWW-Authenticate": "Bearer"}
         )
+    else:
+        new_user = models.User(
+            email=user_data.email,
+            hashed_password=database.get_password_hash(user_data.password),
+            birthday=user_data.birthday,
+            country=user_data.country
+        )
+        database.create_new_user(new_user)
+
 
 
 def get_current_user(token: str = Depends(oauth2_scheme)) -> models.User:
