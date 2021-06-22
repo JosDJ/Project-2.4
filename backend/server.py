@@ -96,7 +96,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()) -> pydantic_schemas.
 
 @app.post('/register', response_model=pydantic_schemas.Token)
 async def register(user_data: pydantic_schemas.RegistrationUser):
-    user = database.get_user(user_data.email)  # check if user exists already
+    user = database.get_user_by_email(user_data.email)  # check if user exists already
 
     if user:
         raise HTTPException(
@@ -111,8 +111,10 @@ async def register(user_data: pydantic_schemas.RegistrationUser):
             birthday=user_data.birthday,
             country=user_data.country
         )
+
         database.create_new_user(new_user)
 
+    return pydantic_schemas.User.from_orm(new_user)
 
 
 def get_current_user(token: str = Depends(oauth2_scheme)) -> models.User:
@@ -454,3 +456,25 @@ def update_playlist_by_id(id: int, playlist: pydantic_schemas.PlaylistIn, user: 
 @app.delete('/playlists/{id}', tags=['playlists'])
 def delete_playlist_by_id(id: int, token: str = Depends(oauth2_scheme)):
     database.delete_playlist_by_id(id)
+
+
+@app.delete('user/{id}', tags=['users'])
+def delete_user_by_id(id: int, token: str = Depends(oauth2_scheme)):
+    database.delete_user_by_id(id)
+
+
+@app.put('/users/{id}', response_model=pydantic_schemas.User, tags=['users'])
+def update_user_by_id(id: int, user: pydantic_schemas.UpdateUser, token:str = Depends(oauth2_scheme)):
+    updated_user = database.update_user_by_id(id, models.User(
+        email=user.email,
+        hashed_password=database.get_password_hash(user.password),#TODO
+        birthday=user.birthday,
+        country=user.country
+    ))
+
+    if not updated_user:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not update user"
+        )
+
+    return pydantic_schemas.User.from_orm(updated_user)
