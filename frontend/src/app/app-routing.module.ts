@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './auth.guard';
+import { LoginComponent } from './loginscreen/login/login.component';
 
 import { HomeComponent } from './mainscreen/home/home.component';
 import { LuisterenComponent } from './mainscreen/luisteren/luisteren.component';
@@ -8,11 +10,18 @@ import { UploadComponent } from './mainscreen/upload/upload.component';
 import { ZoekenComponent } from './mainscreen/zoeken/zoeken.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'luisteren', component: LuisterenComponent },
-  { path: 'mijnaccount', component: MijnaccountComponent },
-  { path: 'upload', component: UploadComponent },
-  { path: 'zoeken', component: ZoekenComponent },
+  { path: '', redirectTo: '/loginnn', pathMatch: 'full' },
+  { path: 'loginnn', component: LoginComponent },
+  { path: 'home', component: HomeComponent,
+    canActivate: [AuthGuard] },
+  { path: 'luisteren', component: LuisterenComponent,
+    canActivate: [AuthGuard] },
+  { path: 'mijnaccount', component: MijnaccountComponent,
+    canActivate: [AuthGuard] },
+  { path: 'upload', component: UploadComponent,
+    canActivate: [AuthGuard] },
+  { path: 'zoeken', component: ZoekenComponent,
+    canActivate: [AuthGuard] },
 ];
 
 @NgModule({

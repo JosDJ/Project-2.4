@@ -21,7 +21,7 @@ class User(BaseModel):
         orm_mode = True
 
 class RegistrationUser(User):
-    password: str = None
+    password: str
 
 class Artist(BaseModel):
     id: int
@@ -31,7 +31,7 @@ class Artist(BaseModel):
         orm_mode = True
 
 class ArtistIn(BaseModel):
-    name: str = None
+    name: str
 
 class Song(BaseModel):
     id: int
@@ -43,8 +43,8 @@ class Song(BaseModel):
 
 class SongIn(BaseModel):
     id: int
-    title: str = None
-    artist_ids: List[int] = []
+    title: str
+    artist_ids: List[int]
 
 class FileUploaded(BaseModel):
     id: int
@@ -64,7 +64,7 @@ class Genre(BaseModel):
         orm_mode = True
 
 class GenreIn(BaseModel):
-    title: str = None
+    title: str
 
 class AlbumCover(BaseModel):
     filepath: str
@@ -85,9 +85,21 @@ class Album(BaseModel):
         orm_mode = True
 
 class AlbumIn(BaseModel):
-    title: str = None
-    artist_id: int = None
-    release_date: date = None
-    genre_id: int = None
+    title: str
+    artist_id: int
+    release_date: date
+    genre_id: int
+    song_ids: List[int]
+    album_cover_id: int
+
+class Playlist(BaseModel):
+    id: int
+    title: str
+    songs: List[Song] = []
+
+    class Config:
+        orm_mode = True
+
+class PlaylistIn(BaseModel):
+    title: str
     song_ids: List[int] = []
-    album_cover_id: int = None
