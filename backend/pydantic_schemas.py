@@ -23,6 +23,9 @@ class User(BaseModel):
 class RegistrationUser(User):
     password: str
 
+class UpdateUser(User):
+    password: str
+
 class Artist(BaseModel):
     id: int
     name: str = None
