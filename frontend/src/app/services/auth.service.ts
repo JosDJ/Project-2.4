@@ -2,40 +2,41 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import jwt_decode from 'jwt-decode';
 
 import { environment } from '../environment';
+
+interface AuthenticationResponse {
+  access_token: string;
+  token_type: string;
+}
+
+interface JWTPayload {
+  email: string;
+  exp: number;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private currentUserSubject: BehaviorSubject<any>;
-  public currentUser: Observable<any>;
-
   constructor(private http: HttpClient) {
-    this.currentUserSubject = new BehaviorSubject<any>(
-      JSON.parse(localStorage.getItem('currentUser')!)
-    );
-    this.currentUser = this.currentUserSubject.asObservable();
   }
 
-  public get currentUserValue() {
-    return this.currentUserSubject.value;
-  }
-
-  isLoggedIn() {
+  isLoggedIn(): boolean {
     const token = localStorage.getItem('token');
-    if (typeof token === 'string') {
-      const payload = atob(token.split('.')[1]);
-      const parsedPayload = JSON.parse(payload);
-      return parsedPayload.exp > Date.now() / 1000;
-    } else {
-      console.log('token is null');
-      return;
+
+    if (token == null) {
+      return false;
     }
+
+    const decoded = jwt_decode<JWTPayload>(token);
+    const now = (Math.floor((new Date()).getTime() / 1000));
+
+    return now <= decoded.exp;
   }
 
-  login(username: string, password: string) {
+  login(username: string, password: string): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -47,21 +48,18 @@ export class AuthService {
       .set('password', password)
       .set('grant_type', 'password');
 
-    return this.http
-      .post<any>(`${environment.apiUrl}/login`, body, httpOptions)
-      .pipe(
-        map((user) => {
-          // store user details and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          this.currentUserSubject.next(user);
-          return user;
-        })
-      );
+    const result = this.http.post<any>(`${environment.apiUrl}/login`, body, httpOptions);
+
+    result.subscribe(data => this.setToken(data));
+
+    return result;
   }
 
-  logout() {
-    // remove user from local storage and set current user to null
-    localStorage.removeItem('currentUser');
-    this.currentUserSubject.next(null);
+  private setToken(authResponse: AuthenticationResponse): void {
+    localStorage.setItem('token', authResponse.access_token);
+  }
+
+  logout(): void {
+    localStorage.removeItem('token');
   }
 }

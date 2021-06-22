@@ -85,7 +85,8 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()) -> pydantic_schemas.
         )
 
     data = {
-        "email": user.email
+        "email": user.email,
+        'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=ACCESS_TOKEN_EXPIRES_MINUTES)
     }
 
     access_token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)

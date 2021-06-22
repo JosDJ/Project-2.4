@@ -28,8 +28,8 @@ export class LoginComponent implements OnInit {
     private authService: AuthService
   ) {
     // redirect to home if already logged in
-    if (this.authService.currentUserValue) { 
-      this.router.navigate(['/login']);
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/']);
     }
   }
 
@@ -51,21 +51,23 @@ export class LoginComponent implements OnInit {
 
       // stop here if form is invalid
       if (this.loginForm.invalid) {
-          console.log("invalid loginform");
+          console.log('invalid loginform');
           return;
       }
 
       this.loading = true;
       this.authService.login(this.f.username.value, this.f.password.value)
-          .pipe(first())
+          // .pipe(first())
           .subscribe(
               data => {
+                if (this.authService.isLoggedIn()) {
                   this.router.navigate([this.returnUrl]);
+                }
               },
               error => {
                   this.error = error;
                   this.loading = false;
-                  this.error = "this username and password are incorrect";
+                  this.error = 'this username and password are incorrect';
               });
   }
 

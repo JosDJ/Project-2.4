@@ -10,27 +10,24 @@ import { UploadComponent } from './mainscreen/upload/upload.component';
 import { ZoekenComponent } from './mainscreen/zoeken/zoeken.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/loginnn', pathMatch: 'full' },
-  { path: 'loginnn', component: LoginComponent },
-  { path: 'home', component: HomeComponent,
-    canActivate: [AuthGuard] 
+  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: LoginComponent },
+  {
+    path: 'luisteren',
+    component: LuisterenComponent,
+    canActivate: [AuthGuard],
   },
-  { path: 'luisteren', component: LuisterenComponent,
-    canActivate: [AuthGuard] 
+  {
+    path: 'mijnaccount',
+    component: MijnaccountComponent,
+    canActivate: [AuthGuard],
   },
-  { path: 'mijnaccount', component: MijnaccountComponent,
-    canActivate: [AuthGuard] 
-  },
-  { path: 'upload', component: UploadComponent,
-    canActivate: [AuthGuard] 
-  },
-  { path: 'zoeken', component: ZoekenComponent,
-    canActivate: [AuthGuard] 
-  },
+  { path: 'upload', component: UploadComponent, canActivate: [AuthGuard] },
+  { path: 'zoeken', component: ZoekenComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
