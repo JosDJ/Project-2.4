@@ -94,8 +94,8 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()) -> pydantic_schemas.
     return pydantic_schemas.Token(access_token=access_token, token_type="bearer")
 
 
-@app.post('/register', response_model=pydantic_schemas.Token)
-async def register(user_data: pydantic_schemas.RegistrationUser):
+@app.post('/register', response_model=pydantic_schemas.User)
+async def register(user_data: pydantic_schemas.UserIn):
     user = database.get_user_by_email(user_data.email)  # check if user exists already
 
     if user:
@@ -104,15 +104,20 @@ async def register(user_data: pydantic_schemas.RegistrationUser):
             detail='An account with this email address already exists',
             headers={"WWW-Authenticate": "Bearer"}
         )
-    else:
-        new_user = models.User(
+    
+    country = database.get_country_by_id(user_data.country_id)
+
+    if not country:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Country not found')
+
+    new_user = models.User(
             email=user_data.email,
             hashed_password=database.get_password_hash(user_data.password),
             birthday=user_data.birthday,
-            country=user_data.country
-        )
+            country=country
+    )
 
-        database.create_new_user(new_user)
+    database.create_new_user(new_user)
 
     return pydantic_schemas.User.from_orm(new_user)
 

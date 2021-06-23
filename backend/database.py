@@ -299,3 +299,33 @@ def update_playlist_by_id(id: int, playlist: models.Playlist) -> Optional[models
 def delete_playlist_by_id(id: int):
     session.query(models.Playlist).filter_by(id=id).delete()
     session.commit()
+
+def create_country(country: models.Country):
+    session.add(country)
+
+    session.commit()
+
+    return country
+
+
+def get_country_by_id(id: int) -> Optional[models.Country]:
+    country = session.query(models.Country).filter_by(id=id).first()
+
+    return country
+
+
+def update_country_by_id(id: int, country: models.Country) -> Optional[models.Country]:
+    country_to_update = get_country_by_id(id)
+
+    if country_to_update:
+        country_to_update.title = country.title
+
+    session.commit()
+
+    return country_to_update
+
+
+def delete_country_by_id(id: int):
+    session.query(models.Country).filter_by(id=id).delete()
+
+    session.commit()
