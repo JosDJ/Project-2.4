@@ -313,6 +313,11 @@ def get_country_by_id(id: int) -> Optional[models.Country]:
 
     return country
 
+def get_countries() -> List[models.Country]:
+    countries = session.query(models.Country).all()
+
+    return countries
+
 
 def update_country_by_id(id: int, country: models.Country) -> Optional[models.Country]:
     country_to_update = get_country_by_id(id)

@@ -7,7 +7,8 @@ class Token(BaseModel):
     token_type: str
 
 class Country(BaseModel):
-    name: str = None
+    id: int
+    name: str
 
     class Config:
         orm_mode = True

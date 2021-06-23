@@ -483,3 +483,9 @@ def update_user_by_id(id: int, user: pydantic_schemas.UpdateUser, token:str = De
         )
 
     return pydantic_schemas.User.from_orm(updated_user)
+
+@app.get('/countries/', response_model=List[pydantic_schemas.Country])
+def get_countries() -> List[pydantic_schemas.Country]:
+    countries = [pydantic_schemas.Country.from_orm(country) for country in database.get_countries()]
+
+    return countries
