@@ -25,9 +25,7 @@ class UserIn(BaseModel):
     birthday: date
     country_id: int
     password: str
-    
-class UpdateUser(User):
-    password: str
+
 
 class Artist(BaseModel):
     id: int

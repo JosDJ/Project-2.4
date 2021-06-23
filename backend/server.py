@@ -469,12 +469,13 @@ def delete_user_by_id(id: int, token: str = Depends(oauth2_scheme)):
 
 
 @app.put('/users/{id}', response_model=pydantic_schemas.User, tags=['users'])
-def update_user_by_id(id: int, user: pydantic_schemas.UpdateUser, token:str = Depends(oauth2_scheme)):
+def update_user_by_id(id: int, user: pydantic_schemas.UserIn, token:str = Depends(oauth2_scheme)):
+    country = database.get_country_by_id(user.country_id)
     updated_user = database.update_user_by_id(id, models.User(
         email=user.email,
-        hashed_password=database.get_password_hash(user.password),#TODO
+        hashed_password=database.get_password_hash(user.password),
         birthday=user.birthday,
-        country=user.country
+        country=country
     ))
 
     if not updated_user:
