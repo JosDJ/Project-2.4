@@ -72,7 +72,7 @@ app.mount('/static_files', StaticFiles(directory='static_files'),
           name="static_files")
 
 
-@app.post('/login', response_model=pydantic_schemas.Token)
+@app.post('/login', response_model=pydantic_schemas.Token, tags=['users'])
 def login(form_data: OAuth2PasswordRequestForm = Depends()) -> pydantic_schemas.Token:
 
     user = database.validate_user(form_data.username, form_data.password)
@@ -94,7 +94,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()) -> pydantic_schemas.
     return pydantic_schemas.Token(access_token=access_token, token_type="bearer")
 
 
-@app.post('/register', response_model=pydantic_schemas.User)
+@app.post('/register', response_model=pydantic_schemas.User, tags=['users'])
 async def register(user_data: pydantic_schemas.UserIn):
     user = database.get_user_by_email(user_data.email)  # check if user exists already
 
@@ -140,7 +140,7 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> models.User:
         raise credentials_exception
 
 
-@app.get('/users/{user_id}', response_model=pydantic_schemas.User)
+@app.get('/users/{user_id}', response_model=pydantic_schemas.User, tags=['users'])
 def get_user_by_id(user_id: int, token: str = Depends(oauth2_scheme)) -> pydantic_schemas.User:
     user = database.get_user_by_id(user_id)
 
