@@ -72,7 +72,7 @@ app.mount('/static_files', StaticFiles(directory='static_files'),
           name="static_files")
 
 
-@app.post('/login', response_model=pydantic_schemas.Token)
+@app.post('/login', response_model=pydantic_schemas.Token, tags=['users'])
 def login(form_data: OAuth2PasswordRequestForm = Depends()) -> pydantic_schemas.Token:
 
     user = database.validate_user(form_data.username, form_data.password)
@@ -85,7 +85,8 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()) -> pydantic_schemas.
         )
 
     data = {
-        "email": user.email
+        "email": user.email,
+        'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=ACCESS_TOKEN_EXPIRES_MINUTES)
     }
 
     access_token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
@@ -93,9 +94,9 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()) -> pydantic_schemas.
     return pydantic_schemas.Token(access_token=access_token, token_type="bearer")
 
 
-@app.post('/register', response_model=pydantic_schemas.Token)
-async def register(user_data: pydantic_schemas.RegistrationUser):
-    user = database.get_user(user_data.email)  # check if user exists already
+@app.post('/register', response_model=pydantic_schemas.User, tags=['users'])
+async def register(user_data: pydantic_schemas.UserIn):
+    user = database.get_user_by_email(user_data.email)  # check if user exists already
 
     if user:
         raise HTTPException(
@@ -103,15 +104,22 @@ async def register(user_data: pydantic_schemas.RegistrationUser):
             detail='An account with this email address already exists',
             headers={"WWW-Authenticate": "Bearer"}
         )
-    else:
-        new_user = models.User(
+    
+    country = database.get_country_by_id(user_data.country_id)
+
+    if not country:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Country not found')
+
+    new_user = models.User(
             email=user_data.email,
             hashed_password=database.get_password_hash(user_data.password),
             birthday=user_data.birthday,
-            country=user_data.country
-        )
-        database.create_new_user(new_user)
+            country=country
+    )
 
+    database.create_new_user(new_user)
+
+    return pydantic_schemas.User.from_orm(new_user)
 
 
 def get_current_user(token: str = Depends(oauth2_scheme)) -> models.User:
@@ -132,7 +140,7 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> models.User:
         raise credentials_exception
 
 
-@app.get('/users/{user_id}', response_model=pydantic_schemas.User)
+@app.get('/users/{user_id}', response_model=pydantic_schemas.User, tags=['users'])
 def get_user_by_id(user_id: int, token: str = Depends(oauth2_scheme)) -> pydantic_schemas.User:
     user = database.get_user_by_id(user_id)
 
@@ -453,3 +461,32 @@ def update_playlist_by_id(id: int, playlist: pydantic_schemas.PlaylistIn, user: 
 @app.delete('/playlists/{id}', tags=['playlists'])
 def delete_playlist_by_id(id: int, token: str = Depends(oauth2_scheme)):
     database.delete_playlist_by_id(id)
+
+
+@app.delete('user/{id}', tags=['users'])
+def delete_user_by_id(id: int, token: str = Depends(oauth2_scheme)):
+    database.delete_user_by_id(id)
+
+
+@app.put('/users/{id}', response_model=pydantic_schemas.User, tags=['users'])
+def update_user_by_id(id: int, user: pydantic_schemas.UserIn, token:str = Depends(oauth2_scheme)):
+    country = database.get_country_by_id(user.country_id)
+    updated_user = database.update_user_by_id(id, models.User(
+        email=user.email,
+        hashed_password=database.get_password_hash(user.password),
+        birthday=user.birthday,
+        country=country
+    ))
+
+    if not updated_user:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not update user"
+        )
+
+    return pydantic_schemas.User.from_orm(updated_user)
+
+@app.get('/countries/', response_model=List[pydantic_schemas.Country])
+def get_countries() -> List[pydantic_schemas.Country]:
+    countries = [pydantic_schemas.Country.from_orm(country) for country in database.get_countries()]
+
+    return countries

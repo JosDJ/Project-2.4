@@ -7,7 +7,8 @@ class Token(BaseModel):
     token_type: str
 
 class Country(BaseModel):
-    name: str = None
+    id: int
+    name: str
 
     class Config:
         orm_mode = True
@@ -20,8 +21,12 @@ class User(BaseModel):
     class Config:
         orm_mode = True
 
-class RegistrationUser(User):
+class UserIn(BaseModel):
+    email: EmailStr
+    birthday: date
+    country_id: int
     password: str
+
 
 class Artist(BaseModel):
     id: int

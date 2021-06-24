@@ -20,6 +20,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import {AuthenticationInterceptor} from './authentication.interceptor';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -45,7 +48,12 @@ import { environment } from '../environments/environment';
   ],
   providers: [
     LoginComponent,
-    AuthService
+    AuthService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthenticationInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
