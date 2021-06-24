@@ -1,14 +1,14 @@
 <mat-grid-list cols="10" class="mygridlist" rowHeight="fit">
     <mat-grid-tile colspan="5" class="gridTile">
-        <button class="button">Favorieten</button> 
+        <button class="button" [routerLink]="['favorieten']">Favorieten</button> 
     </mat-grid-tile>
     <mat-grid-tile colspan="5" class="gridTile">
-        <button class="button">Genres</button> 
+        <button class="button" [routerLink]="['genres']">Genres</button> 
     </mat-grid-tile>
     <mat-grid-tile colspan="5" class="gridTile">
-        <button class="button">Playlists</button> 
+        <button class="button" [routerLink]="['playlists']">Playlists</button> 
     </mat-grid-tile>
     <mat-grid-tile colspan="5" class="gridTile">
-        <button class="button">Recent</button> 
+        <button class="button" [routerLink]="['recent']">Recent</button> 
     </mat-grid-tile>
 </mat-grid-list>

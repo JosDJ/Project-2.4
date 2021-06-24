@@ -6,6 +6,11 @@ import { LuisterenComponent } from './luisteren/luisteren.component';
 import { ZoekenComponent } from './zoeken/zoeken.component';
 import { MijnaccountComponent } from './mijnaccount/mijnaccount.component';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { LuisterenfavorietenComponent } from './luisterenfavorieten/luisterenfavorieten.component';
+import { RouterModule } from '@angular/router';
+import { LuisterengenresComponent } from './luisterengenres/luisterengenres.component';
+import { LuisterenplaylistsComponent } from './luisterenplaylists/luisterenplaylists.component';
+import { LuisterenrecentComponent } from './luisterenrecent/luisterenrecent.component';
 
 @NgModule({
   declarations: [
@@ -13,7 +18,11 @@ import { MatGridListModule } from '@angular/material/grid-list';
     UploadComponent,
     LuisterenComponent,
     ZoekenComponent,
-    MijnaccountComponent
+    MijnaccountComponent,
+    LuisterenfavorietenComponent,
+    LuisterengenresComponent,
+    LuisterenplaylistsComponent,
+    LuisterenrecentComponent
   ],
   exports: [
     HomeComponent,
@@ -21,7 +30,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
   ],
   imports: [
     CommonModule,
-    MatGridListModule
+    MatGridListModule,
+    RouterModule
   ]
 })
 export class MainscreenModule { }

@@ -5,6 +5,10 @@ import { LoginComponent } from './loginscreen/login/login.component';
 
 import { HomeComponent } from './mainscreen/home/home.component';
 import { LuisterenComponent } from './mainscreen/luisteren/luisteren.component';
+import { LuisterenfavorietenComponent } from './mainscreen/luisterenfavorieten/luisterenfavorieten.component';
+import { LuisterengenresComponent } from './mainscreen/luisterengenres/luisterengenres.component';
+import { LuisterenplaylistsComponent } from './mainscreen/luisterenplaylists/luisterenplaylists.component';
+import { LuisterenrecentComponent } from './mainscreen/luisterenrecent/luisterenrecent.component';
 import { MijnaccountComponent } from './mainscreen/mijnaccount/mijnaccount.component';
 import { UploadComponent } from './mainscreen/upload/upload.component';
 import { ZoekenComponent } from './mainscreen/zoeken/zoeken.component';
@@ -13,19 +17,35 @@ const routes: Routes = [
   { path: '', redirectTo: '/loginnn', pathMatch: 'full' },
   { path: 'loginnn', component: LoginComponent },
   { path: 'home', component: HomeComponent,
-    canActivate: [AuthGuard] 
+    // canActivate: [AuthGuard] 
   },
   { path: 'luisteren', component: LuisterenComponent,
-    canActivate: [AuthGuard] 
+    // canActivate: [AuthGuard] 
+  },
+  {
+    path: 'luisteren/favorieten', component: LuisterenfavorietenComponent,
+    // canActivate: [AuthGuard] 
+  },
+  {
+    path: 'luisteren/genres', component: LuisterengenresComponent,
+    // canActivate: [AuthGuard] 
+  },
+  {
+    path: 'luisteren/playlists', component: LuisterenplaylistsComponent,
+    // canActivate: [AuthGuard] 
+  },
+  {
+    path: 'luisteren/recent', component: LuisterenrecentComponent,
+    // canActivate: [AuthGuard] 
   },
   { path: 'mijnaccount', component: MijnaccountComponent,
-    canActivate: [AuthGuard] 
+    // canActivate: [AuthGuard] 
   },
   { path: 'upload', component: UploadComponent,
-    canActivate: [AuthGuard] 
+    // canActivate: [AuthGuard] 
   },
   { path: 'zoeken', component: ZoekenComponent,
-    canActivate: [AuthGuard] 
+    // canActivate: [AuthGuard] 
   },
 ];
 
