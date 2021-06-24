@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 import { LuisterengenresComponent } from './luisterengenres/luisterengenres.component';
 import { LuisterenplaylistsComponent } from './luisterenplaylists/luisterenplaylists.component';
 import { LuisterenrecentComponent } from './luisterenrecent/luisterenrecent.component';
+import { DataparserService } from '../services/dataparser.service';
 
 @NgModule({
   declarations: [
