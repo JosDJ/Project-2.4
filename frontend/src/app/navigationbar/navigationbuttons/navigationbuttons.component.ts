@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../services';
 
 @Component({
   selector: 'app-navigationbuttons',
@@ -7,9 +8,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavigationbuttonsComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private authService : AuthService
+  ) {}
 
   ngOnInit(): void {
+  }
+
+  isLoggedIn() {
+    const token = localStorage.getItem("token");
+    if(token==null) {
+      return false;
+    }
+    return true
+  }
+
+  logout():void {
+    this.authService.logout();
   }
   
   openTopnav() {
@@ -20,5 +35,4 @@ export class NavigationbuttonsComponent implements OnInit {
       x.className = "topnav";
     }
   }
-
 }

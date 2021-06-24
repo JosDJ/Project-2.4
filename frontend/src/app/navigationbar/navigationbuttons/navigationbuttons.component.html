@@ -6,6 +6,7 @@
     <a href="luisteren">Luisteren</a>
     <a href="zoeken">Zoeken</a>
     <a href="mijnaccount">Mijn account</a>
+    <a *ngIf="isLoggedIn() == true" href="login" (click)="logout()">Log out</a>
     <a href="javascript:void(0);" class="icon" (click)="openTopnav()">
       <i class="fa fa-bars"></i>
     </a>
