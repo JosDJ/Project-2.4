@@ -16,16 +16,12 @@ import { ZoekenComponent } from './mainscreen/zoeken/zoeken.component';
 const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
-  {
-    path: 'luisteren',
-    component: LuisterenComponent,
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'mijnaccount',
-    component: MijnaccountComponent,
-    canActivate: [AuthGuard],
-  },
+  { path: 'luisteren', component: LuisterenComponent, canActivate: [AuthGuard] },
+  { path: 'luisteren/favorieten', component: LuisterenfavorietenComponent, canActivate: [AuthGuard] },
+  { path: 'luisteren/genres', component: LuisterengenresComponent, canActivate: [AuthGuard] },
+  { path: 'luisteren/playlists', component: LuisterenplaylistsComponent, canActivate: [AuthGuard] },
+  { path: 'luisteren/recent', component: LuisterenrecentComponent, canActivate: [AuthGuard] },
+  { path: 'mijnaccount', component: MijnaccountComponent, canActivate: [AuthGuard] },
   { path: 'upload', component: UploadComponent, canActivate: [AuthGuard] },
   { path: 'zoeken', component: ZoekenComponent, canActivate: [AuthGuard] },
 ];
