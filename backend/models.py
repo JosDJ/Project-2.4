@@ -128,7 +128,7 @@ class Country(Base):
     __tablename__ = 'countries'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(50))
+    name = Column(String(200))
 
     def __repr__(self) -> str:
         return f"<Country(id={self.id}, name='{self.name}')>"
