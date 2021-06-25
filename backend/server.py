@@ -515,7 +515,7 @@ def get_country_by_id(id: int) -> pydantic_schemas.Country:
 
     return pydantic_schemas.Country.from_orm(country)
 
-@app.get('/favorites/{id}', response_model=List[pydantic_schemas.Song], tags=['favorites'])
+@app.get('/favorites', response_model=List[pydantic_schemas.Song], tags=['favorites'])
 def get_favorites(user: models.User = Depends(get_current_user)) -> List[pydantic_schemas.Song]:
     favorites = [pydantic_schemas.Song.from_orm(favorite) for favorite in user.favorites]
 
