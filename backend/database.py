@@ -41,8 +41,6 @@ def create_dummy_data():
         birthday=datetime.date(1998, 5, 4),
         country=country)
 
-    session.add(user)
-
     artist = models.Artist(name='Metallica')
 
     genre = models.Genre(title='Metal')
@@ -65,6 +63,9 @@ def create_dummy_data():
     album = models.Album(title='Metallica', artist=artist,
                          songs=songs, release_date=datetime.date(1991, 8, 12), genre=genre)
 
+    user.favorites = songs
+
+    session.add(user)
     session.add(album)
 
     song_with_no_album = models.Song(title='No Album!@#!@#', artists=[artist])

@@ -20,44 +20,50 @@ playlist_song_table = Table('playlist_song',
                                 'songs.id', ondelete='CASCADE'))
                             )
 
+favorites_table = Table('favorites', Base.metadata, Column('user_id', ForeignKey('users.id', ondelete='CASCADE')), Column('song_id', Integer, ForeignKey(
+                              'songs.id', ondelete='CASCADE'))
+                          )
+
 
 class File(Base):
-    __tablename__ = 'files'
+    __tablename__='files'
 
-    id = Column(Integer, primary_key=True)
-    filetype = Column(String(50))
-    filepath = Column(String(260))
+    id=Column(Integer, primary_key = True)
+    filetype=Column(String(50))
+    filepath=Column(String(260))
 
     def __repr__(self) -> str:
         return f"<File(id={self.id}, filetype='{self.filetype}', filepath='{self.filepath}'"
 
 
 class User(Base):
-    __tablename__ = 'users'
+    __tablename__='users'
 
-    id = Column(Integer, primary_key=True)
-    email = Column(String(100))
-    hashed_password = Column(String(100))
-    birthday = Column(Date)
-    country_id = Column(Integer, ForeignKey('countries.id'))
+    id=Column(Integer, primary_key = True)
+    email=Column(String(100))
+    hashed_password=Column(String(100))
+    birthday=Column(Date)
+    country_id=Column(Integer, ForeignKey('countries.id'))
 
-    country = relationship('Country', lazy='subquery')
+    country=relationship('Country', lazy = 'subquery')
 
-    playlists = relationship('Playlist', back_populates='author')
+    playlists=relationship('Playlist', back_populates = 'author')
+
+    favorites=relationship('Song', secondary=favorites_table)
 
     def __repr__(self) -> str:
         return f"<User(id={self.id}, email='{self.email}', hashed_password='{self.hashed_password}', birthday='{self.birthday}', country_id={self.country_id})>"
 
 
 class Artist(Base):
-    __tablename__ = 'artists'
+    __tablename__='artists'
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(50))
+    id=Column(Integer, primary_key = True)
+    name=Column(String(50))
 
-    albums = relationship('Album', backref='artist',
-                          lazy='subquery', cascade="all, delete-orphan")
-    songs = relationship('Song', secondary=artist_song_table,
+    albums=relationship('Album', backref = 'artist',
+                          lazy = 'subquery', cascade = "all, delete-orphan")
+    songs=relationship('Song', secondary = artist_song_table,
                          back_populates='artists')
 
     def __repr__(self) -> str:
