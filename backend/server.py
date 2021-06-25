@@ -474,7 +474,7 @@ def delete_playlist_by_id(id: int, token: str = Depends(oauth2_scheme)):
     database.delete_playlist_by_id(id)
 
 
-@app.delete('user/{id}', tags=['users'])
+@app.delete('/users/{id}', tags=['users'])
 def delete_user_by_id(id: int, token: str = Depends(oauth2_scheme)):
     database.delete_user_by_id(id)
 
