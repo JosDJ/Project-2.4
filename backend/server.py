@@ -29,10 +29,10 @@ ACCESS_TOKEN_EXPIRES_MINUTES = 30
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/login')
 
 # create music directory if it doesn't exist already
-MUSIC_DIRECTORY = pathlib.Path(__file__).parent / 'static_files' / 'music'
+MUSIC_DIRECTORY = pathlib.Path('static_files') / 'music'
 MUSIC_DIRECTORY.mkdir(exist_ok=True, parents=True)
 
-IMAGES_DIRECTORY = pathlib.Path(__file__).parent / 'static_files' / 'images'
+IMAGES_DIRECTORY = pathlib.Path('static_files') / 'images'
 IMAGES_DIRECTORY.mkdir(exist_ok=True, parents=True)
 
 tags_metadata = [
@@ -190,7 +190,7 @@ def create_song(song: pydantic_schemas.SongIn, token: str = Depends(oauth2_schem
 @app.get('/songs/{id}', response_model=pydantic_schemas.Song, tags=["songs"])
 async def get_song_by_id(song_id: int, token: str = Depends(oauth2_scheme)) -> pydantic_schemas.Song:
     song = database.get_song_by_id(song_id)
-
+    
     if not song:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail='Song not found')
@@ -223,7 +223,7 @@ def delete_song_by_id(id: int, token: str = Depends(oauth2_scheme)):
     database.delete_song_by_id(id)
 
 
-async def save_song_to_disk(file: UploadFile = File(None)) -> pydantic_schemas.Song:
+def save_song_to_disk(file: UploadFile = File(None)) -> pathlib.Path:
     filename = f'{uuid.uuid4().hex}.mp3'
 
     filepath = pathlib.Path(f'{MUSIC_DIRECTORY}/{filename}')
@@ -231,21 +231,20 @@ async def save_song_to_disk(file: UploadFile = File(None)) -> pydantic_schemas.S
     with open(filepath, 'wb+') as f:
         f.write(file.file.read())
 
-    song = pydantic_schemas.Song(title='test', artists=[
-                                 pydantic_schemas.Artist(name='TestArtist')])
-
-    return song
+    return filepath
 
 
-@app.post('/songs/upload', status_code=status.HTTP_201_CREATED, response_model=pydantic_schemas.Song, tags=["songs"])
-async def upload_song_file(file: UploadFile = File(None), token: str = Depends(oauth2_scheme)):
+@app.post('/songs/upload', status_code=status.HTTP_201_CREATED, response_model=pydantic_schemas.FileUploaded, tags=["songs"])
+def upload_song_file(file: UploadFile = File(None), token: str = Depends(oauth2_scheme)):
     if file.content_type != 'audio/mpeg':
         raise HTTPException(
             status_code=415, detail="Only files with 'Content-Type: audio/mpeg' are allowed")
 
-    song = await save_song_to_disk(file)
+    filepath = save_song_to_disk(file)
 
-    return song
+    song_file = database.create_file(models.File(filetype='audio/mpeg', filepath=filepath.as_posix()))
+ 
+    return pydantic_schemas.FileUploaded(id=song_file.id, filetype=song_file.filetype, filepath=song_file.filepath, original_filename=file.filename)
 
 
 @app.get('/albums/{album_id}', response_model=pydantic_schemas.Album, tags=["albums"])

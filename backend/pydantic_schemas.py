@@ -38,25 +38,28 @@ class Artist(BaseModel):
 class ArtistIn(BaseModel):
     name: str
 
-class Song(BaseModel):
-    id: int
-    title: str = None
-    artists: List[Artist] = []
-
-    class Config:
-        orm_mode = True
-
 class SongIn(BaseModel):
-    id: int
     title: str
     artist_ids: List[int]
+    file_id: int
 
-class FileUploaded(BaseModel):
+class File(BaseModel):
     id: int
     filetype: str
     filepath: str
 
+    class Config:
+        orm_mode = True
+
+class FileUploaded(File):
     original_filename: str
+
+class Song(BaseModel):
+    id: int
+    title: str = None
+    artists: List[Artist] = []
+    album_id: Optional[int]
+    file: File
 
     class Config:
         orm_mode = True
