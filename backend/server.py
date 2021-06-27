@@ -419,6 +419,12 @@ def get_genre_by_id(id: int, token: str = Depends(oauth2_scheme)):
 
     return pydantic_schemas.Genre.from_orm(genre)
 
+@app.get('/genres/', response_model=List[pydantic_schemas.Genre], tags=["genres"])
+def get_genres(token: str = Depends(oauth2_scheme)):
+    genres = [pydantic_schemas.Genre.from_orm(genre) for genre in database.get_genres()]
+
+    return genres
+
 
 @app.put('/genre/{id}', response_model=pydantic_schemas.Genre, tags=["genres"])
 def update_genre_by_id(id: int, genre: pydantic_schemas.GenreIn, token: str = Depends(oauth2_scheme)):

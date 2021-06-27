@@ -463,6 +463,11 @@ def get_genre_by_id(id: int) -> Optional[models.Genre]:
 
     return genre
 
+def get_genres() -> List[models.Genre]:
+    genres = session.query(models.Genre).all()
+
+    return genres
+
 
 def update_genre_by_id(id: int, genre: models.Genre) -> Optional[models.Genre]:
     genre_to_update = get_genre_by_id(id)
