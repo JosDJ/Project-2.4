@@ -55,7 +55,16 @@ tags_metadata = [
     {
         "name": "playlists",
         "descriptions": "Operations with playlists"
+    },
+    {
+        "name": "countries",
+        "descriptions": "Operations with countries"
+    },
+    {
+        "name": "favorites",
+        "descriptions": "Operations with favorites"
     }
+
 ]
 
 app = FastAPI(openapi_tags=tags_metadata)
@@ -86,7 +95,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()) -> pydantic_schemas.
 
     data = {
         "email": user.email,
-        'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=ACCESS_TOKEN_EXPIRES_MINUTES)
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=ACCESS_TOKEN_EXPIRES_MINUTES)
     }
 
     access_token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
@@ -96,7 +105,8 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()) -> pydantic_schemas.
 
 @app.post('/register', response_model=pydantic_schemas.User, tags=['users'])
 async def register(user_data: pydantic_schemas.UserIn):
-    user = database.get_user_by_email(user_data.email)  # check if user exists already
+    user = database.get_user_by_email(
+        user_data.email)  # check if user exists already
 
     if user:
         raise HTTPException(
@@ -104,17 +114,18 @@ async def register(user_data: pydantic_schemas.UserIn):
             detail='An account with this email address already exists',
             headers={"WWW-Authenticate": "Bearer"}
         )
-    
+
     country = database.get_country_by_id(user_data.country_id)
 
     if not country:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Country not found')
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail='Country not found')
 
     new_user = models.User(
-            email=user_data.email,
-            hashed_password=database.get_password_hash(user_data.password),
-            birthday=user_data.birthday,
-            country=country
+        email=user_data.email,
+        hashed_password=database.get_password_hash(user_data.password),
+        birthday=user_data.birthday,
+        country=country
     )
 
     database.create_new_user(new_user)
@@ -463,13 +474,13 @@ def delete_playlist_by_id(id: int, token: str = Depends(oauth2_scheme)):
     database.delete_playlist_by_id(id)
 
 
-@app.delete('user/{id}', tags=['users'])
+@app.delete('/users/{id}', tags=['users'])
 def delete_user_by_id(id: int, token: str = Depends(oauth2_scheme)):
     database.delete_user_by_id(id)
 
 
 @app.put('/users/{id}', response_model=pydantic_schemas.User, tags=['users'])
-def update_user_by_id(id: int, user: pydantic_schemas.UserIn, token:str = Depends(oauth2_scheme)):
+def update_user_by_id(id: int, user: pydantic_schemas.UserIn, token: str = Depends(oauth2_scheme)):
     country = database.get_country_by_id(user.country_id)
     updated_user = database.update_user_by_id(id, models.User(
         email=user.email,
@@ -485,8 +496,27 @@ def update_user_by_id(id: int, user: pydantic_schemas.UserIn, token:str = Depend
 
     return pydantic_schemas.User.from_orm(updated_user)
 
-@app.get('/countries/', response_model=List[pydantic_schemas.Country])
+
+@app.get('/countries/', response_model=List[pydantic_schemas.Country], tags=['countries'])
 def get_countries() -> List[pydantic_schemas.Country]:
-    countries = [pydantic_schemas.Country.from_orm(country) for country in database.get_countries()]
+    countries = [pydantic_schemas.Country.from_orm(
+        country) for country in database.get_countries()]
 
     return countries
+
+
+@app.get('/countries/{id}', response_model=pydantic_schemas.Country, tags=['countries'])
+def get_country_by_id(id: int) -> pydantic_schemas.Country:
+    country = database.get_country_by_id(id)
+
+    if not country:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail='Country not found')
+
+    return pydantic_schemas.Country.from_orm(country)
+
+@app.get('/favorites', response_model=List[pydantic_schemas.Song], tags=['favorites'])
+def get_favorites(user: models.User = Depends(get_current_user)) -> List[pydantic_schemas.Song]:
+    favorites = [pydantic_schemas.Song.from_orm(favorite) for favorite in user.favorites]
+
+    return favorites
