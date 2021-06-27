@@ -1,4 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { environment } from 'src/app/environment';
+import { Playlist } from 'src/app/interfaces/playlist';
+import { Song } from 'src/app/interfaces/song';
 
 @Component({
   selector: 'app-luisterenplaylists',
@@ -6,8 +10,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./luisterenplaylists.component.css']
 })
 export class LuisterenplaylistsComponent implements OnInit {
+  playlists: Playlist[] = [];
 
-  constructor() { }
+  constructor(private http: HttpClient) { 
+    http.get<Playlist[]>(`${environment.apiUrl}/playlists`).subscribe(playlists => this.playlists = playlists);
+  }
 
   ngOnInit(): void {
   }

@@ -463,6 +463,11 @@ def get_playlist_by_id(id: int, token: str = Depends(oauth2_scheme)) -> pydantic
 
     return pydantic_schemas.Playlist.from_orm(playlist)
 
+@app.get('/playlists/', response_model=List[pydantic_schemas.Playlist], tags=['playlists'])
+def get_playlists(token: str = Depends(oauth2_scheme)) -> pydantic_schemas.Playlist:
+    playlists = [pydantic_schemas.Playlist.from_orm(playlist) for playlist in database.get_playlists()]
+
+    return playlists
 
 @app.put('/playlists/{id}', response_model=pydantic_schemas.Playlist, tags=['playlists'])
 def update_playlist_by_id(id: int, playlist: pydantic_schemas.PlaylistIn, user: models.User = Depends(get_current_user)) -> pydantic_schemas.Playlist:

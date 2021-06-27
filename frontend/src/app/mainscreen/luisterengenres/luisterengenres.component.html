@@ -1,6 +1,7 @@
 <mat-grid-list cols="20" class="mygridlist" rowHeight="fit">
     <mat-grid-tile colspan="20" rowspan="20">
         <div class="container">
+            <!-- <img class="mainlogo" src="assets/artistifyLogo.jpg">
             <img class="mainlogo" src="assets/artistifyLogo.jpg">
             <img class="mainlogo" src="assets/artistifyLogo.jpg">
             <img class="mainlogo" src="assets/artistifyLogo.jpg">
@@ -11,8 +12,11 @@
             <img class="mainlogo" src="assets/artistifyLogo.jpg">
             <img class="mainlogo" src="assets/artistifyLogo.jpg">
             <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
+            <img class="mainlogo" src="assets/artistifyLogo.jpg"> -->
+            <div *ngFor="let genre of genres">
+                <!-- <div>{{genre.id}}</div> -->
+                <h1>{{genre.title}}</h1>
+            </div>
         </div>
     </mat-grid-tile>
 </mat-grid-list>

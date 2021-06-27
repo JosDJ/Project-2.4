@@ -548,6 +548,11 @@ def get_playlist_by_id(id: int) -> Optional[models.Playlist]:
 
     return playlist
 
+def get_playlists() -> List[models.Playlist]:
+    playlists = session.query(models.Playlist).all()
+
+    return playlists
+
 
 def update_playlist_by_id(id: int, playlist: models.Playlist) -> Optional[models.Playlist]:
     playlist_to_update = get_playlist_by_id(id)

@@ -1,4 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { environment } from 'src/app/environment';
+import { Genre } from 'src/app/interfaces/genre';
 
 @Component({
   selector: 'app-luisterengenres',
@@ -6,10 +9,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./luisterengenres.component.css']
 })
 export class LuisterengenresComponent implements OnInit {
+  genres: Genre[] = [];
 
-  constructor() { }
+  constructor(private http: HttpClient) { 
+    this.http.get<Genre[]>(`${environment.apiUrl}/genres`).subscribe(genres => this.genres = genres);
+  }
 
   ngOnInit(): void {
   }
-
 }
