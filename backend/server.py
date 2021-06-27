@@ -188,8 +188,8 @@ def create_song(song: pydantic_schemas.SongIn, token: str = Depends(oauth2_schem
 
 
 @app.get('/songs/{id}', response_model=pydantic_schemas.Song, tags=["songs"])
-async def get_song_by_id(song_id: int, token: str = Depends(oauth2_scheme)) -> pydantic_schemas.Song:
-    song = database.get_song_by_id(song_id)
+async def get_song_by_id(id: int, token: str = Depends(oauth2_scheme)) -> pydantic_schemas.Song:
+    song = database.get_song_by_id(id)
     
     if not song:
         raise HTTPException(

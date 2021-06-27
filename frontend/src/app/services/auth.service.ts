@@ -5,16 +5,8 @@ import { map } from 'rxjs/operators';
 import jwt_decode from 'jwt-decode';
 
 import { environment } from '../environment';
-
-interface AuthenticationResponse {
-  access_token: string;
-  token_type: string;
-}
-
-interface JWTPayload {
-  email: string;
-  exp: number;
-}
+import { AuthenticationResponse } from '../interfaces/authentication-response';
+import { JWTPayload } from '../interfaces/jwt-payload';
 
 @Injectable({
   providedIn: 'root',

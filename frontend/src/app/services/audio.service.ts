@@ -13,7 +13,11 @@ import { StreamState } from '../interfaces/stream-state';
 })
 export class AudioService {
   audio = new Audio();
-  stop = new Subject();
+  _stop = new Subject();
+
+  constructor() {
+    
+  }
 
   audioEvents = [
     "ended",
@@ -67,7 +71,7 @@ export class AudioService {
   }
 
   playStream(url: string) {
-    return this.streamObservable(url).pipe(takeUntil(this.stop));
+    return this.streamObservable(url).pipe(takeUntil(this._stop));
   }
 
   private addEvents(obj: any, events: Array<string>, handler: any) {
@@ -131,6 +135,10 @@ export class AudioService {
 
   public pause(): void {
     this.audio.pause()
+  }
+
+  public stop(): void {
+    this.stop.next();
   }
 
   public seekTo(seconds: number): void {

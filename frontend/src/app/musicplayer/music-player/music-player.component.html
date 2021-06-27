@@ -10,8 +10,8 @@
                 </a>
             
                 <a href="javascript:void(0);" class="icon">
-                  <i class="fa fa-play" *ngIf="!state.playing" (click)="play()"></i>
-                  <i class="fa fa-pause" *ngIf="state.playing" (click)="pause()"></i>
+                  <i class="fa fa-play" *ngIf="!state!.playing" (click)="play()"></i>
+                  <i class="fa fa-pause" *ngIf="state!.playing" (click)="pause()"></i>
                 </a>
                 
                 <a href="javascript:void(0);" class="icon">
@@ -21,8 +21,8 @@
         </mat-grid-tile>
         <mat-grid-tile class="bottombar" colspan="5">
             <div class="topnav" id="myTopnav">
-                <progress id="timerbar" value="{{state.currentTime!}}" max="{{state.duration!}}"></progress>
-                <label id="timerlabel"> {{state.readableCurrentTime}}/{{state.readableDuration}}</label>
+                <mat-slider class='time-slider' min="0" [max]="state.duration" step="1" [value]="state.currentTime" (input)="onSliderChangeEnd($event)"></mat-slider>
+                <label id="timerlabel"> {{state!.readableCurrentTime}}/{{state!.readableDuration}}</label>
               </div>
         </mat-grid-tile>
     </mat-grid-list>
