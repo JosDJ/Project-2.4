@@ -1,21 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MusicplayertimerComponent } from './musicplayertimer/musicplayertimer.component';
-import { MusicplayerbuttonsComponent } from './musicplayerbuttons/musicplayerbuttons.component';
+import { MusicPlayerComponent } from './music-player/music-player.component';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 
 
 @NgModule({
   declarations: [
-    MusicplayertimerComponent,
-    MusicplayerbuttonsComponent
+    MusicPlayerComponent
   ],
   exports: [
-    MusicplayertimerComponent,
-    MusicplayerbuttonsComponent
+    MusicPlayerComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    MatSliderModule,
+    MatGridListModule
   ]
 })
 export class MusicplayerModule { }
