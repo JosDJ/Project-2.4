@@ -1,5 +1,6 @@
 import { stringify } from '@angular/compiler/src/util';
 import { Component, OnInit } from '@angular/core';
+import { DataparserService } from 'src/app/services/dataparser.service';
 
 @Component({
   selector: 'app-upload',
