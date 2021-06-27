@@ -151,10 +151,14 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> models.User:
         raise credentials_exception
 
 
-@app.get('/users/{user_id}', response_model=pydantic_schemas.User, tags=['users'])
-def get_user_by_id(user_id: int, token: str = Depends(oauth2_scheme)) -> pydantic_schemas.User:
-    user = database.get_user_by_id(user_id)
+@app.get('/users/{id}', response_model=pydantic_schemas.User, tags=['users'])
+def get_user_by_id(id: int, token: str = Depends(oauth2_scheme)) -> pydantic_schemas.User:
+    user = database.get_user_by_id(id)
 
+    return pydantic_schemas.User.from_orm(user)
+
+@app.get('/users/', response_model=pydantic_schemas.User, tags=['users'])
+def get_user(user: models.User = Depends(get_current_user)):
     return pydantic_schemas.User.from_orm(user)
 
 
