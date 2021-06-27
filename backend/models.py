@@ -75,8 +75,8 @@ class Song(Base):
 
     id = Column(Integer, primary_key=True)
     title = Column(String(50))
-    album_id = Column(Integer, ForeignKey('albums.id', ondelete='CASCADE'))
-    file_id = Column(Integer, ForeignKey('files.id', ondelete='CASCADE'))
+    album_id = Column(Integer, ForeignKey('albums.id'))
+    file_id = Column(Integer, ForeignKey('files.id'))
 
     album = relationship('Album', backref='songs',
                          lazy='subquery')
@@ -86,7 +86,7 @@ class Song(Base):
     playlists = relationship('Playlist', secondary=playlist_song_table,
                              back_populates='songs')
 
-    file = relationship('File', backref=backref('songs', uselist=False))
+    file = relationship('File', backref='songs', cascade='all, delete', uselist=False)
 
     def __repr__(self) -> str:
         return f"<Song(id={self.id}, title='{self.title}', album_id={self.album_id}, file_id={self.file_id})>"
@@ -117,7 +117,7 @@ class Album(Base):
     album_cover_id = Column(Integer, ForeignKey(
         'files.id', ondelete='CASCADE'))
 
-    album_cover = relationship('File', backref=backref('albums', uselist=False))
+    album_cover = relationship('File', backref='albums', cascade='all, delete', uselist=False)
 
     def __repr__(self) -> str:
         return f"<Album(id={self.id}, title='{self.title}', release_date='{self.release_date}', artist_id={self.artist_id}, genre_id={self.genre_id}, album_cover_id={self.album_cover_id})>"

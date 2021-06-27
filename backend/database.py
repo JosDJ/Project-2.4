@@ -372,6 +372,8 @@ def update_song_by_id(id: int, song: models.Song) -> Optional[models.Song]:
 
     if song_to_update:
         song_to_update.title = song.title
+        song_to_update.file = song.file
+        song_to_update.artists = song.artists
 
     session.commit()
 

@@ -59,7 +59,7 @@ class Song(BaseModel):
     title: str = None
     artists: List[Artist] = []
     album_id: Optional[int]
-    file: File
+    file: Optional[File]
 
     class Config:
         orm_mode = True
@@ -74,12 +74,6 @@ class Genre(BaseModel):
 class GenreIn(BaseModel):
     title: str
 
-class AlbumCover(BaseModel):
-    filepath: str
-
-    class Config:
-        orm_mode = True
-
 class Album(BaseModel):
     id: int
     title: str = None
@@ -87,7 +81,7 @@ class Album(BaseModel):
     release_date: date = None
     genre: Genre = None
     songs: List[Song] = []
-    album_cover: AlbumCover = None
+    album_cover: File = None
 
     class Config:
         orm_mode = True
