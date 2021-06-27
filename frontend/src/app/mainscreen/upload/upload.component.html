@@ -15,26 +15,26 @@ TestTestTestTestTestTest
             <div class="container">
                 <label class="item">Title </label>
                 <br>
-                <input class="item" type="titel" placeholder="Enter title" required>
+                <input class="item" type="titel" [(ngModel)]='title' placeholder="Enter title" required>
                 <br>
                 <label class="item">Genre </label>
                 <br>
-                <input class="item" type="genre" placeholder="Enter genre" required>
+                <input class="item" type="genre" [(ngModel)]='genre' placeholder="Enter genre" required>
                 <br>
                 <label class="item">Artist </label>
                 <br>
-                <input class="item" type="artist" placeholder="Enter artist" required>
+                <input class="item" type="artist" [(ngModel)]="artist" placeholder="Enter artist" required>
                 <br>
                 <label class="item">Releasedate </label>
                 <br>
-                <input class="item" type="releasedate" placeholder="Enter releasedate" required>
+                <input class="item" type="releasedate" [(ngModel)]='releasedate' placeholder="Enter releasedate" required>
             </div>
             <div class="addsongbuttondiv">
                 <br>
                 <button class="addsongbutton">Add song</button>
             </div>
             <div class="uploadbuttondiv">
-                <button class="uploadbutton">Upload album</button>
+                <button class="uploadbutton"(click)='onSubmit(title, artist)'>Upload album</button>
             </div>
         </div>
     </mat-grid-tile>
