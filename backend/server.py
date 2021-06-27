@@ -50,19 +50,19 @@ tags_metadata = [
     },
     {
         "name": "artists",
-        "descriptions": "Operations with artists"
+        "description": "Operations with artists"
     },
     {
         "name": "playlists",
-        "descriptions": "Operations with playlists"
+        "description": "Operations with playlists"
     },
     {
         "name": "countries",
-        "descriptions": "Operations with countries"
+        "description": "Operations with countries"
     },
     {
         "name": "favorites",
-        "descriptions": "Operations with favorites"
+        "description": "Operations with favorites"
     }
 
 ]
