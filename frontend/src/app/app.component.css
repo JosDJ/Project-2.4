@@ -8,10 +8,6 @@ html, body {
   margin: 0;
 }
 
-.bottombar {
-  background: #333;
-}
-
 div.invisible {
   display: none;
 }

@@ -1,0 +1,29 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class='music-player'>
+    <mat-grid-list cols="10" rowHeight="3rem" gutterSize="0">
+        <mat-grid-tile class="bottombar" colspan="5">
+            <div class="musicbar" id="myMusicbar">
+                <a class="active" href="#curSong">"Naam"</a>
+                <a href="javascript:void(0);" class="icon">
+                  <i class="fa fa-backward"></i>
+                </a>
+            
+                <a href="javascript:void(0);" class="icon">
+                  <i class="fa fa-play" *ngIf="!state.playing" (click)="play()"></i>
+                  <i class="fa fa-pause" *ngIf="state.playing" (click)="pause()"></i>
+                </a>
+                
+                <a href="javascript:void(0);" class="icon">
+                  <i class="fa fa-forward"></i>
+                </a>
+            </div>
+        </mat-grid-tile>
+        <mat-grid-tile class="bottombar" colspan="5">
+            <div class="topnav" id="myTopnav">
+                <progress id="timerbar" value="{{state.currentTime!}}" max="{{state.duration!}}"></progress>
+                <label id="timerlabel"> {{state.readableCurrentTime}}/{{state.readableDuration}}</label>
+              </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>
