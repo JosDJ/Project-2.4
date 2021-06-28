@@ -1,10 +1,12 @@
 
 <mat-grid-list cols="18" class="mygridlist" rowHeight="fit">
     <mat-grid-tile class="maintiles" colspan="5">
-        <input #file type="file" accept="image/*" (change)="onImageSelect($event); preview(file.files)">
-        <span style="color:red;" *ngIf="message">{{message}}</span>
-        <img [src]="imgURL" *ngIf="imgURL">
-        
+        <div>
+            <img [src]="imgURL" *ngIf="imgURL">
+            <br>
+            <input #file type="file" accept="image/*" (change)="onImageSelect($event); preview(file.files)">
+            <span style="color:red;" *ngIf="message">{{message}}</span>
+        </div>
     </mat-grid-tile>
     <mat-grid-tile class="maintiles" colspan="5">
         <textarea rows="4" cols="50">
@@ -15,21 +17,13 @@ Please give a discription of the album
     <mat-grid-tile class="maintiles" colspan="5">
         <div>
             <div class="container">
-                <label class="item">Title </label>
+                <label class="item">Title song</label>
                 <br>
-                <input class="item" type="titel" [(ngModel)]='title' placeholder="Enter title" required>
+                <input class="item" type="titleSong" [(ngModel)]='titleSong' placeholder="Enter title" required>
                 <br>
-                <label class="item">Genre </label>
+                <label class="item">Artist song</label>
                 <br>
-                <input class="item" type="genre" [(ngModel)]='genre' placeholder="Enter genre" required>
-                <br>
-                <label class="item">Artist </label>
-                <br>
-                <input class="item" type="artist" [(ngModel)]="artist" placeholder="Enter artist" required>
-                <br>
-                <label class="item">Releasedate </label>
-                <br>
-                <input class="item" type="releasedate" [(ngModel)]='releasedate' placeholder="Enter releasedate" required>
+                <input class="item" type="artistSong" [(ngModel)]="artistSong" placeholder="Enter artist" required>
             </div>
             <div class="addsongbuttondiv">
                 <label class="item">Song </label>
@@ -38,8 +32,26 @@ Please give a discription of the album
                 <br>
                 <button (click)="addSong()">Add song</button>
             </div>
-            <div class="uploadbuttondiv">
-                <button class="uploadbutton"(click)='onSubmit(title, artist)'>Upload album</button>
+            <div class="container">
+                <br>
+                <br>
+                <br>
+                <label class="item">Title album </label>
+                <br>
+                <input class="item" type="titleAlbum" [(ngModel)]='titleAlbum' placeholder="Enter title" required>
+                <br>
+                <label class="item">Genre album</label>
+                <br>
+                <input class="item" type="genreAlbum" [(ngModel)]='genreAlbum' placeholder="Enter genre" required>
+                <br>
+                <label class="item">Artist album</label>
+                <br>
+                <input class="item" type="artistAlbum" [(ngModel)]="artistAlbum" placeholder="Enter artist" required>
+                <br>
+                <label class="item">Releasedate album</label>
+                <br>
+                <input class="item" type="releasedateAlbum" [(ngModel)]='releasedateAlbum' placeholder="Enter releasedate" required>
+                <button class="uploadbutton"(click)='upload()'>Upload album</button>
             </div>
         </div>
     </mat-grid-tile>
