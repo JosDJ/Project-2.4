@@ -4,3 +4,6 @@ config = {
 # config = {
 #     'DATABASE_URI' : 'postgresql://postgres:642251s@localhost:5432/artestify'
 # }
+# config = {
+#     'DATABASE_URI' : 'postgresql://postgres:artestify@localhost:5432/artestify'
+# }
