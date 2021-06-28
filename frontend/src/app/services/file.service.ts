@@ -27,7 +27,7 @@ export class FileService {
     return this.stateChange.asObservable();
   }
 
-  uploadSongFile(songFile:any[], fileName:string[]): Observable<any> {
+  uploadSongFile(songFile:any[]): Observable<any> {
     const httpOptions = {
         headers: new HttpHeaders({
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -36,6 +36,9 @@ export class FileService {
       
       const body = new HttpParams()
       .set('file', songFile[0])
+
+      console.log('foo = ' ,body)
+      console.log('foo2 = ' , songFile[0])
         
       const result = this.http.post<any>(`${environment.apiUrl}/songs/upload`, body, httpOptions);
       console.log(result)
