@@ -1,29 +1,22 @@
 <!-- <div [ngClass]="{hide: visible, show: !visible}">
     <app-login (exampleOutput)="exampleMethodParent($event)"></app-login>
 </div> -->
-<div>
-    <div class="toprow">
-        <app-navigationbuttons></app-navigationbuttons>
-    </div>
+<div class="container">
+    <header>
+        <div class="header">
+            <app-navigationbuttons></app-navigationbuttons>
+        </div>
+    </header>
 
-    <body>
-    <div class="mainscreen">
-        <router-outlet></router-outlet>
-    </div>
-    </body>
+    <main>
+        <div class="mainscreen">
+            <router-outlet></router-outlet>
+        </div>
+    </main>
 
-    <div class="bottomrow">
-        <!-- <mat-grid-list cols="10" rowHeight="{{desired_rowHeight}}" gutterSize="0">
-            <mat-grid-tile class="bottombar" colspan="5">
-                <app-musicplayerbuttons></app-musicplayerbuttons>
-            </mat-grid-tile>
-            <mat-grid-tile class="bottombar" colspan="5">
-                <app-musicplayertimer></app-musicplayertimer>
-            </mat-grid-tile>
-        </mat-grid-list> -->
-        <app-music-player></app-music-player>
-    </div>
+    <footer>
+        <div class="audioplayer">
+            <app-music-player></app-music-player>
+        </div>
+    </footer>
 </div>
-
-
-

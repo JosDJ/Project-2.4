@@ -1,23 +1,11 @@
-<mat-grid-list cols="20" class="mygridlist" rowHeight="fit">
-    <mat-grid-tile colspan="20" rowspan="20">
-        <div class="container">
-            <!-- <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg"> -->
+<div class="container" *ngFor="let playlist of playlists">
+    <div class="item">
+        <button class="button">{{playlist.title}}</button>
+    </div>
 
-            <div *ngFor="let playlist of playlists">
-                <h1>{{playlist.title}}</h1>
-            </div>
-
-        </div>
-    </mat-grid-tile>
-</mat-grid-list>
+    <!-- <mat-grid-list cols="20" class="mygridlist" rowHeight="fit" *ngFor="let playlist of playlists">
+        <mat-grid-tile colspan="1" rowspan="1">
+            <button class="button">{{playlist.title}}</button>
+        </mat-grid-tile>
+    </mat-grid-list> -->
+</div>

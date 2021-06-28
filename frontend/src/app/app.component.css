@@ -1,11 +1,28 @@
-.mainscreen {
-  height: calc(100vh - 6rem);
-  background-color: rgb(114, 67, 49);
+html, body {
+  display: flex;
+  flex-direction: column;
 }
 
-html, body {
-  height: 100%;
-  margin: 0;
+.header {
+  height: 50px;
+}
+
+.mainscreen {
+  /* height: calc(100vh - 6rem); */
+  background-color: rgb(114, 67, 49);
+  height: calc(100vh - 50px - 50px);
+  overflow-y: scroll;
+
+  margin: 0 auto;
+}
+
+.mainscreen::after {
+  content: "";
+  display: block;
+}
+
+.audioplayer, .mainscreen::after {
+  height: 50px;
 }
 
 div.invisible {

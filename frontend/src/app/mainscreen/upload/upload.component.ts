@@ -1,7 +1,4 @@
-
-import { stringify } from '@angular/compiler/src/util';
-
-import { DataparserService } from 'src/app/services/dataparser.service';
+import { FileService } from 'src/app/services/file.service';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, SystemJsNgModuleLoader } from '@angular/core';
 
@@ -25,7 +22,7 @@ export class UploadComponent implements OnInit {
   releasedate:string = '';
 
   constructor(private http:HttpClient,
-    private dataParser:DataparserService
+    private dataParser:FileService
   ) { }
   
 selectedFile = null;
@@ -39,19 +36,8 @@ fileList:any=[];// the music files
   ngOnInit(): void {
   }
   
-  getRandomInt() {
-    return Math.floor(Math.random() * 1000000000000);
-  }
-
-  onSubmit(titleSong:string, artistid:string) {
-    var foo:string[] = []; 
-    foo.push(artistid)
-    this.upload(titleSong, foo)
-  }
-
-  upload(title:string, artist_ids:string[]): void{
-    const id = this.getRandomInt().toString();
-    this.dataParser.uploadSongEntry(id,title,artist_ids);
+  upload(): void{
+    this.dataParser.uploadSongFile(this.fileList, this.listData);
   }
 
   addSong(event?: MouseEvent){
