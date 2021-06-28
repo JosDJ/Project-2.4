@@ -8,7 +8,6 @@ html, body {
 }
 
 .mainscreen {
-  /* height: calc(100vh - 6rem); */
   background-color: rgb(114, 67, 49);
   height: calc(100vh - 50px - 50px);
   overflow-y: scroll;

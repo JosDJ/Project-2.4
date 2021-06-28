@@ -56,6 +56,51 @@ export class LuisterenplaylistsComponent implements OnInit {
       title: "Playlist 9",
       songs: []
     },
+    {
+      id: 1,
+      title: "Playlist 1",
+      songs: []
+    },
+    {
+      id: 1,
+      title: "Playlist 2",
+      songs: []
+    },
+    {
+      id: 1,
+      title: "Playlist 3",
+      songs: []
+    },
+    {
+      id: 1,
+      title: "Playlist 4",
+      songs: []
+    },
+    {
+      id: 1,
+      title: "Playlist 5",
+      songs: []
+    },
+    {
+      id: 1,
+      title: "Playlist 6",
+      songs: []
+    },
+    {
+      id: 1,
+      title: "Playlist 7",
+      songs: []
+    },
+    {
+      id: 1,
+      title: "Playlist 8",
+      songs: []
+    },
+    {
+      id: 1,
+      title: "Playlist 9",
+      songs: []
+    },
   ];
 
   constructor(private http: HttpClient) { 

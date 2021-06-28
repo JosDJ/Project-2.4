@@ -14,11 +14,11 @@ export class FileService {
   ];
 
   constructor(private http: HttpClient) { 
-    http.get<Song>(`${environment.apiUrl}/songs/16`).subscribe(song => {
-      this.files.push(song);
+    // http.get<Song>(`${environment.apiUrl}/songs/16`).subscribe(song => {
+    //   this.files.push(song);
 
-      this.stateChange.next(this.files);
-    });
+    //   this.stateChange.next(this.files);
+    // });
   }
 
   private stateChange: Subject<Song[]> = new Subject();
