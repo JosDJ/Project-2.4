@@ -1,11 +1,5 @@
-<div class="container" *ngFor="let playlist of playlists">
-    <div class="item">
+<div class="container">
+    <div class="item" *ngFor="let playlist of playlists">
         <button class="button">{{playlist.title}}</button>
     </div>
-
-    <!-- <mat-grid-list cols="20" class="mygridlist" rowHeight="fit" *ngFor="let playlist of playlists">
-        <mat-grid-tile colspan="1" rowspan="1">
-            <button class="button">{{playlist.title}}</button>
-        </mat-grid-tile>
-    </mat-grid-list> -->
 </div>
