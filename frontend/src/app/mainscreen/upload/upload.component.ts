@@ -15,6 +15,12 @@ export class UploadComponent implements OnInit {
   
   title:string = '';
   artist:string = '';
+  titleSong:string = '';
+  artistSong:string = '';
+  titleAlbum:string = '';
+  genreAlbum:string = '';
+  artistAlbum:string = '';
+  releasedateAlbum:string = '';
   genre:string = '';
   releasedate:string = '';
 
@@ -37,10 +43,10 @@ fileList:any=[];// the music files
     return Math.floor(Math.random() * 1000000000000);
   }
 
-  onSubmit(title:string, artistid:string) {
+  onSubmit(titleSong:string, artistid:string) {
     var foo:string[] = []; 
     foo.push(artistid)
-    this.upload(title, foo)
+    this.upload(titleSong, foo)
   }
 
   upload(title:string, artist_ids:string[]): void{
