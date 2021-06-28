@@ -12,6 +12,12 @@ export class UploadComponent implements OnInit {
   
   title:string = '';
   artist:string = '';
+  titleSong:string = '';
+  artistSong:string = '';
+  titleAlbum:string = '';
+  genreAlbum:string = '';
+  artistAlbum:string = '';
+  releasedateAlbum:string = '';
   genre:string = '';
   releasedate:string = '';
 
