@@ -9,7 +9,7 @@
         <label class="userText">Geboortedatum:</label>
     </mat-grid-tile>
     <mat-grid-tile colspan="5" class="gridTile" [style.background]="'white'">
-        <label class="userText">{{user!.birthday}}</label>
+        <label class="userText">{{formatDate(user!.birthday)}}</label>
     </mat-grid-tile>
     <mat-grid-tile colspan="5" class="gridTile" [style.background]="'white'">
         <label class="userText">Land of regio:</label>

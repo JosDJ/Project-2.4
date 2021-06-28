@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import * as moment from 'moment';
 import { environment } from 'src/app/environment';
 import { User } from 'src/app/interfaces/user';
 
@@ -18,4 +19,7 @@ export class MijnaccountComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  formatDate(date: Date): string {
+    return moment(date).format('DD-MM-YYYY');
+  }
 }
