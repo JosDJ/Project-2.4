@@ -1,7 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Playlist } from 'src/app/interfaces/playlist';
 import { Song } from 'src/app/interfaces/song';
+import { StreamState } from 'src/app/interfaces/stream-state';
 import { AudioService } from 'src/app/services/audio.service';
+import { FileService } from 'src/app/services/file.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-playlist-viewer',
@@ -10,19 +14,43 @@ import { AudioService } from 'src/app/services/audio.service';
 })
 export class PlaylistViewerComponent implements OnInit {
   @Input()
-  playlist: Playlist | undefined;
-  
-  constructor(private audioService: AudioService) { }
+  playlist: Playlist | null = null;
 
-  ngOnInit(): void {
-    this.playlist?.songs.forEach(song => {
-      console.log(this.artistsToString(song));
-    });
+  state: StreamState | null = null;
+
+  currentSong: Song | null = null;
+
+  constructor(private audioService: AudioService) {
+    this.audioService.getState().subscribe(state => this.state = state);
   }
 
-  artistsToString(song: Song): string {
-    console.log(song.artists);
+  ngOnInit(): void {
 
-    return song.artists.map(artist => artist.name).join(', ');
+  }
+
+  playSong(song: Song) {
+    this.currentSong = song;
+
+    this.audioService.stop();
+
+    this.audioService.playStream(song.file?.filepath).subscribe();
+  }
+
+  play(song: Song) {
+    if (song != this.currentSong)
+    {
+      this.playSong(song);
+    }
+    else {
+      this.audioService.play();
+    }
+  }
+
+  pause() {
+    this.audioService.pause();
+  }
+
+  stop() {
+    this.audioService.stop();
   }
 }
