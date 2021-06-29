@@ -25,9 +25,9 @@ export class UploadComponent implements OnInit {
     private dataParser: FileService
   ) { }
 
-  selectedFile = null;
-  selectedFileName = "";
-  message = "";
+  selectedFile: File | null = null;
+  selectedFileName: string = "";
+  message: string = "";
   selectedImage = null;
   imgURL = "assets/addimage.png";
 
@@ -41,6 +41,7 @@ export class UploadComponent implements OnInit {
 
   addSong(event?: MouseEvent) {
     if (this.selectedFile != null) {
+      
       this.dataParser.uploadSongFile(this.selectedFile).subscribe(uploadedFile => console.log(uploadedFile));
 
 
