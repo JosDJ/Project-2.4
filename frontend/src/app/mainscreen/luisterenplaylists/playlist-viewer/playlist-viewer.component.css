@@ -5,8 +5,22 @@
 .viewer-content {
     display: flex;
     justify-content: center;
+    flex-direction: column;
 }
 
-.viewer-songs>tr> :not(:first-child) {
+/* .viewer-songs>tr> :not(:first-child) {
     padding-left: 300px;
+} */
+
+.song {
+    margin-bottom: 10px;
+    display: flex;
+}
+
+.song-title {
+    width: 100px;
+}
+
+.song-artists {
+    display: flex;
 }
