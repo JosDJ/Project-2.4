@@ -15,26 +15,14 @@
             </mat-grid-tile>
             <mat-grid-tile class="bottombar" colspan="5" rowspan="10" [style.background]="'black'">
                 <div>
-                    <label class="item">Username </label>
-                    <input class="item" type="username" placeholder="Username" required>
-                    <br>
-                    <label class="item">Confirm username </label>
-                    <input class="item" type="username" placeholder="Confirm username" required>
-                    <br>
-                    <label class="item">Password </label>
-                    <input class="item" type="password" placeholder="Password" required>
-                    <br>
-                    <label class="item">Confirm password </label>
-                    <input class="item" type="password" placeholder="Confirm password" required>
-                    <br>
-                    <button class="registerbutton">REGISTER</button>
+                    <app-register></app-register>
                 </div>
             </mat-grid-tile>
             <mat-grid-tile class="bottombar" colspan="1" rowspan="10" >
             </mat-grid-tile>
             <mat-grid-tile class="bottombar" colspan="5" rowspan="10" [style.background]="'black'">
-                
-                
+
+
                 <div>
                     <div [style.color]="'white'" *ngIf="error" class="alert alert-danger">{{error}}</div>
                     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
@@ -58,7 +46,7 @@
                                 Login
                             </button>
                             <!-- stuurt soms meteen door naar homepage bij login soms niet -->
-                        </div> 
+                        </div>
                     </form>
                 </div>
             </mat-grid-tile>
