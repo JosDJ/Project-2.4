@@ -9,9 +9,6 @@
         </div>
     </mat-grid-tile>
     <mat-grid-tile class="maintiles" colspan="5">
-        <!-- <textarea rows="4" cols="50">
-        Please give a discription of the album
-        </textarea> -->
         <label class="songlist">
             <table>
                 <thead>
@@ -65,26 +62,10 @@
                 <label class="item">Releasedate album</label>
                 <br>
                 <input class="item" type="releasedateAlbum" [(ngModel)]='releasedateAlbum' placeholder="Enter releasedate" required>
+                <br>
                 <button class="uploadbutton"(click)='upload()'>Upload album</button>
             </div>
         </div>
     </mat-grid-tile>
-
-    <!-- <mat-grid-tile class="maintiles" colspan="3">
-        <table>
-            <thead>
-                <tr>
-                    <th>Songs</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor = "let item of listData">
-                    <td>{{item}}</td>
-                </tr>
-            </tbody>
-        </table>
-        
-        
-    </mat-grid-tile> -->
 </mat-grid-list>
 

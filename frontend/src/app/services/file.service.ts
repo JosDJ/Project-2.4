@@ -36,8 +36,9 @@ export class FileService {
       
       console.log(songFile)
 
-      const body = new HttpParams()
-      .set('file', songFile)
+      // const body = new HttpParams()
+      // .set('file', songFile)
+      const body = new FormData();body.append('file',songFile);
 
       const result = this.http.post<any>(`${environment.apiUrl}/songs/upload`, body, httpOptions);
 
