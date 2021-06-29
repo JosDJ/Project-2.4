@@ -45,7 +45,16 @@ export class FileService {
   }
 
   uploadAlbumCover(albumCover: File): Observable<FileUploaded> {
-    const result = this.http.post<FileUploaded>(`${environment.apiUrl}/albums/upload_album_cover`, albumCover);
+    const body = new FormData();
+    body.append('file', albumCover);
+
+    const result = this.http.post<FileUploaded>(`${environment.apiUrl}/albums/upload_album_cover`, body);
+
+    return result;
+  }
+  
+  deleteSong(id:number): Observable<any> {
+    const result = this.http.delete<any>(`${environment.apiUrl}/songs/${id}`);
 
     return result
   }

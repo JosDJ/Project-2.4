@@ -48,6 +48,7 @@
                 <br>
                 <br>
                 <br>
+                <div [style.color]="'white'" *ngIf="errorMsgg != ''" >{{errorMsgg}}</div>
                 <label class="item">Title album </label>
                 <br>
                 <input class="item" type="titleAlbum" [(ngModel)]='titleAlbum' placeholder="Enter title" required>
