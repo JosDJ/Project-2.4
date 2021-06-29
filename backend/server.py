@@ -478,7 +478,7 @@ def update_playlist_by_id(id: int, playlist: pydantic_schemas.PlaylistIn, user: 
     songs = [database.get_song_by_id(song_id) for song_id in playlist.song_ids]
 
     updated_playlist = database.update_playlist_by_id(
-        id, models.Playlist(title=playlist.title, songs=songs, author=user))
+        id, models.Playlist(title=playlist.title, songs=songs))
 
     return pydantic_schemas.Playlist.from_orm(updated_playlist)
 

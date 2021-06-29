@@ -1,0 +1,24 @@
+<mat-card class="viewer">
+    <mat-card-title>{{playlist!.title}}</mat-card-title>
+    <mat-card-content>
+        <div class="viewer-content">
+            <table class="viewer-songs">
+                <tr>
+                    <th>Titel</th>
+                    <th>Artiesten</th>
+                    <th>Lengte</th>
+                </tr>
+                <tr *ngFor="let song of playlist!.songs">
+                    <td>{{song.title}}</td>
+                    <td>
+                        <div *ngFor="let artist of song.artists; let last = last">
+                            {{artist.name}}
+                            <span *ngIf="!last">, </span>
+                        </div>
+                    </td>
+                    <td>1:00</td>
+                </tr>
+            </table>
+        </div>
+    </mat-card-content>
+</mat-card>

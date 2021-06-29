@@ -1,0 +1,12 @@
+.viewer {
+    width: 1000px;
+}
+
+.viewer-content {
+    display: flex;
+    justify-content: center;
+}
+
+.viewer-songs>tr> :not(:first-child) {
+    padding-left: 300px;
+}
