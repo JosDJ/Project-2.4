@@ -1,0 +1,30 @@
+.loginscreen {
+  height: calc(100vh - 6rem);
+  /* background-color: rgb(114, 67, 49); */
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.mygridlist {
+  height: 100%;
+  position: relative;
+}
+
+label {
+  color: white;
+  width: 25vw;
+  display: block;
+  font-size: large
+}
+
+input {
+  font-size: large;
+  width: 25vw;
+}
+
+.hide {
+  display: none;
+}
