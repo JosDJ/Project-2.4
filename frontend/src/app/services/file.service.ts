@@ -27,21 +27,19 @@ export class FileService {
     return this.stateChange.asObservable();
   }
 
-  uploadSongFile(songFile:any[]): Observable<any> {
+  uploadSongFile(songFile:any): Observable<any> {
     const httpOptions = {
         headers: new HttpHeaders({
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'multipart/form-data',
         }),
       };
       
-      const body = new HttpParams()
-      .set('file', songFile[0])
+      console.log(songFile)
 
-      console.log('foo = ' ,body)
-      console.log('foo2 = ' , songFile[0])
-        
+      const body = new HttpParams()
+      .set('file', songFile)
+
       const result = this.http.post<any>(`${environment.apiUrl}/songs/upload`, body, httpOptions);
-      console.log(result)
 
       result.subscribe();
 
@@ -51,7 +49,7 @@ export class FileService {
   uploadSongEntry(id:string, title:string, artist_ids:string[]): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
       }),
     };
 
@@ -61,7 +59,7 @@ export class FileService {
       .set('artist_ids', artist_ids[0])
       artist_ids.forEach(ids =>{
         if (ids == artist_ids[0]){
-          console.log('ja skip die 0 maar gwn aub')
+          console.log('ja skip die eerste entry maar gwn aub')
         }else{
           body.append('artist_ids', ids)
         }

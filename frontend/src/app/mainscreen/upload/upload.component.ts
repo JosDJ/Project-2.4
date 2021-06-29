@@ -37,11 +37,11 @@ fileList:any=[];// the music files
   }
   
   upload(): void{
-    this.dataParser.uploadSongFile(this.fileList);
   }
 
   addSong(event?: MouseEvent){
     if (this.selectedFile != null){
+      this.dataParser.uploadSongFile(this.selectedFile);
       this.listData.push(this.selectedFileName)
       this.fileList.push(this.selectedFile)
     }
