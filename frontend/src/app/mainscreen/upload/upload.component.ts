@@ -9,6 +9,7 @@ import { timeout } from 'rxjs/operators';
 import { SongIn } from 'src/app/interfaces/songin';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Song } from 'src/app/interfaces/song';
+import { AlbumIn } from 'src/app/interfaces/albumin';
 
 @Component({
   selector: 'app-upload',
@@ -37,7 +38,7 @@ export class UploadComponent implements OnInit {
     releaseDate: new FormControl(new Date(), [
       Validators.required
     ]),
-    artist_id: new FormControl(null, [
+    artist: new FormControl(null, [
       Validators.required
     ]),
     genre_id: new FormControl(null, [
@@ -46,7 +47,7 @@ export class UploadComponent implements OnInit {
     song_ids: new FormControl([], [
       Validators.required
     ]),
-    album_cover_id: new FormControl(null, [
+    albumCover: new FormControl(null, [
       Validators.required
     ])
   });
@@ -60,8 +61,6 @@ export class UploadComponent implements OnInit {
 
   title: string = '';
   artist: string = '';
-  titleSong: string = '';
-  artistSong: string = '';
   titleAlbum: string = '';
   genreAlbum: string = '';
   artistAlbum: string = '';
@@ -70,10 +69,7 @@ export class UploadComponent implements OnInit {
   releasedate: string = '';
 
   genres: Genre[] = [];
-  nameArray: any = [];//on screen names
 
-  selectedFile: File | null = null;
-  selectedFileName: string = "";
   message: string = "";
   selectedImage: File | null = null;
   imgURL = "assets/addimage.png";
@@ -99,28 +95,71 @@ export class UploadComponent implements OnInit {
     return this.uploadSongForm.get('file')?.value;
   }
 
+  getAlbumTitle(): string {
+    return this.uploadAlbumForm.get('title')?.value;
+  }
+
+  getAlbumReleaseDate(): Date {
+    return this.uploadAlbumForm.get('releaseDate')?.value;
+  }
+
+  getAlbumArtistID(): number {
+    return this.uploadAlbumForm.get('artist_id')?.value;
+  }
+
+  getAlbumGenreID(): number {
+    return this.uploadAlbumForm.get('genre_id')?.value;
+  }
+
+  getAlbumSongIDs(): number[] {
+    return this.uploadAlbumForm.get('song_ids')?.value;
+  }
+
+  getAlbumCover(): File {
+    return this.uploadAlbumForm.get('albumCover')?.value;
+  }
+
   upload(): void {
-    if (this.selectedImage != null && this.uploadedSongs.length != 0) {
-      if (this.titleAlbum != '' && this.artistAlbum != '' && this.releasedateAlbum != '') {
-        this.errorMsgg = '';
-        console.log(this.selectedImage)
-        this.dataParser.uploadAlbumCover(this.selectedImage).subscribe(uploadedFile => console.log(uploadedFile))
-        setTimeout(() => {
-          const artistgenreList: number[] = [1];
-          // const foo:SongIn = {title: this.titleSong, artist_ids: artistSongList, file_id: this.uploadedSong.id};
-          // this.dataParser.uploadSongEntry(foo).subscribe(uploadedSongEntry => this.uploadedSongs.push(uploadedSongEntry));
-        }, 300);
-      } else {
-        this.errorMsgg = 'De benodigde velden zijn nog leeg';
-      }
-    } else {
-      this.errorMsgg = 'U moet of nog een song adden of u moet uw album cover uploaden';
+    // if (this.selectedImage != null && this.uploadedSongs.length != 0) {
+    //   if (this.titleAlbum != '' && this.artistAlbum != '' && this.releasedateAlbum != '') {
+    //     this.errorMsgg = '';
+    //     console.log(this.selectedImage)
+    //     this.dataParser.uploadAlbumCover(this.selectedImage).subscribe(uploadedFile => console.log(uploadedFile))
+    //     setTimeout(() => {
+    //       const artistgenreList: number[] = [1];
+    //       // const foo:SongIn = {title: this.titleSong, artist_ids: artistSongList, file_id: this.uploadedSong.id};
+    //       // this.dataParser.uploadSongEntry(foo).subscribe(uploadedSongEntry => this.uploadedSongs.push(uploadedSongEntry));
+    //     }, 300);
+    //   } else {
+    //     this.errorMsgg = 'De benodigde velden zijn nog leeg';
+    //   }
+    // } else {
+    //   this.errorMsgg = 'U moet of nog een song adden of u moet uw album cover uploaden';
+    // }
+
+    if (this.uploadAlbumForm.valid) {
+      this.dataParser.uploadAlbumCover(this.getAlbumCover()).subscribe(uploadedFile => {
+        const album: AlbumIn = {
+          title: this.getAlbumTitle(),
+          // artist_id: this.getAlbumArtistID(),
+          artist_id: 1, // TODO: artist id uit de backend halen
+          release_date: this.getAlbumReleaseDate(),
+          genre_id: this.getAlbumGenreID(),
+          song_ids: this.getAlbumSongIDs(),
+          album_cover_id: uploadedFile.id
+        };
+
+        this.dataParser.uploadAlbum(album).subscribe((uploadedAlbum) => console.log(uploadedAlbum))
+      });
+    }
+    else {
+      this.errorMsgg = 'Niet alle velden zijn ingevuld.';
     }
   }
 
   addSong(event?: MouseEvent) {
     if (this.uploadSongForm.valid) {
-      if (!this.nameArray.includes(this.getSongTitle())) {
+      if (!this.uploadedSongs.find(s => s.title === this.getSongTitle())) {
         this.errorMsg = '';
 
         this.dataParser.uploadSongFile(this.uploadSongForm.get('file')?.value).subscribe(uploadedFile => {
@@ -150,7 +189,10 @@ export class UploadComponent implements OnInit {
   }
 
   onImageSelect(event: any) {
-    this.selectedImage = event.target.files[0];
+    // this.selectedImage = event.target.files[0];
+
+    this.uploadAlbumForm.patchValue({ albumCover: event.target.files[0] });
+    this.uploadAlbumForm.get('albumCover')?.updateValueAndValidity();
   }
 
   preview(files: any) {
@@ -161,12 +203,8 @@ export class UploadComponent implements OnInit {
   }
 
   onFileSelected(event: any) {
-    this.uploadSongForm.patchValue({file: event.target.files[0]});
+    this.uploadSongForm.patchValue({ file: event.target.files[0] });
     this.uploadSongForm.get('file')?.updateValueAndValidity();
-
-    // this.selectedFile = event.target.files[0];
-    // this.selectedFileName = event.target.files[0].name;
-
   }
 }
 
