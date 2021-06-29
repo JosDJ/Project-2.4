@@ -4,6 +4,8 @@ import { stringify } from '@angular/compiler/src/util';
 import { HttpBackend, HttpClient, HttpRequest } from '@angular/common/http';
 import { Component, OnInit, SystemJsNgModuleLoader } from '@angular/core';
 import { Genre } from 'src/app/interfaces/genre';
+import { async } from '@angular/core/testing';
+import { timeout } from 'rxjs/operators';
 
 @Component({
   selector: 'app-upload',
@@ -11,6 +13,8 @@ import { Genre } from 'src/app/interfaces/genre';
   styleUrls: ['./upload.component.css']
 })
 export class UploadComponent implements OnInit {
+
+  uploadedSong:any;
 
   title: string = '';
   artist: string = '';
@@ -47,12 +51,12 @@ export class UploadComponent implements OnInit {
 
   addSong(event?: MouseEvent) {
     if (this.selectedFile != null) {
-      
-      this.dataParser.uploadSongFile(this.selectedFile).subscribe(uploadedFile => console.log(uploadedFile));
-
-
-      this.nameArray.push(this.selectedFileName)
-      this.fileArray.push(this.selectedFile)
+      this.dataParser.uploadSongFile(this.selectedFile).subscribe(async uploadedFile => this.uploadedSong = uploadedFile);
+      setTimeout(() => {
+        console.log('foo', this.uploadedSong.id)
+        this.nameArray.push(this.selectedFileName)
+        this.fileArray.push(this.selectedFile)
+      }, 300);
     }
   }
 
