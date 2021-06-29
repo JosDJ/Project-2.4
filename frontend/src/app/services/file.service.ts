@@ -3,17 +3,18 @@ import { Injectable, SkipSelf } from '@angular/core';
 import { Subject, Observable, of } from 'rxjs';
 
 import { environment } from '../environment';
+import { FileUploaded } from '../interfaces/file-uploaded';
 import { Song } from '../interfaces/song';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileService {
-   files: Song[] = [
+  files: Song[] = [
 
   ];
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient) {
     // http.get<Song>(`${environment.apiUrl}/songs/16`).subscribe(song => {
     //   this.files.push(song);
 
@@ -27,48 +28,18 @@ export class FileService {
     return this.stateChange.asObservable();
   }
 
-  uploadSongFile(songFile:any): Observable<any> {
-    const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'multipart/form-data',
-        }),
-      };
-      
-      console.log(songFile)
+  uploadSongFile(songFile: File): Observable<FileUploaded> {
+    const body = new FormData();
+    body.append('file', songFile);
 
-      const body = new HttpParams()
-      .set('file', songFile)
+    const result = this.http.post<FileUploaded>(`${environment.apiUrl}/songs/upload`, body);
 
-      const result = this.http.post<any>(`${environment.apiUrl}/songs/upload`, body, httpOptions);
-
-      result.subscribe();
-
-      return result
+    return result;
   }
 
-  uploadSongEntry(id:string, title:string, artist_ids:string[]): Observable<any> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-    };
-
-    const body = new HttpParams()
-      .set('id', id)
-      .set('title', title)
-      .set('artist_ids', artist_ids[0])
-      artist_ids.forEach(ids =>{
-        if (ids == artist_ids[0]){
-          console.log('ja skip die eerste entry maar gwn aub')
-        }else{
-          body.append('artist_ids', ids)
-        }
-      })
-
-    const result = this.http.post<any>(`${environment.apiUrl}/songs/create`, body, httpOptions);
-
-    result.subscribe();
-
+  uploadSongEntry(song: Song): Observable<any> {
+    const result = this.http.post<any>(`${environment.apiUrl}/songs/create`, song);
+    
     return result
   }
 }

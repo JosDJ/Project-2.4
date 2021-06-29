@@ -5,6 +5,7 @@ from typing import List, Optional
 import pathlib
 import uuid
 from PIL import Image
+from starlette.status import HTTP_415_UNSUPPORTED_MEDIA_TYPE
 
 from models import User
 from fastapi import Depends, FastAPI, File, HTTPException, UploadFile, status
@@ -242,7 +243,7 @@ def save_song_to_disk(file: UploadFile = File(None)) -> pathlib.Path:
 def upload_song_file(file: UploadFile = File(None), token: str = Depends(oauth2_scheme)):
     if file.content_type != 'audio/mpeg':
         raise HTTPException(
-            status_code=415, detail="Only files with 'Content-Type: audio/mpeg' are allowed")
+            status_code=HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail="Only files with 'Content-Type: audio/mpeg' are allowed")
 
     filepath = save_song_to_disk(file)
 
