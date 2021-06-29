@@ -1,7 +1,9 @@
 import { FileService } from 'src/app/services/file.service';
-import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/app/environment';
+import { stringify } from '@angular/compiler/src/util';
+import { HttpBackend, HttpClient, HttpRequest } from '@angular/common/http';
 import { Component, OnInit, SystemJsNgModuleLoader } from '@angular/core';
-
+import { Genre } from 'src/app/interfaces/genre';
 
 @Component({
   selector: 'app-upload',
@@ -21,9 +23,9 @@ export class UploadComponent implements OnInit {
   genre: string = '';
   releasedate: string = '';
 
-  constructor(private http: HttpClient,
-    private dataParser: FileService
-  ) { }
+  genres:Genre[] = [];
+  nameArray:any=[];//on screen names
+  fileArray:any=[];// the music files
 
   selectedFile: File | null = null;
   selectedFileName: string = "";
@@ -31,8 +33,12 @@ export class UploadComponent implements OnInit {
   selectedImage = null;
   imgURL = "assets/addimage.png";
 
-  listData: any = [];//on screen names
-  fileList: any = [];// the music files
+  constructor(private http:HttpClient,
+    private dataParser:FileService
+  ) { 
+    http.get<Genre[]>(`${environment.apiUrl}/genres`).subscribe(genre => this.genres = genre);
+  }
+  
   ngOnInit(): void {
   }
 
@@ -45,14 +51,17 @@ export class UploadComponent implements OnInit {
       this.dataParser.uploadSongFile(this.selectedFile).subscribe(uploadedFile => console.log(uploadedFile));
 
 
-      this.listData.push(this.selectedFileName)
-      this.fileList.push(this.selectedFile)
+      this.nameArray.push(this.selectedFileName)
+      this.fileArray.push(this.selectedFile)
     }
-
-
   }
-  onImageSelect(event: any) {
-    console.log(event);
+
+  deleteSong(element:any){
+    this.nameArray= this.nameArray.filter((song: any) => song != element);
+    this.fileArray= this.fileArray.filter((song: any) => song.name != element);
+  }
+
+  onImageSelect(event: any){
     this.selectedImage = event.target.files[0];
   }
 
@@ -61,12 +70,12 @@ export class UploadComponent implements OnInit {
     var reader = new FileReader();
     reader.readAsDataURL(files[0]);
     reader.onload = (_event) => this.imgURL = String(reader.result);
-
   }
-
-  onFileSelected(event: any) {
+  
+  onFileSelected(event:any){
     this.selectedFile = event.target.files[0];
     this.selectedFileName = event.target.files[0].name;
+    
   }
 }
 
