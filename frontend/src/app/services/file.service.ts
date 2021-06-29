@@ -39,7 +39,7 @@ export class FileService {
 
   uploadSongEntry(song: Song): Observable<any> {
     const result = this.http.post<any>(`${environment.apiUrl}/songs/create`, song);
-    
+
     return result
   }
 }
