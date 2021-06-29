@@ -51,7 +51,7 @@ export class UploadComponent implements OnInit {
 
   addSong(event?: MouseEvent) {
     if (this.selectedFile != null) {
-      this.dataParser.uploadSongFile(this.selectedFile).subscribe(async uploadedFile => this.uploadedSong = uploadedFile);
+      this.dataParser.uploadSongFile(this.selectedFile).subscribe(uploadedFile => this.uploadedSong = uploadedFile);
       setTimeout(() => {
         console.log('foo', this.uploadedSong.id)
         this.nameArray.push(this.selectedFileName)
