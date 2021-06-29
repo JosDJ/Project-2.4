@@ -54,4 +54,21 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('token');
   }
+
+  register(username: string, password: string, birthday: string, country: string): Observable<any>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/x-www-form-urlencoded',
+      }),
+    };
+    const postBody = {
+      email: username,
+      birthday,
+      country_id: country,
+      password
+    };
+    console.log(postBody);
+    const result = this.http.post<any>(`${environment.apiUrl}/register`, postBody, httpOptions);
+    return result;
+  }
 }
