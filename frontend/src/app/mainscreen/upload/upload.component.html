@@ -55,8 +55,8 @@
                 <br>
                 <label class="item">Genre album</label>
                 <br>
-                <select *ngFor="let genre in genres">
-                    <option value="{{genre.id}}">
+                <select class="item" type=genreAlbum>
+                    <option *ngFor="let genre of genres" value="{{genre.id}}">
                         {{genre.title}}
                     </option>
                 </select>

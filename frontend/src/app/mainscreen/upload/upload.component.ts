@@ -45,7 +45,7 @@ export class UploadComponent implements OnInit {
   constructor(private http:HttpClient,
     private dataParser:FileService
   ) { 
-    http.get<Genre[]>(`${environment.apiUrl}/genres`).subscribe(genre => this.genres = genre);
+    http.get<Genre[]>(`${environment.apiUrl}/genres`).subscribe(genres => this.genres = genres);
   }
   
   ngOnInit(): void {
