@@ -5,6 +5,7 @@ import { Subject, Observable, of } from 'rxjs';
 import { environment } from '../environment';
 import { FileUploaded } from '../interfaces/file-uploaded';
 import { Song } from '../interfaces/song';
+import { SongIn } from '../interfaces/songin';
 
 @Injectable({
   providedIn: 'root'
@@ -37,8 +38,14 @@ export class FileService {
     return result;
   }
 
-  uploadSongEntry(song: Song): Observable<any> {
-    const result = this.http.post<any>(`${environment.apiUrl}/songs/create`, song);
+  uploadSongEntry(song: SongIn): Observable<SongIn> {
+    const result = this.http.post<SongIn>(`${environment.apiUrl}/songs/create`, song);
+
+    return result
+  }
+
+  uploadAlbumCover(albumCover: File): Observable<FileUploaded> {
+    const result = this.http.post<FileUploaded>(`${environment.apiUrl}/albums/upload_album_cover`, albumCover);
 
     return result
   }

@@ -28,6 +28,7 @@
     <mat-grid-tile class="maintiles" colspan="5">
         <div>
             <div class="container">
+                <div [style.color]="'white'" *ngIf="errorMsg != ''" >{{errorMsg}}</div>
                 <label class="item">Title song</label>
                 <br>
                 <input class="item" type="titleSong" [(ngModel)]='titleSong' placeholder="Enter title" required>

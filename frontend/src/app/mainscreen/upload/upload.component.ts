@@ -6,6 +6,7 @@ import { Component, OnInit, SystemJsNgModuleLoader } from '@angular/core';
 import { Genre } from 'src/app/interfaces/genre';
 import { async } from '@angular/core/testing';
 import { timeout } from 'rxjs/operators';
+import { SongIn } from 'src/app/interfaces/songin';
 
 @Component({
   selector: 'app-upload',
@@ -15,6 +16,8 @@ import { timeout } from 'rxjs/operators';
 export class UploadComponent implements OnInit {
 
   uploadedSong:any;
+  errorMsg:string = '';
+  uploadedSongs:any[] = [];
 
   title: string = '';
   artist: string = '';
@@ -29,12 +32,11 @@ export class UploadComponent implements OnInit {
 
   genres:Genre[] = [];
   nameArray:any=[];//on screen names
-  fileArray:any=[];// the music files
 
   selectedFile: File | null = null;
   selectedFileName: string = "";
   message: string = "";
-  selectedImage = null;
+  selectedImage: File | null = null;
   imgURL = "assets/addimage.png";
 
   constructor(private http:HttpClient,
@@ -47,22 +49,35 @@ export class UploadComponent implements OnInit {
   }
 
   upload(): void {
+    if (this.selectedImage != null && this.uploadedSongs.length != 0){
+      if (this.titleAlbum != '' && this.artistAlbum != '' && this.releasedateAlbum != '') {
+        console.log(this.selectedImage)
+        this.dataParser.uploadAlbumCover(this.selectedImage).subscribe(uploadedFile => console.log(uploadedFile))
+      }
+    }
   }
 
   addSong(event?: MouseEvent) {
     if (this.selectedFile != null) {
-      this.dataParser.uploadSongFile(this.selectedFile).subscribe(uploadedFile => this.uploadedSong = uploadedFile);
-      setTimeout(() => {
-        console.log('foo', this.uploadedSong.id)
-        this.nameArray.push(this.selectedFileName)
-        this.fileArray.push(this.selectedFile)
-      }, 300);
+      if (this.titleSong != '' && this.artistSong != '') {
+        this.errorMsg = '';
+        this.dataParser.uploadSongFile(this.selectedFile).subscribe(uploadedFile => this.uploadedSong = uploadedFile);
+        setTimeout(() => {
+          const artistSongList:number[] = [1];
+          const foo:SongIn = {title: this.titleSong, artist_ids: artistSongList, file_id: this.uploadedSong.id};
+          this.dataParser.uploadSongEntry(foo).subscribe(uploadedSongEntry => this.uploadedSongs.push(uploadedSongEntry));
+          this.nameArray.push(this.titleSong)
+        }, 300);
+      } else {
+        this.errorMsg = 'De benodigde velden zijn nog leeg';
+      }
     }
   }
 
   deleteSong(element:any){
+    console.log('element = ' , element)
     this.nameArray= this.nameArray.filter((song: any) => song != element);
-    this.fileArray= this.fileArray.filter((song: any) => song.name != element);
+    this.uploadedSongs= this.uploadedSongs.filter((song:any) => song.title != element);
   }
 
   onImageSelect(event: any){
