@@ -20,7 +20,7 @@ html, body {
   display: block;
 }
 
-.audioplayer, .mainscreen::after {
+.audioplayer {
   height: 50px;
 }
 
