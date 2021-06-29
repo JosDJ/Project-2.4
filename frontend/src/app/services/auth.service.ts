@@ -62,13 +62,13 @@ export class AuthService {
       }),
     };
     const postBody = {
-      _username: username,
-      _password: password,
-      _birthday: birthday,
-      _country: country
+      email: username,
+      birthday,
+      country_id: country,
+      password
     };
+    console.log(postBody);
     const result = this.http.post<any>(`${environment.apiUrl}/register`, postBody, httpOptions);
-    result.subscribe(data => this.setToken(data));
     return result;
   }
 }
