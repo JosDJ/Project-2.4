@@ -5,6 +5,11 @@ import { AudioService } from 'src/app/services/audio.service';
 import { FileService } from 'src/app/services/file.service';
 import { Queue } from 'src/app/utilities/queue';
 
+interface CurrentSong {
+  index: number;
+  song: Song;
+}
+
 @Component({
   selector: 'app-music-player',
   templateUrl: './music-player.component.html',
@@ -23,7 +28,7 @@ export class MusicPlayerComponent implements OnInit {
 
   songs: Song[] = [];
 
-  currentSong: any = {};
+  currentSong: CurrentSong | null = null;
 
   constructor(private audioService: AudioService, private fileService: FileService) {
     this.audioService.getState().subscribe(state => {

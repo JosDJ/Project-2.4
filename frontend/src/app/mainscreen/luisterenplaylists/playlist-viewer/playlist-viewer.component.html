@@ -4,21 +4,26 @@
     <mat-card-title>{{playlist!.title}}</mat-card-title>
     <mat-card-content>
         <div class="viewer-content">
-            <div *ngFor="let song of playlist!.songs" class="song">
+            <div *ngFor="let song of playlist!.songs; index as i" class="song">
                 <span class="song-media-buttons">
                     <a href="javascript:void(0);" class="icon">
-                        <i class="fa fa-play" *ngIf="!state!.playing" (click)="play(song)"></i>
-                        <i class="fa fa-pause" *ngIf="state!.playing" (click)="pause()"></i>
+                        <i class="fa fa-play" *ngIf="!state!.playing || currentSong != song" (click)="play(song)"></i>
+                        <i class="fa fa-pause" *ngIf="state!.playing && currentSong == song" (click)="pause()"></i>
                     </a>
                 </span>
                 <span class="song-title">{{song.title}}</span>
                 <span class="song-artists">
                     <div *ngFor="let artist of song.artists; let last = last">
-                        {{artist.name}}
-                        <span *ngIf="!last">, </span>
+                        <span *ngIf="!last">
+                            {{artist.name}},&nbsp;
+                        </span>
+                        <span *ngIf="last">
+                            {{artist.name}}
+                        </span>
+                        <!-- <span *ngIf="!last">,</span> -->
                     </div>
                 </span>
-                <span class="duration">1:00</span>
+                <span class="duration">{{durations[i]}}</span>
             </div>
         </div>
     </mat-card-content>

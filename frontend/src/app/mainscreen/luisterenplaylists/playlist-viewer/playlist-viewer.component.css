@@ -17,10 +17,15 @@
     display: flex;
 }
 
+.song-media-buttons {
+    width: 20px;
+}
+
 .song-title {
-    width: 100px;
+    width: 400px;
 }
 
 .song-artists {
     display: flex;
+    width: 400px;
 }

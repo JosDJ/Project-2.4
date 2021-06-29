@@ -18,6 +18,8 @@ export class PlaylistViewerComponent implements OnInit {
 
   state: StreamState | null = null;
 
+  durations: string[] = [];
+
   currentSong: Song | null = null;
 
   constructor(private audioService: AudioService) {
@@ -25,7 +27,14 @@ export class PlaylistViewerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // echt een hack dit maar ja haha
+    this.playlist?.songs.forEach(song => {
+      const audio = new Audio(song.file.filepath);
 
+      audio.addEventListener('canplay', () => {
+        this.durations.push(this.audioService.formatTime(audio.duration));
+      });
+    });
   }
 
   playSong(song: Song) {
@@ -52,5 +61,11 @@ export class PlaylistViewerComponent implements OnInit {
 
   stop() {
     this.audioService.stop();
+  }
+
+  getDuration(url: string): number {
+    const audio = new Audio(url);
+
+    return audio.duration;
   }
 }
