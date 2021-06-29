@@ -12,6 +12,7 @@ import { LoginscreenModule } from './loginscreen/loginscreen.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatGridListModule } from '@angular/material/grid-list';
+import {MatTableModule} from '@angular/material/table';
 import { LoginComponent } from './loginscreen/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -35,6 +36,7 @@ import {AuthenticationInterceptor} from './authentication.interceptor';
     MusicplayerModule,
     MatSliderModule,
     MatGridListModule,
+    MatTableModule,
     MainscreenModule,
     LoginscreenModule,
     ReactiveFormsModule,

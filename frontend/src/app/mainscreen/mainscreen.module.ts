@@ -6,12 +6,14 @@ import { LuisterenComponent } from './luisteren/luisteren.component';
 import { ZoekenComponent } from './zoeken/zoeken.component';
 import { MijnaccountComponent } from './mijnaccount/mijnaccount.component';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card'
 import { LuisterenfavorietenComponent } from './luisterenfavorieten/luisterenfavorieten.component';
 import { RouterModule } from '@angular/router';
 import { LuisterengenresComponent } from './luisterengenres/luisterengenres.component';
 import { LuisterenplaylistsComponent } from './luisterenplaylists/luisterenplaylists.component';
 import { LuisterenrecentComponent } from './luisterenrecent/luisterenrecent.component';
 import { FormsModule } from '@angular/forms';
+import { PlaylistViewerComponent } from './luisterenplaylists/playlist-viewer/playlist-viewer.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,8 @@ import { FormsModule } from '@angular/forms';
     LuisterenfavorietenComponent,
     LuisterengenresComponent,
     LuisterenplaylistsComponent,
-    LuisterenrecentComponent
+    LuisterenrecentComponent,
+    PlaylistViewerComponent
   ],
   exports: [
     HomeComponent,
@@ -33,7 +36,8 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     MatGridListModule,
     RouterModule,
-    FormsModule
+    FormsModule,
+    MatCardModule
   ]
 })
 export class MainscreenModule { }

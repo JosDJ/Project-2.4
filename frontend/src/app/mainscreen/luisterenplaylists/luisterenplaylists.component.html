@@ -1,5 +1,12 @@
 <div class="container">
-    <div class="item" *ngFor="let playlist of playlists">
-        <button class="button">{{playlist.title}}</button>
+    <div class="grid" *ngIf="activePlaylist == null">
+        <div class="grid-item" *ngFor="let playlist of playlists">
+            <button class="button" (click)="openPlaylist(playlist)">{{playlist.title}}</button>
+        </div>
+    </div>
+
+    <div class="viewer" *ngIf="activePlaylist != null">
+        <button (click)="resetPlaylist()">Terug</button>
+        <app-playlist-viewer [playlist]="activePlaylist"></app-playlist-viewer>
     </div>
 </div>
