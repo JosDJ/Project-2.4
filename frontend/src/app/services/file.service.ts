@@ -38,8 +38,8 @@ export class FileService {
     return result;
   }
 
-  uploadSongEntry(song: SongIn): Observable<SongIn> {
-    const result = this.http.post<SongIn>(`${environment.apiUrl}/songs/create`, song);
+  uploadSong(song: SongIn): Observable<Song> {
+    const result = this.http.post<Song>(`${environment.apiUrl}/songs/create`, song);
 
     return result
   }

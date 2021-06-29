@@ -16,9 +16,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor = "let item of nameArray; index as i">
-                        <td>{{i+1}}) {{item}}</td>
-                        <td><button (click)="deleteSong(item)">delete</button></td>
+                    <tr *ngFor = "let song of uploadedSongs; index as i">
+                        <td>{{i+1}}) {{song.title}}</td>
+                        <td><button (click)="deleteSong(song)">delete</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -27,23 +27,26 @@
 
     <mat-grid-tile class="maintiles" colspan="5">
         <div>
-            <div class="container">
-                <div [style.color]="'white'" *ngIf="errorMsg != ''" >{{errorMsg}}</div>
-                <label class="item">Title song</label>
-                <br>
-                <input class="item" type="titleSong" [(ngModel)]='titleSong' placeholder="Enter title" required>
-                <br>
-                <label class="item">Artist song</label>
-                <br>
-                <input class="item" type="artistSong" [(ngModel)]="artistSong" placeholder="Enter artist" required>
-            </div>
-            <div class="addsongbuttondiv">
-                <label class="item">Song </label>
-                <br>
-                <input #song type="file" accept="audio/*" (change)="onFileSelected($event)">
-                <br>
-                <button (click)="addSong()">Add song</button>
-            </div>
+            <form [formGroup]="uploadSongForm">
+                <div class="container">
+                    <div [style.color]="'white'" *ngIf="errorMsg != ''" >{{errorMsg}}</div>
+                    <label class="item">Titel</label>
+                    <br>
+                    <input type="text" formControlName="title" class="item" placeholder="Enter title" required>
+                    <br>
+                    <label class="item">Artiest</label>
+                    <br>
+                    <input type="text" formControlName="artist" class="item" placeholder="Enter artist" required>
+                </div>
+
+                <div class="addsongbuttondiv">
+                    <label class="item">Liedje</label>
+                    <br>
+                    <input #song type="file" accept="audio/mpeg" (change)="onFileSelected($event)">
+                    <br>
+                    <button (click)="addSong()">Voeg liedje toe</button>
+                </div>
+            </form>
             <div class="container">
                 <br>
                 <br>

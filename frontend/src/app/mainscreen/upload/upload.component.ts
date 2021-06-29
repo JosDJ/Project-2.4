@@ -7,6 +7,8 @@ import { Genre } from 'src/app/interfaces/genre';
 import { async } from '@angular/core/testing';
 import { timeout } from 'rxjs/operators';
 import { SongIn } from 'src/app/interfaces/songin';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Song } from 'src/app/interfaces/song';
 
 @Component({
   selector: 'app-upload',
@@ -14,12 +16,46 @@ import { SongIn } from 'src/app/interfaces/songin';
   styleUrls: ['./upload.component.css']
 })
 export class UploadComponent implements OnInit {
+  uploadSongForm: FormGroup = new FormGroup({
+    title: new FormControl('', [
+      Validators.required,
+      Validators.maxLength(50)
+    ]),
+    artist: new FormControl('', [
+      Validators.required
+    ]),
+    file: new FormControl(null, [
+      Validators.required
+    ])
+  });
+
+  uploadAlbumForm: FormGroup = new FormGroup({
+    title: new FormControl('', [
+      Validators.required,
+      Validators.maxLength(50)
+    ]),
+    releaseDate: new FormControl(new Date(), [
+      Validators.required
+    ]),
+    artist_id: new FormControl(null, [
+      Validators.required
+    ]),
+    genre_id: new FormControl(null, [
+      Validators.required
+    ]),
+    song_ids: new FormControl([], [
+      Validators.required
+    ]),
+    album_cover_id: new FormControl(null, [
+      Validators.required
+    ])
+  });
 
   uploadedSong: any;
   errorMsg: string = '';
   errorMsgg: string = '';
-  uploadedSongs: any[] = [];
-  SongToDelete: any = null;
+  uploadedSongs: Song[] = [];
+  songToDelete: Song | null | undefined = null;
   UploadedCover: any = null;
 
   title: string = '';
@@ -51,6 +87,18 @@ export class UploadComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  getSongTitle(): string {
+    return this.uploadSongForm.get('title')?.value;
+  }
+
+  getSongArtist(): string {
+    return this.uploadSongForm.get('artist')?.value;
+  }
+
+  getSongFile(): File {
+    return this.uploadSongForm.get('file')?.value;
+  }
+
   upload(): void {
     if (this.selectedImage != null && this.uploadedSongs.length != 0) {
       if (this.titleAlbum != '' && this.artistAlbum != '' && this.releasedateAlbum != '') {
@@ -71,32 +119,34 @@ export class UploadComponent implements OnInit {
   }
 
   addSong(event?: MouseEvent) {
-    if (this.selectedFile != null) {
-      if (this.titleSong != '' && this.artistSong != '') {
-        if (!this.nameArray.includes(this.titleSong)) {
-          this.errorMsg = '';
-          this.dataParser.uploadSongFile(this.selectedFile).subscribe(uploadedFile => {
-            this.uploadedSong = uploadedFile;
-            
-            const artistSongList: number[] = [1];
-            const foo: SongIn = { title: this.titleSong, artist_ids: artistSongList, file_id: this.uploadedSong.id };
-            this.dataParser.uploadSongEntry(foo).subscribe(uploadedSongEntry => this.uploadedSongs.push(uploadedSongEntry));
-            this.nameArray.push(this.titleSong)
-          });
-        } else {
-          this.errorMsg = 'U kunt niet meerdere keren hetzelfde bestand toevoegen';
-        }
-      } else {
-        this.errorMsg = 'De benodigde velden zijn nog leeg';
+    if (this.uploadSongForm.valid) {
+      if (!this.nameArray.includes(this.getSongTitle())) {
+        this.errorMsg = '';
+
+        this.dataParser.uploadSongFile(this.uploadSongForm.get('file')?.value).subscribe(uploadedFile => {
+          const artist_ids = [1]; // TODO: artiesten van de backend halen
+          const song: SongIn = {
+            title: this.getSongTitle(),
+            artist_ids: artist_ids,
+            file_id: uploadedFile.id
+          }
+
+          this.dataParser.uploadSong(song).subscribe(uploadedSong => this.uploadedSongs.push(uploadedSong));
+        });
       }
+      else {
+        this.errorMsg = 'Bestand is al toegevoegd.';
+      }
+    }
+    else {
+      this.errorMsg = "Niet alle velden zijn ingevuld.";
     }
   }
 
-  deleteSong(element: any) {
-    console.log('element = ', element)
-    this.nameArray = this.nameArray.filter((song: any) => song != element);
-    this.SongToDelete = this.uploadedSongs.filter((song: any) => song.title == element);
-    this.dataParser.deleteSong(this.SongToDelete[0].id).subscribe(deletedSong => console.log(deletedSong));
+  deleteSong(song: Song) {
+    this.uploadedSongs = this.uploadedSongs.filter((s: Song) => s !== song);
+
+    this.dataParser.deleteSong(song.id).subscribe(deletedSong => console.log(deletedSong));
   }
 
   onImageSelect(event: any) {
@@ -111,8 +161,11 @@ export class UploadComponent implements OnInit {
   }
 
   onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
-    this.selectedFileName = event.target.files[0].name;
+    this.uploadSongForm.patchValue({file: event.target.files[0]});
+    this.uploadSongForm.get('file')?.updateValueAndValidity();
+
+    // this.selectedFile = event.target.files[0];
+    // this.selectedFileName = event.target.files[0].name;
 
   }
 }
