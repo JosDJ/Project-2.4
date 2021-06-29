@@ -41,7 +41,7 @@ export class UploadComponent implements OnInit {
 
   addSong(event?: MouseEvent) {
     if (this.selectedFile != null) {
-      
+
       this.dataParser.uploadSongFile(this.selectedFile).subscribe(uploadedFile => console.log(uploadedFile));
 
 
