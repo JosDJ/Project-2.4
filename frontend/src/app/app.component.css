@@ -8,7 +8,7 @@ html, body {
 }
 
 .mainscreen {
-  background-color: rgb(114, 67, 49);
+  background-color: #cecece;
   height: calc(100vh - 50px - 50px);
   overflow-y: scroll;
 

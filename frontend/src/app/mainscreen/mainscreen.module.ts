@@ -14,6 +14,8 @@ import { LuisterenplaylistsComponent } from './luisterenplaylists/luisterenplayl
 import { LuisterenrecentComponent } from './luisterenrecent/luisterenrecent.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PlaylistViewerComponent } from './luisterenplaylists/playlist-viewer/playlist-viewer.component';
+import { AlbumViewerComponent } from './album-viewer/album-viewer.component';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { PlaylistViewerComponent } from './luisterenplaylists/playlist-viewer/pl
     LuisterengenresComponent,
     LuisterenplaylistsComponent,
     LuisterenrecentComponent,
-    PlaylistViewerComponent
+    PlaylistViewerComponent,
+    AlbumViewerComponent
   ],
   exports: [
     HomeComponent,
@@ -38,7 +41,8 @@ import { PlaylistViewerComponent } from './luisterenplaylists/playlist-viewer/pl
     RouterModule,
     FormsModule,
     MatCardModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatDividerModule
   ]
 })
 export class MainscreenModule { }
