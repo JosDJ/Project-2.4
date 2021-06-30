@@ -89,7 +89,7 @@ export class UploadComponent implements OnInit {
     private dataParser: FileService
   ) {
     http.get<Genre[]>(`${environment.apiUrl}/genres`).subscribe(genres => this.genres = genres);
-    http.get<Artist[]>(`${environment.apiUrl}/artist`).subscribe(artists => this.artists = artists);
+    http.get<Artist[]>(`${environment.apiUrl}/artists`).subscribe(artists => this.artists = artists);
     console.log(this.artists);
   }
 
