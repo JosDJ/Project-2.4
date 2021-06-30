@@ -139,7 +139,7 @@ export class AlbumViewerComponent implements OnInit {
 
     this.audioService.stop();
 
-    this.audioService.playStream(song.file?.filepath).subscribe();
+    this.audioService.playSong(song).subscribe();
   }
 
   play(song: Song) {
@@ -159,7 +159,7 @@ export class AlbumViewerComponent implements OnInit {
   stop() {
     this.audioService.stop();
   }
-  
+
   formatTime(seconds: number): string {
     return this.audioService.formatTime(seconds);
   }

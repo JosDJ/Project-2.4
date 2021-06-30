@@ -466,8 +466,10 @@ def delete_genre_by_id(id: int, token: str = Depends(oauth2_scheme)):
 def create_playlist(playlist: pydantic_schemas.PlaylistIn, user: models.User = Depends(get_current_user)) -> pydantic_schemas.Playlist:
     songs = [database.get_song_by_id(song_id) for song_id in playlist.song_ids]
 
+    author = database.get_user_by_id(user.id)
+
     created_playlist = database.create_playlist(
-        models.Playlist(title=playlist.title, songs=songs, author=user))
+        models.Playlist(title=playlist.title, songs=songs, author=author))
 
     return pydantic_schemas.Playlist.from_orm(created_playlist)
 

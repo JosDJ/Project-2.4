@@ -22,6 +22,7 @@ export class MusicPlayerComponent implements OnInit {
     readableDuration: '00:00',
     duration: 0,
     currentTime: 0,
+    currentSong: undefined,
     canplay: false,
     error: false
   };
@@ -40,8 +41,8 @@ export class MusicPlayerComponent implements OnInit {
     });
   }
 
-  playStream(url: string) {
-    this.audioService.playStream(url).subscribe((events) => {
+  playStream(song: Song) {
+    this.audioService.playSong(song).subscribe((events) => {
 
     });
   }
@@ -51,7 +52,7 @@ export class MusicPlayerComponent implements OnInit {
 
     this.audioService.stop()
 
-    this.playStream(song.file.filepath);
+    this.playStream(song);
   }
 
   ngOnInit() {

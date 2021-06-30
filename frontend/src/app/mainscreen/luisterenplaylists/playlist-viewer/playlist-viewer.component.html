@@ -1,7 +1,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <mat-card class="viewer">
-    <mat-card-title>{{playlist!.title}}</mat-card-title>
+    <mat-card-title-group>
+        <mat-card-title>{{playlist!.title}}</mat-card-title>
+        <mat-card-subtitle>{{playlist!.songs.length}} songs, {{playlist!.songs | getTotalDuration | formatTime}}</mat-card-subtitle>
+    </mat-card-title-group>
+
     <mat-card-content>
         <div class="viewer-content">
             <div *ngFor="let song of playlist!.songs; index as i" class="song">
@@ -23,7 +27,7 @@
                         <!-- <span *ngIf="!last">,</span> -->
                     </div>
                 </span>
-                <span class="duration">{{durations[i]}}</span>
+                <span class="duration">{{song.file.duration | formatTime}}</span>
             </div>
         </div>
     </mat-card-content>
