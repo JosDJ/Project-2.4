@@ -23,10 +23,11 @@
 }
 
 .song-list {
-    width: 500px;
-    height: 500px;
+    height: 50vh;
+    width: 28vw;
     overflow-y: scroll;
     background-color: white;
+    color: black;
 }
 
 /* .songlist {
@@ -43,9 +44,12 @@
     flex-direction: column;
 }
 
+.upload-artist-form {
+    margin-bottom: 20px;
+}
+
 .upload-song-form {
     margin-bottom: 20px;
-    margin-top: -150px;
 }
 
 .container > div {
@@ -68,7 +72,7 @@
     width: 27vw;
 } */
  label {
-     color: white;
+     color:white;
  }
 
 .secondarytiles {
@@ -85,6 +89,10 @@ input {
 
 .songlistTitel {
     font-size: large;
+}
+
+.uploadArtistForm {
+
 }
 
 .uploadSongForm {
