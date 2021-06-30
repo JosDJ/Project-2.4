@@ -11,6 +11,7 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Song } from 'src/app/interfaces/song';
 import { AlbumIn } from 'src/app/interfaces/albumin';
 import { ArtistIn } from 'src/app/interfaces/artistIn';
+import { Artist } from 'src/app/interfaces/artist';
 
 @Component({
   selector: 'app-upload',
@@ -78,6 +79,7 @@ export class UploadComponent implements OnInit {
   releasedate: string = '';
 
   genres: Genre[] = [];
+  artists:Artist[] = [];
 
   message: string = "";
   selectedImage: File | null = null;
@@ -87,6 +89,8 @@ export class UploadComponent implements OnInit {
     private dataParser: FileService
   ) {
     http.get<Genre[]>(`${environment.apiUrl}/genres`).subscribe(genres => this.genres = genres);
+    http.get<Artist[]>(`${environment.apiUrl}/artist`).subscribe(artists => this.artists = artists);
+    console.log(this.artists);
   }
 
   ngOnInit(): void {
