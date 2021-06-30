@@ -47,6 +47,7 @@ class File(BaseModel):
     id: int
     filetype: str
     filepath: str
+    duration: Optional[int]
 
     class Config:
         orm_mode = True

@@ -61,7 +61,8 @@ export class AlbumViewerComponent implements OnInit {
           file: {
             id: 1,
             filetype: "audio/mpeg",
-            filepath: "http://localhost:8000/static_files/music/2e768149f56f4fe2a7a0e27d4bbf4eaf.mp3"
+            filepath: "http://localhost:8000/static_files/music/2e768149f56f4fe2a7a0e27d4bbf4eaf.mp3",
+            duration: 27
           }
         },
         {
@@ -85,7 +86,8 @@ export class AlbumViewerComponent implements OnInit {
           file: {
             id: 1,
             filetype: "audio/mpeg",
-            filepath: "http://localhost:8000/static_files/music/2e768149f56f4fe2a7a0e27d4bbf4eaf.mp3"
+            filepath: "http://localhost:8000/static_files/music/2e768149f56f4fe2a7a0e27d4bbf4eaf.mp3",
+            duration: 27
           }
         },
         {
@@ -109,14 +111,15 @@ export class AlbumViewerComponent implements OnInit {
           file: {
             id: 1,
             filetype: "audio/mpeg",
-            filepath: "http://localhost:8000/static_files/music/2e768149f56f4fe2a7a0e27d4bbf4eaf.mp3"
+            filepath: "http://localhost:8000/static_files/music/2e768149f56f4fe2a7a0e27d4bbf4eaf.mp3",
+            duration: 27
           }
         },
       ],
       album_cover: {
         id: 1,
         filetype: "image/png",
-        filepath: "static_files/images/c51bc7197dcd470f8f6dbb1d67a8fb40.png"
+        filepath: "static_files/images/8e6750bf6a7948c1b8ea632236b5158d.png"
       }
 
     }
@@ -156,10 +159,8 @@ export class AlbumViewerComponent implements OnInit {
   stop() {
     this.audioService.stop();
   }
-
-  getDuration(url: string): number {
-    const audio = new Audio(url);
-
-    return audio.duration;
+  
+  formatTime(seconds: number): string {
+    return this.audioService.formatTime(seconds);
   }
 }

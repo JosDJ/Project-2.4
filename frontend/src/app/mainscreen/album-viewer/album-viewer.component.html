@@ -4,7 +4,7 @@
     <mat-card class="viewer">
         <mat-card-title-group class="title-group">
             <mat-card-title>{{album!.title}}</mat-card-title>
-            <mat-card-subtitle>{{album!.artist.name}}</mat-card-subtitle>
+            <mat-card-subtitle>{{album!.artist.name}} | {{album!.release_date.getFullYear()}} | {{album!.songs.length}} songs, {{album!.songs | getTotalDuration | formatTime}}</mat-card-subtitle>
             <img src="{{apiEndpoint}}/{{album!.album_cover!.filepath}}" mat-card-lg-image />
         </mat-card-title-group>
         <mat-card-content>
@@ -27,7 +27,7 @@
                             </span>
                         </div>
                     </span>
-                    <span class="song-duration">{{durations[i]}}</span>
+                    <span class="song-duration">{{song.file.duration | formatTime}}</span>
                 </div>
             </div>
         </mat-card-content>

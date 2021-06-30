@@ -32,6 +32,8 @@ class File(Base):
     filetype=Column(String(50))
     filepath=Column(String(260))
 
+    duration=Column(Integer) # voor de liedjes
+
     def __repr__(self) -> str:
         return f"<File(id={self.id}, filetype='{self.filetype}', filepath='{self.filepath}'"
 
