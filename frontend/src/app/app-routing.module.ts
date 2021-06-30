@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth.guard';
 import { LoginComponent } from './loginscreen/login/login.component';
+import { AlbumViewerComponent } from './mainscreen/album-viewer/album-viewer.component';
 
 import { HomeComponent } from './mainscreen/home/home.component';
 import { LuisterenComponent } from './mainscreen/luisteren/luisteren.component';
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'luisteren/recent', component: LuisterenrecentComponent, canActivate: [AuthGuard] },
   { path: 'mijnaccount', component: MijnaccountComponent, canActivate: [AuthGuard] },
   { path: 'upload', component: UploadComponent, canActivate: [AuthGuard] },
+  {path: 'viewer', component: AlbumViewerComponent, canActivate: [AuthGuard]},
   { path: 'zoeken', component: ZoekenComponent, canActivate: [AuthGuard] },
 ];
 
