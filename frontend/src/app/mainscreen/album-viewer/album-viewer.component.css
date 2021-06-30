@@ -1,0 +1,47 @@
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.title-group {
+    margin-bottom: 15px;
+}
+
+.viewer {
+    width: 800px;
+    margin-top: 10px;
+}
+
+.viewer-content {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    /* height: 500px; */
+}
+
+/* .viewer-songs>tr> :not(:first-child) {
+    padding-left: 300px;
+} */
+
+.song {
+    margin-bottom: 10px;
+    display: flex;
+}
+
+.song-media-buttons {
+    width: 20px;
+}
+
+.song-title {
+    width: 300px;
+}
+
+.song-artists {
+    display: flex;
+    width: 300px;
+    margin-left: 10px;
+}
+
+.song-duration {
+    margin-left: 18px;
+}

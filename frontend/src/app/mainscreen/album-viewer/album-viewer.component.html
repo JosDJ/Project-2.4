@@ -1,0 +1,35 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="container">
+    <mat-card class="viewer">
+        <mat-card-title-group class="title-group">
+            <mat-card-title>{{album!.title}}</mat-card-title>
+            <mat-card-subtitle>{{album!.artist.name}}</mat-card-subtitle>
+            <img src="{{apiEndpoint}}/{{album!.album_cover!.filepath}}" mat-card-lg-image />
+        </mat-card-title-group>
+        <mat-card-content>
+            <div class="viewer-content">
+                <div *ngFor="let song of album!.songs; index as i" class="song">
+                    <span class="song-media-buttons">
+                        <a href="javascript:void(0);" class="icon">
+                            <i class="fa fa-play" *ngIf="!state!.playing || currentSong != song" (click)="play(song)"></i>
+                            <i class="fa fa-pause" *ngIf="state!.playing && currentSong == song" (click)="pause()"></i>
+                        </a>
+                    </span>
+                    <span class="song-title">{{song.title}}</span>
+                    <span class="song-artists">
+                        <div *ngFor="let artist of song.artists; let last = last">
+                            <span *ngIf="!last">
+                                {{artist.name}},&nbsp;
+                            </span>
+                            <span *ngIf="last">
+                                {{artist.name}}
+                            </span>
+                        </div>
+                    </span>
+                    <span class="song-duration">{{durations[i]}}</span>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

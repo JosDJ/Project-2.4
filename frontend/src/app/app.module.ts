@@ -15,6 +15,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import {MatTableModule} from '@angular/material/table';
 import { LoginComponent } from './loginscreen/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import {MatDividerModule} from '@angular/material/divider';
 
 import { AuthService } from './services';
 import { HttpClientModule } from '@angular/common/http';
@@ -37,6 +38,7 @@ import {AuthenticationInterceptor} from './authentication.interceptor';
     MatSliderModule,
     MatGridListModule,
     MatTableModule,
+    MatDividerModule,
     MainscreenModule,
     LoginscreenModule,
     ReactiveFormsModule,
