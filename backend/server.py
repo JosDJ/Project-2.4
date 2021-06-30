@@ -426,6 +426,12 @@ def get_artists(token: str = Depends(oauth2_scheme)):
 
     return artists
 
+@app.get('/artists/name/{name}', response_model=List[pydantic_schemas.Artist], tags=["artists"])
+def get_artists(name: str, token: str = Depends(oauth2_scheme)):
+    artists = [pydantic_schemas.Artist.from_orm(artist) for artist in database.get_artists_by_name(name)]
+
+    return artists
+
 
 @app.put('/artists/id/{id}', response_model=pydantic_schemas.Artist, tags=["artists"])
 def update_artist_by_id(id: int, artist: pydantic_schemas.ArtistIn, token: str = Depends(oauth2_scheme)):

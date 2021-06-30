@@ -514,6 +514,11 @@ def get_artists() -> List[models.Artist]:
 
     return artists
 
+def get_artists_by_name(name: str) -> List[models.Artist]:
+    artists = session.query(models.Artist).filter(func.lower(models.Artist.name).contains(func.lower(name))).all()
+
+    return artists
+
 
 def update_artist_by_id(id: int, artist: models.Artist) -> Optional[models.Artist]:
     artist_to_update = get_artist_by_id(id)
