@@ -83,4 +83,16 @@ export class ApiService {
 
     return result
   }
+
+  getSongById(id:number): Observable<any> {
+    const result = this.http.get<any>(`${environment.apiUrl}/songs/${id}`);
+
+    return result
+  }
+
+  getAlbumById(album_id:number): Observable<any> {
+    const result = this.http.get<any>(`${environment.apiUrl}/albums/${album_id}`);
+
+    return result
+  }
 }
