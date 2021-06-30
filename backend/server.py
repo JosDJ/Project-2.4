@@ -1,4 +1,3 @@
-from backend.models import Artist
 from datetime import timedelta
 import datetime
 from os import stat
