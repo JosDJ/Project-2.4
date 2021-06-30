@@ -10,6 +10,7 @@ import { SongIn } from 'src/app/interfaces/songin';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Song } from 'src/app/interfaces/song';
 import { AlbumIn } from 'src/app/interfaces/albumin';
+import { ArtistIn } from 'src/app/interfaces/artistIn';
 
 @Component({
   selector: 'app-upload',
@@ -17,6 +18,12 @@ import { AlbumIn } from 'src/app/interfaces/albumin';
   styleUrls: ['./upload.component.css']
 })
 export class UploadComponent implements OnInit {
+  uploadArtistForm: FormGroup = new FormGroup({
+    newArtist: new FormControl('', [
+      Validators.required,
+      Validators.maxLength(50)
+    ])
+  });
   uploadSongForm: FormGroup = new FormGroup({
     title: new FormControl('', [
       Validators.required,
@@ -55,6 +62,7 @@ export class UploadComponent implements OnInit {
   uploadedSong: any;
   errorMsg: string = '';
   errorMsgg: string = '';
+  errorMsggg: string = '';
   uploadedSongs: Song[] = [];
   songToDelete: Song | null | undefined = null;
   UploadedCover: any = null;
@@ -82,6 +90,10 @@ export class UploadComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  getNewArtist(): string {
+    return this.uploadArtistForm.get('newArtist')?.value;
   }
 
   getSongTitle(): string {
@@ -118,6 +130,18 @@ export class UploadComponent implements OnInit {
 
   getAlbumCover(): File {
     return this.uploadAlbumForm.get('albumCover')?.value;
+  }
+
+  addArtist(): void {
+    if (this.uploadArtistForm.valid) {
+      this.errorMsggg = '';
+      const artistToAdd: ArtistIn = {
+        name: this.getNewArtist(),
+      }
+      this.dataParser.uploadNewArtist(artistToAdd).subscribe(addedArtist => console.log(addedArtist));
+    }else {
+      this.errorMsggg = 'Het invul veld is nog leeg';
+    }
   }
 
   upload(): void {

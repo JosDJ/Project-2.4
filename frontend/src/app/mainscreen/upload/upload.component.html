@@ -6,10 +6,19 @@
     </div>
     <div class="upload-forms">
         <div class="upload-song-form">
+            <form [formGroup]="uploadArtistForm">
+                <div class="container">
+                    <div [style.color]="'white'" *ngIf="errorMsggg != ''">{{errorMsggg}}</div>
+                    <div>
+                        <label class="item">Nieuw artiest</label>
+                        <input type="text" formControlName="newArtist" class="item" placeholder="Enter new Artist" required>
+                        <button (click)="addArtist()">Add artist</button>
+                    </div>
+                </div>
+            </form>
             <form [formGroup]="uploadSongForm">
                 <div class="container">
                     <div [style.color]="'white'" *ngIf="errorMsg != ''">{{errorMsg}}</div>
-
                     <div>
                         <label class="item">Titel</label>
                         <input type="text" formControlName="title" class="item" placeholder="Enter title" required>

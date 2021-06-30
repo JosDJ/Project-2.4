@@ -5,6 +5,8 @@ import { Subject, Observable, of } from 'rxjs';
 import { environment } from '../environment';
 import { Album } from '../interfaces/album';
 import { AlbumIn } from '../interfaces/albumin';
+import { Artist } from '../interfaces/artist';
+import { ArtistIn } from '../interfaces/artistIn';
 import { FileUploaded } from '../interfaces/file-uploaded';
 import { Song } from '../interfaces/song';
 import { SongIn } from '../interfaces/songin';
@@ -57,6 +59,12 @@ export class FileService {
 
   uploadAlbum(album: AlbumIn): Observable<Album> {
     const result = this.http.post<Album>(`${environment.apiUrl}/albums/create`, album);
+
+    return result;
+  }
+
+  uploadNewArtist(newArtist: ArtistIn): Observable<Artist> {
+    const result = this.http.post<Artist>(`${environment.apiUrl}/artists/create`, newArtist);
 
     return result;
   }
