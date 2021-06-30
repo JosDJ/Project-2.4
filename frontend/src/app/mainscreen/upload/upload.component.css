@@ -12,14 +12,14 @@
     margin: 50px;
 }
 
-.album-preview {
+/* .album-preview {
     height: 500px;
     width: 500px;
-}
+} */
 
 .album-preview > img {
-    height: 100%;
-    width: 100%;
+    height: 50vh;
+    width: 28vw;
 }
 
 .song-list {
@@ -28,6 +28,12 @@
     overflow-y: scroll;
     background-color: white;
 }
+
+/* .songlist {
+    /* min-height: 50vh;
+    max-height: calc(100vh - 50px - 50px); */
+    /* overflow-y: scroll;
+} */
 
 .upload-forms {
     display: flex;
@@ -54,13 +60,8 @@
     margin-right: 5px;
 }
 
-
 .maintiles {
     position: center;
-}
-
-textarea {
-    height: 50vh;
 }
 
 /* img {
@@ -81,14 +82,6 @@ input {
 .addsongbutton {
     height: 30px;
 }
-
-/* .songlist {
-    background-color: white;
-    color: black;
-    /* min-height: 50vh;
-    max-height: calc(100vh - 50px - 50px); */
-    /* overflow-y: scroll; 
-} */
 
 .songlistTitel {
     font-size: large;
