@@ -35,11 +35,11 @@ export class ApiService {
   }
 
   getAlbumById(id: number): Observable<Album> {
-    return this.http.get<Album>(`${environment.apiUrl}/albums/${id}`);
+    return this.http.get<Album>(`${environment.apiUrl}/albums/id/${id}`);
   }
 
   getPlaylistById(id: number): Observable<Playlist> {
-    return this.http.get<Playlist>(`${environment.apiUrl}/playlists/${id}`);
+    return this.http.get<Playlist>(`${environment.apiUrl}/playlists/id/${id}`);
   }
 
   uploadSongFile(songFile: File): Observable<FileUploaded> {
@@ -79,13 +79,13 @@ export class ApiService {
   }
   
   deleteSong(id:number): Observable<any> {
-    const result = this.http.delete<any>(`${environment.apiUrl}/songs/${id}`);
+    const result = this.http.delete<any>(`${environment.apiUrl}/songs/id/${id}`);
 
     return result
   }
 
   getSongById(id:number): Observable<Song> {
-    const result = this.http.get<Song>(`${environment.apiUrl}/songs/${id}`);
+    const result = this.http.get<Song>(`${environment.apiUrl}/songs/id/${id}`);
 
     return result
   }
