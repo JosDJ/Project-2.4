@@ -8,13 +8,14 @@ import { AlbumIn } from '../interfaces/albumin';
 import { Artist } from '../interfaces/artist';
 import { ArtistIn } from '../interfaces/artistIn';
 import { FileUploaded } from '../interfaces/file-uploaded';
+import { Playlist } from '../interfaces/playlist';
 import { Song } from '../interfaces/song';
 import { SongIn } from '../interfaces/songin';
 
 @Injectable({
   providedIn: 'root'
 })
-export class FileService {
+export class ApiService {
   files: Song[] = [
 
   ];
@@ -31,6 +32,14 @@ export class FileService {
 
   getState(): Observable<Song[]> {
     return this.stateChange.asObservable();
+  }
+
+  getAlbumById(id: number): Observable<Album> {
+    return this.http.get<Album>(`${environment.apiUrl}/albums/${id}`);
+  }
+
+  getPlaylistById(id: number): Observable<Playlist> {
+    return this.http.get<Playlist>(`${environment.apiUrl}/playlists/${id}`);
   }
 
   uploadSongFile(songFile: File): Observable<FileUploaded> {

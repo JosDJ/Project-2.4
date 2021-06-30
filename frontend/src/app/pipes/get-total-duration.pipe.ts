@@ -6,16 +6,22 @@ import { Song } from 'src/app/interfaces/song';
 })
 export class GetTotalDurationPipe implements PipeTransform {
 
-  transform(value: Song[], args?: any): number {
-    return this.getTotalDuration(value);
+  transform(value: Song[] | undefined, args?: any): number {
+    if (value) {
+      return this.getTotalDuration(value);
+    }
+
+    return 0;
   }
 
   getTotalDuration(songs: Song[]): number {
     let total = 0;
 
     songs.forEach(song => {
-      if (song.file.duration) {
-        total += song.file.duration;
+      if (song.file) {
+        if (song.file.duration) {
+          total += song.file.duration;
+        }
       }
     });
 

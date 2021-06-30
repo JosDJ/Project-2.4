@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <mat-card class="viewer">
-    <mat-card-title-group>
+    <mat-card-title-group class="title-group">
         <mat-card-title>{{playlist!.title}}</mat-card-title>
         <mat-card-subtitle>{{playlist!.songs.length}} songs, {{playlist!.songs | getTotalDuration | formatTime}}</mat-card-subtitle>
     </mat-card-title-group>
@@ -11,8 +11,8 @@
             <div *ngFor="let song of playlist!.songs; index as i" class="song">
                 <span class="song-media-buttons">
                     <a href="javascript:void(0);" class="icon">
-                        <i class="fa fa-play" *ngIf="!state!.playing || currentSong != song" (click)="play(song)"></i>
-                        <i class="fa fa-pause" *ngIf="state!.playing && currentSong == song" (click)="pause()"></i>
+                        <i class="fa fa-play" *ngIf="!state!.playing || state!.currentSong!.id != song.id" (click)="play(song)"></i>
+                        <i class="fa fa-pause" *ngIf="state!.playing && state!.currentSong!.id == song.id" (click)="pause()"></i>
                     </a>
                 </span>
                 <span class="song-title">{{song.title}}</span>
@@ -27,7 +27,7 @@
                         <!-- <span *ngIf="!last">,</span> -->
                     </div>
                 </span>
-                <span class="duration">{{song.file.duration | formatTime}}</span>
+                <span class="song-duration">{{song.file.duration | formatTime}}</span>
             </div>
         </div>
     </mat-card-content>

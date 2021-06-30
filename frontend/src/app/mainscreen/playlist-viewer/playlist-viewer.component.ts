@@ -1,11 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+
+import * as _ from 'lodash';
 import { Playlist } from 'src/app/interfaces/playlist';
 import { Song } from 'src/app/interfaces/song';
 import { StreamState } from 'src/app/interfaces/stream-state';
 import { AudioService } from 'src/app/services/audio.service';
-import { FileService } from 'src/app/services/file.service';
-import * as _ from 'lodash';
 
 @Component({
   selector: 'app-playlist-viewer',

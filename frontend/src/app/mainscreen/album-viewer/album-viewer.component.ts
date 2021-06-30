@@ -1,9 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { environment } from 'src/app/environment';
 import { Album } from 'src/app/interfaces/album';
 import { Song } from 'src/app/interfaces/song';
 import { StreamState } from 'src/app/interfaces/stream-state';
 import { AudioService } from 'src/app/services/audio.service';
+import { ApiService } from 'src/app/services/file.service';
 
 @Component({
   selector: 'app-album-viewer',
@@ -11,8 +13,25 @@ import { AudioService } from 'src/app/services/audio.service';
   styleUrls: ['./album-viewer.component.css']
 })
 export class AlbumViewerComponent implements OnInit {
-  @Input()
-  album: Album | null = null;
+  album: Album | null = {
+    id: 1,
+    title: '',
+    artist: {
+      id: 1,
+      name: ''
+    },
+    genre: {
+      id: 1,
+      title: ''
+    },
+    release_date: '',
+    songs: [],
+    album_cover: {
+      id: 1,
+      filetype: '',
+      filepath: ''
+    }
+  };
 
   apiEndpoint: string = environment.apiUrl;
 
@@ -22,114 +41,22 @@ export class AlbumViewerComponent implements OnInit {
 
   currentSong: Song | null = null;
 
-  constructor(private audioService: AudioService) {
+  constructor(private route: ActivatedRoute, private audioService: AudioService, private apiService: ApiService) {
     this.audioService.getState().subscribe(state => this.state = state);
   }
 
   ngOnInit(): void {
-    this.album = {
-      id: 1,
-      title: "Test album",
-      artist: {
-        id: 1,
-        name: "Iron Maiden"
-      },
-      release_date: new Date(1990, 1, 1),
-      genre: {
-        id: 1,
-        title: "Metal"
-      },
-      songs: [
-        {
-          id: 1,
-          title: "Song 1",
-          artists: [
-            {
-              id: 1,
-              name: "Metallica"
-            },
-            {
-              id: 2,
-              name: "Slayer"
-            },
-            {
-              id: 2,
-              name: "Megadeth"
-            }
-          ],
-          album_id: 1,
-          file: {
-            id: 1,
-            filetype: "audio/mpeg",
-            filepath: "http://localhost:8000/static_files/music/2e768149f56f4fe2a7a0e27d4bbf4eaf.mp3",
-            duration: 27
-          }
-        },
-        {
-          id: 1,
-          title: "Song 2",
-          artists: [
-            {
-              id: 1,
-              name: "Metallica"
-            },
-            {
-              id: 2,
-              name: "Slayer"
-            },
-            {
-              id: 2,
-              name: "Megadeth"
-            }
-          ],
-          album_id: 1,
-          file: {
-            id: 1,
-            filetype: "audio/mpeg",
-            filepath: "http://localhost:8000/static_files/music/2e768149f56f4fe2a7a0e27d4bbf4eaf.mp3",
-            duration: 27
-          }
-        },
-        {
-          id: 1,
-          title: "Song 3",
-          artists: [
-            {
-              id: 1,
-              name: "Metallica"
-            },
-            {
-              id: 2,
-              name: "Slayer"
-            },
-            {
-              id: 2,
-              name: "Megadeth"
-            }
-          ],
-          album_id: 1,
-          file: {
-            id: 1,
-            filetype: "audio/mpeg",
-            filepath: "http://localhost:8000/static_files/music/2e768149f56f4fe2a7a0e27d4bbf4eaf.mp3",
-            duration: 27
-          }
-        },
-      ],
-      album_cover: {
-        id: 1,
-        filetype: "image/png",
-        filepath: "static_files/images/8e6750bf6a7948c1b8ea632236b5158d.png"
-      }
+    this.route.params.subscribe(params => {
+      this.apiService.getAlbumById(params.id).subscribe(album => {
+        this.album = album;
 
-    }
-
-    // echt een hack dit maar ja haha
-    this.album?.songs.forEach(song => {
-      const audio = new Audio(song.file.filepath);
-
-      audio.addEventListener('canplay', () => {
-        this.durations.push(this.audioService.formatTime(audio.duration));
+        if (!this.album.album_cover) {
+          this.album.album_cover = {
+            id: 1,
+            filetype: 'image/png',
+            filepath: ""
+          }
+        }
       });
     });
   }
@@ -158,9 +85,5 @@ export class AlbumViewerComponent implements OnInit {
 
   stop() {
     this.audioService.stop();
-  }
-
-  formatTime(seconds: number): string {
-    return this.audioService.formatTime(seconds);
   }
 }
