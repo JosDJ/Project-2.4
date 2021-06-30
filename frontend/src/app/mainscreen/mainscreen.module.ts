@@ -16,6 +16,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PlaylistViewerComponent } from './luisterenplaylists/playlist-viewer/playlist-viewer.component';
 import { AlbumViewerComponent } from './album-viewer/album-viewer.component';
 import { MatDividerModule } from '@angular/material/divider';
+import { FormatTimePipe } from '../pipes/format-time.pipe';
+import { GetTotalDurationPipe } from '../pipes/get-total-duration.pipe';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { MatDividerModule } from '@angular/material/divider';
     LuisterenplaylistsComponent,
     LuisterenrecentComponent,
     PlaylistViewerComponent,
-    AlbumViewerComponent
+    AlbumViewerComponent,
+    FormatTimePipe,
+    GetTotalDurationPipe
   ],
   exports: [
     HomeComponent,

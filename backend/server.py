@@ -6,6 +6,7 @@ import pathlib
 import uuid
 from PIL import Image
 from starlette.status import HTTP_415_UNSUPPORTED_MEDIA_TYPE
+from mutagen.mp3 import MP3
 
 from models import User
 from fastapi import Depends, FastAPI, File, HTTPException, UploadFile, status
@@ -238,6 +239,10 @@ def save_song_to_disk(file: UploadFile = File(None)) -> pathlib.Path:
 
     return filepath
 
+def get_song_duration(filepath: pathlib.Path) -> int:
+    audio = MP3(filepath)
+
+    return int(audio.info.length)
 
 @app.post('/songs/upload', status_code=status.HTTP_201_CREATED, response_model=pydantic_schemas.FileUploaded, tags=["songs"])
 def upload_song_file(file: UploadFile = File(None), token: str = Depends(oauth2_scheme)):
@@ -247,9 +252,11 @@ def upload_song_file(file: UploadFile = File(None), token: str = Depends(oauth2_
 
     filepath = save_song_to_disk(file)
 
-    song_file = database.create_file(models.File(filetype='audio/mpeg', filepath=filepath.as_posix()))
+    duration = get_song_duration(filepath)
+
+    song_file = database.create_file(models.File(filetype='audio/mpeg', filepath=filepath.as_posix(), duration=duration))
  
-    return pydantic_schemas.FileUploaded(id=song_file.id, filetype=song_file.filetype, filepath=song_file.filepath, original_filename=file.filename)
+    return pydantic_schemas.FileUploaded(id=song_file.id, filetype=song_file.filetype, filepath=song_file.filepath, original_filename=file.filename, duration=duration)
 
 
 @app.get('/albums/{album_id}', response_model=pydantic_schemas.Album, tags=["albums"])
