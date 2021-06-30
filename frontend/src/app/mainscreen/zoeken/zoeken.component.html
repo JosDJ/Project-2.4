@@ -1,37 +1,18 @@
 <mat-grid-list cols="20" class="mygridlist" rowHeight="fit">
     <mat-grid-tile  class="zoekentile" colspan="20" rowspan="2">
-        <input class="zoekbalk" type="zoeken" placeholder="Zoeken..." required>
+        <mat-card>
+            <input class="zoekbalk" type="zoeken" [(ngModel)]="zoekterm" placeholder="Zoeken..." required>
+            <button class="zoekbutton" (click)="search()">zoeken</button>
+        </mat-card>
     </mat-grid-tile>
     <mat-grid-tile colspan="10" rowspan="20">
         <div class="container">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
+            <button class="songbutton" *ngFor="let song of this.gevondenSongs">{{song}}</button>
         </div>
     </mat-grid-tile>
     <mat-grid-tile colspan="10" rowspan="20">
         <div class="container">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
-            <img class="mainlogo" src="assets/artistifyLogo.jpg">
+            <button class="albumbutton" *ngFor="let album of this.gevondenAlbums">{{album}}</button>
         </div>
     </mat-grid-tile>
 </mat-grid-list>

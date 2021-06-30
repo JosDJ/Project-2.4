@@ -167,6 +167,7 @@ export class UploadComponent implements OnInit {
   }
 
   addSong(event?: MouseEvent) {
+    console.log(this.getSongTitle());
     if (this.uploadSongForm.valid) {
       if (!this.uploadedSongs.find(s => s.title === this.getSongTitle())) {
         this.errorMsg = '';
