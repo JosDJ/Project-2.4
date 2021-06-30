@@ -1,50 +1,60 @@
 <div class="page-container">
-    <div class="album-preview">
+    <mat-card class="album-preview">
         <img [src]="imgURL" *ngIf="imgURL">
         <br>
         <input #file type="file" accept="image/*" (change)="onImageSelect($event); preview(file.files)">
-    </div>
+    </mat-card>
     <div class="upload-forms">
-        <div class="upload-song-form">
+        <mat-card class="upload-artist-form">
             <form [formGroup]="uploadArtistForm">
                 <div class="container">
                     <div [style.color]="'white'" *ngIf="errorMsggg != ''">{{errorMsggg}}</div>
                     <div>
                         <label class="item">Nieuw artiest</label>
+                        <br>
                         <input type="text" formControlName="newArtist" class="item" placeholder="Enter new Artist" required>
+                        <br>
                         <button (click)="addArtist()">Add artist</button>
                     </div>
                 </div>
             </form>
+        </mat-card>
+        <mat-card class="upload-song-form">
             <form [formGroup]="uploadSongForm">
                 <div class="container">
                     <div [style.color]="'white'" *ngIf="errorMsg != ''">{{errorMsg}}</div>
                     <div>
                         <label class="item">Titel</label>
+                        <br>
                         <input type="text" formControlName="title" class="item" placeholder="Enter title" required>
                     </div>
                     <div>
                         <label class="item">Artiest</label>
+                        <br>
                         <input type="text" formControlName="artist" class="item" placeholder="Enter artist" required>
                     </div>
                     <div>
                         <label class="item">Liedje</label>
+                        <br>
                         <input #song class='audioFileInput' type="file" accept="audio/mpeg" (change)="onFileSelected($event)">
+                        <br>
                         <button (click)="addSong()">Add song</button>
                     </div>
                 </div>
             </form>
-        </div>
-        <div class="upload-album-form">
+        </mat-card>
+        <mat-card class="upload-album-form">
             <form [formGroup]="uploadAlbumForm">
                 <div class="container">
                     <div [style.color]="'white'" *ngIf="errorMsgg != ''">{{errorMsgg}}</div>
                     <div>
                         <label class="item">Title album </label>
+                        <br>
                         <input class="item" type="text" formControlName="title" placeholder="Enter title" required>
                     </div>
                     <div>
                         <label class="item genre-label">Genre album</label>
+                        <br>
                         <select class="item" formControlName="genre_id">
                             <option *ngFor="let genre of genres" value="{{genre.id}}">
                                 {{genre.title}}
@@ -53,18 +63,20 @@
                     </div>
                     <div>
                         <label class="item">Artist album</label>
+                        <br>
                         <input class="item" type="text" formControlName="artist" placeholder="Enter artist" required>
                     </div>
                     <div>
                         <label class="item">Releasedate album</label>
+                        <br>
                         <input class="item" type="date" formControlName="releaseDate" required>
                     </div>
                     <button class="uploadbutton" (click)='upload()'>Upload album</button>
                 </div>
             </form>
-        </div>
+        </mat-card>
     </div>
-    <div class="song-list">
+    <mat-card class="song-list">
         <table>
             <thead>
                 <tr>
@@ -78,5 +90,5 @@
                 </tr>
             </tbody>
         </table>
-    </div>
+    </mat-card>
 </div>

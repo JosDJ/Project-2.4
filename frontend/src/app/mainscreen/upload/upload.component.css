@@ -12,22 +12,29 @@
     margin: 50px;
 }
 
-.album-preview {
+/* .album-preview {
     height: 500px;
     width: 500px;
-}
+} */
 
 .album-preview > img {
-    height: 100%;
-    width: 100%;
+    height: 50vh;
+    width: 28vw;
 }
 
 .song-list {
-    width: 500px;
-    height: 500px;
+    height: 50vh;
+    width: 28vw;
     overflow-y: scroll;
     background-color: white;
+    color: black;
 }
+
+/* .songlist {
+    /* min-height: 50vh;
+    max-height: calc(100vh - 50px - 50px); */
+    /* overflow-y: scroll;
+} */
 
 .upload-forms {
     display: flex;
@@ -37,9 +44,12 @@
     flex-direction: column;
 }
 
+.upload-artist-form {
+    margin-bottom: 20px;
+}
+
 .upload-song-form {
     margin-bottom: 20px;
-    margin-top: -150px;
 }
 
 .container > div {
@@ -54,20 +64,15 @@
     margin-right: 5px;
 }
 
-
 .maintiles {
     position: center;
-}
-
-textarea {
-    height: 50vh;
 }
 
 /* img {
     width: 27vw;
 } */
  label {
-     color: white;
+     color:white;
  }
 
 .secondarytiles {
@@ -82,16 +87,12 @@ input {
     height: 30px;
 }
 
-/* .songlist {
-    background-color: white;
-    color: black;
-    /* min-height: 50vh;
-    max-height: calc(100vh - 50px - 50px); */
-    /* overflow-y: scroll; 
-} */
-
 .songlistTitel {
     font-size: large;
+}
+
+.uploadArtistForm {
+
 }
 
 .uploadSongForm {

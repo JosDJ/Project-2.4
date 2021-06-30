@@ -138,7 +138,7 @@ export class UploadComponent implements OnInit {
       const artistToAdd: ArtistIn = {
         name: this.getNewArtist(),
       }
-      this.dataParser.uploadNewArtist(artistToAdd).subscribe(addedArtist => console.log(addedArtist));
+      this.dataParser.uploadNewArtist(artistToAdd).subscribe(addedArtist => this.errorMsggg = 'De artiest: ' + addedArtist.name + ' is succesvol toegevoegd');
     }else {
       this.errorMsggg = 'Het invul veld is nog leeg';
     }
@@ -158,7 +158,7 @@ export class UploadComponent implements OnInit {
           album_cover_id: uploadedFile.id
         };
         
-        this.dataParser.uploadAlbum(album).subscribe((uploadedAlbum) => console.log(uploadedAlbum))
+        this.dataParser.uploadAlbum(album).subscribe((uploadedAlbum) => this.errorMsgg = 'Het album: ' + uploadedAlbum.title + ' is succesvol toegevoegd')
       });
     }
     else {
@@ -183,6 +183,7 @@ export class UploadComponent implements OnInit {
             this.uploadedSongs.push(uploadedSong);
             this.uploadedSongIds.push(uploadedSong.id);
             this.uploadAlbumForm.patchValue({song_ids:uploadedSong.id});
+            this.errorMsg = 'Song is succesvol toegevoegd';
           });
         });
       }
