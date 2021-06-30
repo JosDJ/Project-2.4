@@ -389,7 +389,7 @@ def get_artist_by_id(id: int, token: str = Depends(oauth2_scheme)):
 
 @app.get('/artists', response_model=List[pydantic_schemas.Artist], tags=["artists"])
 def get_artists(token: str = Depends(oauth2_scheme)):
-    artists = [pydantic_schemas.Artist.from_orm(artist) for artist in database.get_artists(id)]
+    artists = [pydantic_schemas.Artist.from_orm(artist) for artist in database.get_artists()]
 
     return pydantic_schemas.Artist.from_orm(artists)    
 
