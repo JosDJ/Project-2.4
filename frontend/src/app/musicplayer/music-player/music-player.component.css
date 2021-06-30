@@ -35,10 +35,10 @@
     color: white;
 }
 
-label {
+.slider-currentTime, .slider-duration {
     color: white;
 }
 
-progress {
-    width: 20vw;
+.slider-progress {
+    width: 500px;
 }

@@ -25,13 +25,13 @@
         <div [style.color]="'white'" *ngIf="f.birthday.errors.required">Birthday is required</div>
       </div>
     </div>
+    <label for="country">Country</label>
     <div class="form-group">
-      <label for="country">Country</label>
-      <input type="text" placeholder="Country" formControlName="country" class="form-control"
-             [ngClass]="{ 'is-invalid': submitted && f.country.errors }"/>
-      <div *ngIf="submitted && f.country.errors" class="invalid-feedback">
-        <div [style.color]="'white'" *ngIf="f.country.errors.required">Country is required</div>
-      </div>
+      <select class="item" type=country formControlName="country" class="form-control">
+      <option *ngFor="let country of countries" value="{{country.id}}">
+        {{country.name}}
+      </option>
+      </select>
     </div>
     <div class="form-group">
       <button [disabled]="loading" class="btn btn-primary">

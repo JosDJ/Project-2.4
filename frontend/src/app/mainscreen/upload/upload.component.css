@@ -1,18 +1,71 @@
-.maintiles {
-    position: center;
+.page-container {
+    display: flex;
+
+    height: 100%;
+    width: 100%;
+
+    justify-content: center;
+    align-items: center;
 }
 
-.mygridlist {
+.page-container > div {
+    margin: 50px;
+}
+
+.album-preview {
+    height: 500px;
+    width: 500px;
+}
+
+.album-preview > img {
     height: 100%;
+    width: 100%;
+}
+
+.song-list {
+    width: 500px;
+    height: 500px;
+    overflow-y: scroll;
+    background-color: white;
+}
+
+.upload-forms {
+    display: flex;
+    width: 500px;
+    justify-content: left;
+    align-items: center;
+    flex-direction: column;
+}
+
+.upload-song-form {
+    margin-bottom: 20px;
+    margin-top: -150px;
+}
+
+.container > div {
+    margin-bottom: 5px;
+}
+
+.audioFileInput {
+    margin-bottom: 5px;
+}
+
+.genre-label {
+    margin-right: 5px;
+}
+
+
+.maintiles {
+    position: center;
 }
 
 textarea {
     height: 50vh;
 }
 
-img {
+/* img {
     width: 27vw;
-}
+} */
  label {
      color: white;
  }
@@ -25,24 +78,26 @@ input {
     width: 25vw;
 }
 
-.addsongbuttondiv {
-    justify-content: center;
-    align-items: center;
-}
-
 .addsongbutton {
     height: 30px;
 }
 
-.songlist {
+/* .songlist {
     background-color: white;
     color: black;
-    width: 30vw;
-    min-height: 50vh;
-    max-height: calc(100vh - 50px - 50px);
-    overflow-y: scroll;
-}
+    /* min-height: 50vh;
+    max-height: calc(100vh - 50px - 50px); */
+    /* overflow-y: scroll; 
+} */
 
 .songlistTitel {
     font-size: large;
+}
+
+.uploadSongForm {
+    margin-bottom: 20px;
+}
+
+.uploadAlbumForm {
+
 }

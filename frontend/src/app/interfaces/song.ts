@@ -1,10 +1,10 @@
 import { Artist } from "./artist";
-import { UploadedFile } from "./uploaded-file";
+import { FileUploaded } from "./file-uploaded";
 
 export interface Song {
     id: number;
     title: string;
     artists: Array<Artist>;
     album_id: number;
-    file: UploadedFile;
+    file: FileUploaded;
 }

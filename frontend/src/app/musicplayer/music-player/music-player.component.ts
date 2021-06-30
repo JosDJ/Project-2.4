@@ -5,6 +5,11 @@ import { AudioService } from 'src/app/services/audio.service';
 import { FileService } from 'src/app/services/file.service';
 import { Queue } from 'src/app/utilities/queue';
 
+interface CurrentSong {
+  index: number;
+  song: Song;
+}
+
 @Component({
   selector: 'app-music-player',
   templateUrl: './music-player.component.html',
@@ -23,7 +28,7 @@ export class MusicPlayerComponent implements OnInit {
 
   songs: Song[] = [];
 
-  currentSong: any = {};
+  currentSong: CurrentSong | null = null;
 
   constructor(private audioService: AudioService, private fileService: FileService) {
     this.audioService.getState().subscribe(state => {
@@ -49,7 +54,7 @@ export class MusicPlayerComponent implements OnInit {
     this.playStream(song.file.filepath);
   }
 
-  ngOnInit(){
+  ngOnInit() {
   }
 
   play() {
@@ -65,25 +70,29 @@ export class MusicPlayerComponent implements OnInit {
   }
 
   next() {
-    const index = this.currentSong.index + 1;
-    const song = this.songs[index];
+    if (this.currentSong != null) {
+      const index = this.currentSong.index + 1;
+      const song = this.songs[index];
 
-    this.playSong(song, index);
+      this.playSong(song, index);
+    }
   }
 
   previous() {
-    const index = this.currentSong.index - 1;
-    const song = this.songs[index];
+    if (this.currentSong != null) {
+      const index = this.currentSong.index - 1;
+      const song = this.songs[index];
 
-    this.playSong(song, index);
+      this.playSong(song, index);
+    }
   }
 
   isFirstPlaying(): boolean {
-    return this.currentSong.index === 0;
+    return this.currentSong?.index === 0;
   }
 
   isLastPlaying(): boolean {
-    return this.currentSong.index === this.songs.length - 1;
+    return this.currentSong?.index === this.songs.length - 1;
   }
 
   onSliderChangeEnd(change: any) {

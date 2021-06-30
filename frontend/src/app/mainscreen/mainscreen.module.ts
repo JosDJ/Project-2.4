@@ -12,7 +12,7 @@ import { RouterModule } from '@angular/router';
 import { LuisterengenresComponent } from './luisterengenres/luisterengenres.component';
 import { LuisterenplaylistsComponent } from './luisterenplaylists/luisterenplaylists.component';
 import { LuisterenrecentComponent } from './luisterenrecent/luisterenrecent.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PlaylistViewerComponent } from './luisterenplaylists/playlist-viewer/playlist-viewer.component';
 
 @NgModule({
@@ -37,7 +37,8 @@ import { PlaylistViewerComponent } from './luisterenplaylists/playlist-viewer/pl
     MatGridListModule,
     RouterModule,
     FormsModule,
-    MatCardModule
+    MatCardModule,
+    ReactiveFormsModule
   ]
 })
 export class MainscreenModule { }

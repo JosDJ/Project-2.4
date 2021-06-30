@@ -3,6 +3,8 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../../services';
 import {HttpClient} from '@angular/common/http';
+import {Country} from '../../interfaces/country';
+import {environment} from '../../environment';
 
 @Component({
   selector: 'app-register',
@@ -15,6 +17,7 @@ export class RegisterComponent implements OnInit {
   submitted = false;
   error!: string;
   loading = false;
+  countries: Country[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -22,7 +25,9 @@ export class RegisterComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private http: HttpClient
-  ) {}
+  ) {
+    this.http.get<Country[]>(`${environment.apiUrl}/countries`).subscribe(countries => this.countries = countries);
+  }
 
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
@@ -58,16 +63,6 @@ export class RegisterComponent implements OnInit {
     this.authService
       .register(this.f.username.value, this.f.password.value, this.f.birthday.value, this.f.country.value)
       .subscribe(
-        /*(data) => {
-        if (this.authService.isLoggedIn()) {
-          this.router.navigate([this.returnUrl]);
-      }
-    },
-        (error) => {
-        this.error = error;
-        this.loading = false;
-        this.error = 'Registration failed, please try again';
-        }*/
         res => console.log(res),
         err => console.log(err)
     );

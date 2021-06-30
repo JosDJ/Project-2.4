@@ -3,6 +3,8 @@ import { Injectable, SkipSelf } from '@angular/core';
 import { Subject, Observable, of } from 'rxjs';
 
 import { environment } from '../environment';
+import { Album } from '../interfaces/album';
+import { AlbumIn } from '../interfaces/albumin';
 import { FileUploaded } from '../interfaces/file-uploaded';
 import { Song } from '../interfaces/song';
 import { SongIn } from '../interfaces/songin';
@@ -38,8 +40,8 @@ export class FileService {
     return result;
   }
 
-  uploadSongEntry(song: SongIn): Observable<SongIn> {
-    const result = this.http.post<SongIn>(`${environment.apiUrl}/songs/create`, song);
+  uploadSong(song: SongIn): Observable<Song> {
+    const result = this.http.post<Song>(`${environment.apiUrl}/songs/create`, song);
 
     return result
   }
@@ -49,6 +51,12 @@ export class FileService {
     body.append('file', albumCover);
 
     const result = this.http.post<FileUploaded>(`${environment.apiUrl}/albums/upload_album_cover`, body);
+
+    return result;
+  }
+
+  uploadAlbum(album: AlbumIn): Observable<Album> {
+    const result = this.http.post<Album>(`${environment.apiUrl}/albums/create`, album);
 
     return result;
   }
