@@ -7,7 +7,7 @@ import { Genre } from 'src/app/interfaces/genre';
 import { async } from '@angular/core/testing';
 import { timeout } from 'rxjs/operators';
 import { SongIn } from 'src/app/interfaces/songin';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Song } from 'src/app/interfaces/song';
 import { AlbumIn } from 'src/app/interfaces/albumin';
 
@@ -58,6 +58,7 @@ export class UploadComponent implements OnInit {
   uploadedSongs: Song[] = [];
   songToDelete: Song | null | undefined = null;
   UploadedCover: any = null;
+  uploadedSongIds: number[] = [];
 
   title: string = '';
   artist: string = '';
@@ -120,24 +121,8 @@ export class UploadComponent implements OnInit {
   }
 
   upload(): void {
-    // if (this.selectedImage != null && this.uploadedSongs.length != 0) {
-    //   if (this.titleAlbum != '' && this.artistAlbum != '' && this.releasedateAlbum != '') {
-    //     this.errorMsgg = '';
-    //     console.log(this.selectedImage)
-    //     this.dataParser.uploadAlbumCover(this.selectedImage).subscribe(uploadedFile => console.log(uploadedFile))
-    //     setTimeout(() => {
-    //       const artistgenreList: number[] = [1];
-    //       // const foo:SongIn = {title: this.titleSong, artist_ids: artistSongList, file_id: this.uploadedSong.id};
-    //       // this.dataParser.uploadSongEntry(foo).subscribe(uploadedSongEntry => this.uploadedSongs.push(uploadedSongEntry));
-    //     }, 300);
-    //   } else {
-    //     this.errorMsgg = 'De benodigde velden zijn nog leeg';
-    //   }
-    // } else {
-    //   this.errorMsgg = 'U moet of nog een song adden of u moet uw album cover uploaden';
-    // }
-
     if (this.uploadAlbumForm.valid) {
+      this.errorMsgg = '';
       this.dataParser.uploadAlbumCover(this.getAlbumCover()).subscribe(uploadedFile => {
         const album: AlbumIn = {
           title: this.getAlbumTitle(),
@@ -145,10 +130,10 @@ export class UploadComponent implements OnInit {
           artist_id: 1, // TODO: artist id uit de backend halen
           release_date: this.getAlbumReleaseDate(),
           genre_id: this.getAlbumGenreID(),
-          song_ids: this.getAlbumSongIDs(),
+          song_ids: this.uploadedSongIds,
           album_cover_id: uploadedFile.id
         };
-
+        
         this.dataParser.uploadAlbum(album).subscribe((uploadedAlbum) => console.log(uploadedAlbum))
       });
     }
@@ -170,7 +155,11 @@ export class UploadComponent implements OnInit {
             file_id: uploadedFile.id
           }
 
-          this.dataParser.uploadSong(song).subscribe(uploadedSong => this.uploadedSongs.push(uploadedSong));
+          this.dataParser.uploadSong(song).subscribe(uploadedSong => {
+            this.uploadedSongs.push(uploadedSong);
+            this.uploadedSongIds.push(uploadedSong.id);
+            this.uploadAlbumForm.patchValue({song_ids:uploadedSong.id});
+          });
         });
       }
       else {
