@@ -1,12 +1,11 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {Observable} from 'rxjs';
 import jwt_decode from 'jwt-decode';
 
-import { environment } from '../environment';
-import { AuthenticationResponse } from '../interfaces/authentication-response';
-import { JWTPayload } from '../interfaces/jwt-payload';
+import {environment} from '../environment';
+import {AuthenticationResponse} from '../interfaces/authentication-response';
+import {JWTPayload} from '../interfaces/jwt-payload';
 
 @Injectable({
   providedIn: 'root',
@@ -67,8 +66,6 @@ export class AuthService {
       country_id: country,
       password
     };
-    console.log(postBody);
-    const result = this.http.post<any>(`${environment.apiUrl}/register`, postBody, httpOptions);
-    return result;
+    return this.http.post<any>(`${environment.apiUrl}/register`, postBody, httpOptions);
   }
 }
