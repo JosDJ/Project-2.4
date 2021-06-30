@@ -499,6 +499,9 @@ def get_artist_by_id(id: int) -> Optional[models.Artist]:
 
     return artist
 
+def get_artists() -> List[models.Artist]:
+    artists = session.query(models.Artist).all()
+
 
 def update_artist_by_id(id: int, artist: models.Artist) -> Optional[models.Artist]:
     artist_to_update = get_artist_by_id(id)
