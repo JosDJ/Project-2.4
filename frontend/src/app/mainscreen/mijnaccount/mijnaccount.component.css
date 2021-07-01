@@ -16,3 +16,7 @@ select {
   width: 25vw;
 }
 
+p {
+  font-size: large;
+  font-weight: bold;
+}
