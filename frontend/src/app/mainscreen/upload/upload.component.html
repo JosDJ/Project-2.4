@@ -31,7 +31,8 @@
                     <div>
                         <label class="item">Artiest</label>
                         <br>
-                        <select formControlName='artist'>
+                        <input type="text" formControlName="artist" class="item" placeholder="Enter artist" required>
+                        <select formControlName='artist' multiple style="width: 200px;">
                             <option *ngFor="let artiest of artists" value="{{artiest.id}}">
                                 {{artiest.name}}
                             </option> 

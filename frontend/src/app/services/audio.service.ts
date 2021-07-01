@@ -4,6 +4,8 @@ import { Injectable } from '@angular/core';
 import * as moment from "moment";
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { environment } from '../environment';
+import { Song } from '../interfaces/song';
 import { StreamState } from '../interfaces/stream-state';
 
 // Based on: https://auth0.com/blog/building-an-audio-player-app-with-angular-and-rxjs/
@@ -37,6 +39,7 @@ export class AudioService {
     readableDuration: '',
     duration: undefined,
     currentTime: undefined,
+    currentSong: undefined,
     canplay: false,
     error: false
   }
@@ -45,14 +48,14 @@ export class AudioService {
     this.state
   );
 
-  private streamObservable(url: string) {
+  private streamObservable(song: Song) {
     return new Observable(observer => {
-      this.audio.src = url;
+      this.audio.src = environment.apiUrl + '/' + song.file.filepath;
       this.audio.load();
       this.audio.play();
 
       const handler = (event: Event) => {
-        this.updateStateEvents(event);
+        this.updateStateEvents(event, song);
 
         observer.next(event);
       }
@@ -70,8 +73,8 @@ export class AudioService {
     });
   }
 
-  playStream(url: string) {
-    return this.streamObservable(url).pipe(takeUntil(this._stop));
+  playSong(song: Song) {
+    return this.streamObservable(song).pipe(takeUntil(this._stop));
   }
 
   private addEvents(obj: any, events: Array<string>, handler: any) {
@@ -86,12 +89,13 @@ export class AudioService {
     });
   }
 
-  private updateStateEvents(event: Event): void {
+  private updateStateEvents(event: Event, song: Song): void {
     switch (event.type) {
       case "canplay":
         this.state.duration = this.audio.duration;
         this.state.readableDuration = this.formatTime(this.state.duration);
         this.state.canplay = true;
+        this.state.currentSong = song;
         break;
       case "playing":
         this.state.playing = true;
@@ -120,6 +124,7 @@ export class AudioService {
       readableDuration: '',
       duration: undefined,
       currentTime: undefined,
+      currentSong: undefined,
       canplay: false,
       error: false
     };

@@ -1,4 +1,4 @@
-import { FileService } from 'src/app/services/file.service';
+import { ApiService } from 'src/app/services/file.service';
 import { environment } from 'src/app/environment';
 import { stringify } from '@angular/compiler/src/util';
 import { HttpBackend, HttpClient, HttpRequest } from '@angular/common/http';
@@ -86,7 +86,7 @@ export class UploadComponent implements OnInit {
   imgURL = "assets/addimage.png";
 
   constructor(private http: HttpClient,
-    private dataParser: FileService
+    private dataParser: ApiService
   ) {
     http.get<Genre[]>(`${environment.apiUrl}/genres`).subscribe(genres => this.genres = genres);
     http.get<Artist[]>(`${environment.apiUrl}/artists`).subscribe(artists => this.artists = artists);

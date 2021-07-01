@@ -2,43 +2,42 @@
   <div [style.color]="'white'" *ngIf="error" class="alert alert-danger">{{error}}</div>
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
-      <label for="username">Username</label>
-      <input type="text" placeholder="Username" formControlName="username" class="form-control"
-             [ngClass]="{ 'is-invalid': submitted && f.username.errors }"/>
+      <label for="username">E-mail</label>
+      <input type="email" placeholder="E-mail" formControlName="username" class="form-control"
+        [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
       <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
         <div [style.color]="'white'" *ngIf="f.username.errors.required">Username is required</div>
       </div>
     </div>
     <div class="form-group">
-      <label for="password">Password</label>
-      <input type="password" placeholder="Password" formControlName="password" class="form-control"
-             [ngClass]="{ 'is-invalid': submitted && f.password.errors }"/>
+      <label for="password">Wachtwoord</label>
+      <input type="password" placeholder="Wachtwoord" formControlName="password" class="form-control"
+        [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
       <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
         <div [style.color]="'white'" *ngIf="f.password.errors.required">Password is required</div>
       </div>
     </div>
     <div class="form-group">
-      <label for="birthday">Birthday</label>
-      <input type="text" placeholder="YYYY-MM-DD" formControlName="birthday" class="form-control"
-             [ngClass]="{ 'is-invalid': submitted && f.birthday.errors }"/>
+      <label for="birthday">Geboortedatum</label>
+      <input type="date" formControlName="birthday" class="form-control"
+        [ngClass]="{ 'is-invalid': submitted && f.birthday.errors }" />
       <div *ngIf="submitted && f.birthday.errors" class="invalid-feedback">
         <div [style.color]="'white'" *ngIf="f.birthday.errors.required">Birthday is required</div>
       </div>
     </div>
-    <label for="country">Country</label>
+    <label for="country">Land</label>
     <div class="form-group">
-      <select class="item" type=country formControlName="country" class="form-control">
-      <option *ngFor="let country of countries" value="{{country.id}}">
-        {{country.name}}
-      </option>
+      <select class="item" formControlName="country" class="form-control">
+          <option *ngFor="let country of countries;let first = first" value="{{country.id}}">
+            {{country.name}}
+          </option>
       </select>
     </div>
     <div class="form-group">
       <button [disabled]="loading" class="btn btn-primary">
         <span href="" *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-        Register
+        Registreer
       </button>
     </div>
   </form>
 </div>
-

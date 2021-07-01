@@ -10,7 +10,7 @@ from models import Base, User
 from passlib.context import CryptContext
 from typing import Optional, List
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 engine = create_engine(config["DATABASE_URI"])
@@ -366,6 +366,11 @@ def get_song_by_id(id: int) -> Optional[models.Song]:
 
     return song
 
+def get_songs_by_title(title: str) -> List[models.Album]:
+    songs = session.query(models.Song).filter(func.lower(models.Song.title).contains(func.lower(title))).all()
+
+    return songs
+
 
 def update_song_by_id(id: int, song: models.Song) -> Optional[models.Song]:
     song_to_update = get_song_by_id(id)
@@ -426,6 +431,11 @@ def get_album_by_id(id: int) -> Optional[models.Album]:
     album = session.query(models.Album).filter_by(id=id).first()
 
     return album
+
+def get_albums_by_title(title: str) -> List[models.Album]:
+    albums = session.query(models.Album).filter(func.lower(models.Album.title).contains(func.lower(title))).all()
+
+    return albums
 
 
 def update_album_by_id(id: int, album: models.Album):
@@ -501,6 +511,11 @@ def get_artist_by_id(id: int) -> Optional[models.Artist]:
 
 def get_artists() -> List[models.Artist]:
     artists = session.query(models.Artist).all()
+
+    return artists
+
+def get_artists_by_name(name: str) -> List[models.Artist]:
+    artists = session.query(models.Artist).filter(func.lower(models.Artist.name).contains(func.lower(name))).all()
 
     return artists
 

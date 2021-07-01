@@ -24,7 +24,7 @@ const routes: Routes = [
   { path: 'luisteren/recent', component: LuisterenrecentComponent, canActivate: [AuthGuard] },
   { path: 'mijnaccount', component: MijnaccountComponent, canActivate: [AuthGuard] },
   { path: 'upload', component: UploadComponent, canActivate: [AuthGuard] },
-  {path: 'viewer', component: AlbumViewerComponent, canActivate: [AuthGuard]},
+  { path: 'albums/:id', component: AlbumViewerComponent, canActivate: [AuthGuard]},
   { path: 'zoeken', component: ZoekenComponent, canActivate: [AuthGuard] },
 ];
 

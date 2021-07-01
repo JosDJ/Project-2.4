@@ -7,7 +7,7 @@ export interface Album {
     id: number;
     title: string;
     artist: Artist;
-    release_date: Date;
+    release_date: string;
     genre: Genre;
     songs: Song[];
     album_cover: FileUploaded;

@@ -27,15 +27,15 @@
                     <div [style.color]="'white'" *ngIf="error" class="alert alert-danger">{{error}}</div>
                     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                         <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" placeholder="Username" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+                            <label for="username">E-mail</label>
+                            <input type="email" placeholder="E-mail" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
                             <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
                                 <div [style.color]="'white'" *ngIf="f.username.errors.required">Username is required</div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" placeholder="Password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+                            <label for="password">Wachtwoord</label>
+                            <input type="password" placeholder="Wachtwoord" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
                             <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
                                 <div [style.color]="'white'" *ngIf="f.password.errors.required">Password is required</div>
                             </div>

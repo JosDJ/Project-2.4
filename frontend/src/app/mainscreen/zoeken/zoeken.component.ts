@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FileService } from 'src/app/services/file.service';
+import { ApiService } from 'src/app/services/file.service';
 
 @Component({
   selector: 'app-zoeken',
@@ -12,7 +12,7 @@ export class ZoekenComponent implements OnInit {
   gevondenSongs:string[] = [];
   gevondenAlbums:string[] = [];
 
-  constructor(private dataParser: FileService) { }
+  constructor(private dataParser: ApiService) { }
 
   ngOnInit(): void {
   }
