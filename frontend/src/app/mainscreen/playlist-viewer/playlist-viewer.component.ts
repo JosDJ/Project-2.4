@@ -28,13 +28,17 @@ export class PlaylistViewerComponent implements OnInit {
   }
 
   playSong(song: Song) {
-    this.audioService.stop();
+    if (this.playlist) {
+      this.audioService.stop();
 
-    this.audioService.playSong(song).subscribe();
+      this.audioService.setQueue(this.playlist.songs).subscribe(queue => {
+        this.audioService.playSong(song).subscribe();
+      });
+    }
   }
 
   play(song: Song) {
-    if (song != this.state?.currentSong)
+    if (song != this.state?.currentSong?.song)
     {
       this.playSong(song);
     }

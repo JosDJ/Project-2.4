@@ -1,3 +1,4 @@
+import { CurrentSong } from "./current-song";
 import { Song } from "./song";
 
 export interface StreamState {
@@ -6,7 +7,7 @@ export interface StreamState {
     readableDuration: string;
     duration: number | undefined;
     currentTime: number | undefined;
-    currentSong: Song | undefined;
+    currentSong: CurrentSong | undefined;
     canplay: boolean;
     error: boolean;
 }

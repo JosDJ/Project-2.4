@@ -1,4 +1,4 @@
-html, body {
+.container {
   display: flex;
   flex-direction: column;
 }
@@ -12,8 +12,7 @@ html, body {
 .mainscreen {
   background-color: #cecece;
   height: calc(100vh - 47px - 47px);
-  overflow-y: scroll;
-
+  overflow-y: hidden;
   margin: 0 auto;
 }
 

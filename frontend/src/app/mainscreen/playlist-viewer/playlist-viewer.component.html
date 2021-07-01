@@ -11,8 +11,8 @@
             <div *ngFor="let song of playlist!.songs; index as i" class="song">
                 <span class="song-media-buttons">
                     <a href="javascript:void(0);" class="icon">
-                        <i class="fa fa-play" *ngIf="!state!.playing || state!.currentSong!.id != song.id" (click)="play(song)"></i>
-                        <i class="fa fa-pause" *ngIf="state!.playing && state!.currentSong!.id == song.id" (click)="pause()"></i>
+                        <i class="fa fa-play" *ngIf="!state!.playing || state!.currentSong?.song?.id != song.id" (click)="play(song)"></i>
+                        <i class="fa fa-pause" *ngIf="state!.playing && state!.currentSong?.song?.id == song.id" (click)="pause()"></i>
                     </a>
                 </span>
                 <span class="song-title">{{song.title}}</span>

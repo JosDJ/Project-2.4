@@ -17,8 +17,11 @@ export class AudioService {
   audio = new Audio();
   _stop = new Subject();
 
+  queue: Song[] = [];
+  queueChange: BehaviorSubject<Song[]> = new BehaviorSubject<Song[]>(this.queue);
+
   constructor() {
-    
+
   }
 
   audioEvents = [
@@ -95,7 +98,8 @@ export class AudioService {
         this.state.duration = this.audio.duration;
         this.state.readableDuration = this.formatTime(this.state.duration);
         this.state.canplay = true;
-        this.state.currentSong = song;
+        const index = this.queue.indexOf(song);
+        this.state.currentSong = {index, song};
         break;
       case "playing":
         this.state.playing = true;
@@ -147,7 +151,30 @@ export class AudioService {
   }
 
   public seekTo(seconds: number): void {
-    this.audio.fastSeek(seconds);
+    this.audio.currentTime = seconds;
+    this.audio?.play();
+  }
+
+  next() {
+    if (this.state.currentSong != null) {
+      const index = this.state.currentSong.index + 1;
+      const song = this.queue[index];
+
+      this.stop();
+
+      this.playSong(song).subscribe();
+    }
+  }
+
+  previous() {
+    if (this.state.currentSong != null) {
+      const index = this.state.currentSong.index - 1;
+      const song = this.queue[index];
+
+      this.stop();
+
+      this.playSong(song).subscribe();
+    }
   }
 
   public getDuration(): number {
@@ -164,5 +191,22 @@ export class AudioService {
     const momentTime = time * 1000;
 
     return moment.utc(momentTime).format(format);
+  }
+
+  public addSongToQueue(song: Song): void {
+    this.queue.push(song);
+
+    this.setQueue(this.queue);
+  }
+
+  public setQueue(queue: Song[]): Observable<Song[]> {
+    this.queue = queue;
+    this.queueChange.next(queue);
+
+    return this.getQueue();
+  }
+
+  public getQueue(): Observable<Song[]> {
+    return this.queueChange;
   }
 }

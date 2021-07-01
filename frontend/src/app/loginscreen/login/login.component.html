@@ -1,66 +1,66 @@
-<body>
-    <div class="loginscreen">
-        <mat-grid-list cols="13" rows="30" class="mygridlist" rowHeight="fit">
-            <mat-grid-tile class="bottombar" colspan="1" rowspan="5" >
-            </mat-grid-tile>
-            <mat-grid-tile class="bottombar" colspan="5" rowspan="5" >
-            </mat-grid-tile>
-            <mat-grid-tile class="bottombar" colspan="1" rowspan="5" >
-            </mat-grid-tile>
-            <mat-grid-tile class="bottombar" colspan="5" rowspan="5" >
-            </mat-grid-tile>
-            <mat-grid-tile class="bottombar" colspan="1" rowspan="5" >
-            </mat-grid-tile>
-            <mat-grid-tile class="bottombar" colspan="1" rowspan="10" >
-            </mat-grid-tile>
-            <mat-grid-tile class="bottombar" colspan="5" rowspan="10" [style.background]="'black'">
-                <div>
-                    <app-register></app-register>
-                </div>
-            </mat-grid-tile>
-            <mat-grid-tile class="bottombar" colspan="1" rowspan="10" >
-            </mat-grid-tile>
-            <mat-grid-tile class="bottombar" colspan="5" rowspan="10" [style.background]="'black'">
+<div class="loginscreen">
+    <mat-grid-list cols="13" rows="30" class="mygridlist" rowHeight="fit">
+        <mat-grid-tile class="bottombar" colspan="1" rowspan="5">
+        </mat-grid-tile>
+        <mat-grid-tile class="bottombar" colspan="5" rowspan="5">
+        </mat-grid-tile>
+        <mat-grid-tile class="bottombar" colspan="1" rowspan="5">
+        </mat-grid-tile>
+        <mat-grid-tile class="bottombar" colspan="5" rowspan="5">
+        </mat-grid-tile>
+        <mat-grid-tile class="bottombar" colspan="1" rowspan="5">
+        </mat-grid-tile>
+        <mat-grid-tile class="bottombar" colspan="1" rowspan="10">
+        </mat-grid-tile>
+        <mat-grid-tile class="bottombar" colspan="5" rowspan="10" [style.background]="'black'">
+            <div>
+                <app-register></app-register>
+            </div>
+        </mat-grid-tile>
+        <mat-grid-tile class="bottombar" colspan="1" rowspan="10">
+        </mat-grid-tile>
+        <mat-grid-tile class="bottombar" colspan="5" rowspan="10" [style.background]="'black'">
 
 
-                <div>
-                    <div [style.color]="'white'" *ngIf="error" class="alert alert-danger">{{error}}</div>
-                    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-                        <div class="form-group">
-                            <label for="username">E-mail</label>
-                            <input type="email" placeholder="E-mail" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
-                            <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
-                                <div [style.color]="'white'" *ngIf="f.username.errors.required">Username is required</div>
-                            </div>
+            <div>
+                <div [style.color]="'white'" *ngIf="error" class="alert alert-danger">{{error}}</div>
+                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                    <div class="form-group">
+                        <label for="username">E-mail</label>
+                        <input type="email" placeholder="E-mail" formControlName="username" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+                        <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+                            <div [style.color]="'white'" *ngIf="f.username.errors.required">Username is required</div>
                         </div>
-                        <div class="form-group">
-                            <label for="password">Wachtwoord</label>
-                            <input type="password" placeholder="Wachtwoord" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
-                            <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                                <div [style.color]="'white'" *ngIf="f.password.errors.required">Password is required</div>
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Wachtwoord</label>
+                        <input type="password" placeholder="Wachtwoord" formControlName="password" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+                        <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                            <div [style.color]="'white'" *ngIf="f.password.errors.required">Password is required</div>
                         </div>
-                        <div class="form-group">
-                            <button [disabled]="loading" class="btn btn-primary" >
-                                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                                Login
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </mat-grid-tile>
-            <mat-grid-tile class="bottombar" colspan="1" rowspan="10" >
-            </mat-grid-tile>
-            <mat-grid-tile class="bottombar" colspan="1" rowspan="5" >
-            </mat-grid-tile>
-            <mat-grid-tile class="bottombar" colspan="5" rowspan="5" >
-            </mat-grid-tile>
-            <mat-grid-tile class="bottombar" colspan="1" rowspan="5" >
-            </mat-grid-tile>
-            <mat-grid-tile class="bottombar" colspan="5" rowspan="5" >
-            </mat-grid-tile>
-            <mat-grid-tile class="bottombar" colspan="1" rowspan="5" >
-            </mat-grid-tile>
-        </mat-grid-list>
-    </div>
-</body>
+                    </div>
+                    <div class="form-group">
+                        <button [disabled]="loading" class="btn btn-primary">
+                            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                            Login
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </mat-grid-tile>
+        <mat-grid-tile class="bottombar" colspan="1" rowspan="10">
+        </mat-grid-tile>
+        <mat-grid-tile class="bottombar" colspan="1" rowspan="5">
+        </mat-grid-tile>
+        <mat-grid-tile class="bottombar" colspan="5" rowspan="5">
+        </mat-grid-tile>
+        <mat-grid-tile class="bottombar" colspan="1" rowspan="5">
+        </mat-grid-tile>
+        <mat-grid-tile class="bottombar" colspan="5" rowspan="5">
+        </mat-grid-tile>
+        <mat-grid-tile class="bottombar" colspan="1" rowspan="5">
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>

@@ -1,14 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { CurrentSong } from 'src/app/interfaces/current-song';
 import { Song } from 'src/app/interfaces/song';
 import { StreamState } from 'src/app/interfaces/stream-state';
 import { AudioService } from 'src/app/services/audio.service';
 import { ApiService } from 'src/app/services/file.service';
 import { Queue } from 'src/app/utilities/queue';
-
-interface CurrentSong {
-  index: number;
-  song: Song;
-}
 
 @Component({
   selector: 'app-music-player',
@@ -29,16 +25,20 @@ export class MusicPlayerComponent implements OnInit {
 
   queue: Song[] = [];
 
-  currentSong: CurrentSong | null = null;
-
   constructor(private audioService: AudioService, private fileService: ApiService) {
     this.audioService.getState().subscribe(state => {
       this.state = state;
+
+      if (this.state.duration != 0) {
+        if (this.state.currentTime == this.state.duration && !this.isLastPlaying()) {
+          setTimeout(() => {
+            this.next()
+          }, 1000);
+        }
+      }
     });
 
-    this.fileService.getState().subscribe(songs => {
-      this.queue = songs;
-    });
+    this.audioService.getQueue().subscribe(queue => this.queue = queue);
   }
 
   playStream(song: Song) {
@@ -48,7 +48,7 @@ export class MusicPlayerComponent implements OnInit {
   }
 
   playSong(song: Song, index: number) {
-    this.currentSong = { index, song };
+    this.state.currentSong = { index, song };
 
     this.audioService.stop()
 
@@ -71,33 +71,25 @@ export class MusicPlayerComponent implements OnInit {
   }
 
   next() {
-    if (this.currentSong != null) {
-      const index = this.currentSong.index + 1;
-      const song = this.queue[index];
-
-      this.playSong(song, index);
-    }
+    this.audioService.next();
   }
 
   previous() {
-    if (this.currentSong != null) {
-      const index = this.currentSong.index - 1;
-      const song = this.queue[index];
-
-      this.playSong(song, index);
-    }
+    this.audioService.previous();
   }
 
   isFirstPlaying(): boolean {
-    return this.currentSong?.index === 0;
+    return this.state.currentSong?.index === 0;
   }
 
   isLastPlaying(): boolean {
-    return this.currentSong?.index === this.queue.length - 1;
+    return this.state.currentSong?.index === this.queue.length - 1;
   }
 
-  onSliderChangeEnd(change: any) {
-    this.audioService.seekTo(change.value);
+  onSliderChangeEnd($event: Event) {
+    const value: string = ($event.target as HTMLInputElement).value;
+
+    this.audioService.seekTo(parseFloat(value));
   }
 
 }
