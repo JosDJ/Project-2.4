@@ -90,7 +90,6 @@ export class UploadComponent implements OnInit {
   ) {
     http.get<Genre[]>(`${environment.apiUrl}/genres`).subscribe(genres => this.genres = genres);
     http.get<Artist[]>(`${environment.apiUrl}/artists`).subscribe(artists => this.artists = artists);
-    console.log(this.artists);
   }
 
   ngOnInit(): void {
@@ -177,7 +176,9 @@ export class UploadComponent implements OnInit {
         this.errorMsg = '';
 
         this.dataParser.uploadSongFile(this.uploadSongForm.get('file')?.value).subscribe(uploadedFile => {
-          const artist_ids = [1]; // TODO: artiesten van de backend halen
+          var artist_ids: number[] = []; // TODO: artiesten van de backend halen
+          artist_ids.push(+this.getSongArtist())
+          console.log(artist_ids);
           const song: SongIn = {
             title: this.getSongTitle(),
             artist_ids: artist_ids,
