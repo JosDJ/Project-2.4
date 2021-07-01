@@ -38,6 +38,10 @@ export class ApiService {
     return this.http.get<Album>(`${environment.apiUrl}/albums/id/${id}`);
   }
 
+  getallAlbumsByTitle(title: any): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/albums/title/${title}`);
+  }
+
   getPlaylistById(id: number): Observable<Playlist> {
     return this.http.get<Playlist>(`${environment.apiUrl}/playlists/id/${id}`);
   }
@@ -86,6 +90,12 @@ export class ApiService {
 
   getSongById(id:number): Observable<Song> {
     const result = this.http.get<Song>(`${environment.apiUrl}/songs/id/${id}`);
+
+    return result
+  }
+
+  getallSongsByTitle(title: any): Observable<any> {
+    const result = this.http.get<any>(`${environment.apiUrl}/songs/title/${title}`);
 
     return result
   }
