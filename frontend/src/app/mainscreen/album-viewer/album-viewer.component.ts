@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from 'src/app/environment';
 import { Album } from 'src/app/interfaces/album';
+import { CurrentSong } from 'src/app/interfaces/current-song';
 import { Song } from 'src/app/interfaces/song';
 import { StreamState } from 'src/app/interfaces/stream-state';
 import { AudioService } from 'src/app/services/audio.service';
@@ -37,9 +38,7 @@ export class AlbumViewerComponent implements OnInit {
 
   state: StreamState | null = null;
 
-  durations: string[] = [];
-
-  currentSong: Song | null = null;
+  currentSong: CurrentSong | null = null;
 
   constructor(private route: ActivatedRoute, private audioService: AudioService, private apiService: ApiService) {
     this.audioService.getState().subscribe(state => this.state = state);
@@ -62,15 +61,17 @@ export class AlbumViewerComponent implements OnInit {
   }
 
   playSong(song: Song) {
-    this.currentSong = song;
+    if (this.album) {
+      this.audioService.stop();
 
-    this.audioService.stop();
-
-    this.audioService.playSong(song).subscribe();
+      this.audioService.setQueue(this.album.songs).subscribe(queue => {
+        this.audioService.playSong(song).subscribe();
+      });
+    }
   }
 
   play(song: Song) {
-    if (song != this.currentSong)
+    if (song != this.state?.currentSong?.song)
     {
       this.playSong(song);
     }
