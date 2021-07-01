@@ -163,17 +163,7 @@ def get_user_by_id(id: int, token: str = Depends(oauth2_scheme)) -> pydantic_sch
 @app.get('/users/', response_model=pydantic_schemas.User, tags=['users'])
 def get_user(user: models.User = Depends(get_current_user)):
     return pydantic_schemas.User.from_orm(user)
-
-
-# @app.post('/users/register', response_model=DbUser)
-# async def register(credentials: UserCredentials) -> UserWithPassword:
-#     hashed_password = get_password_hash(credentials.password)
-
-#     user = UserWithPassword(email=credentials.email,
-#                             hashed_password=hashed_password)
-
-#     return user
-
+    
 @app.post('/songs/create', response_model=pydantic_schemas.Song, tags=['songs'])
 def create_song(song: pydantic_schemas.SongIn, token: str = Depends(oauth2_scheme)):
     file = database.get_file_by_id(song.file_id)

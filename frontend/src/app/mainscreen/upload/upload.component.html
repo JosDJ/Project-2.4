@@ -34,7 +34,7 @@
                         <input type="text" formControlName="artist" class="item" [(ngModel)]="zoektermArtistSongs" (keyup)="getAvailableArtistsSongs(zoektermArtistSongs)" placeholder="Enter artist" required>
                         <br>
                         <select formControlName='artist' multiple style="width: 200px;">
-                            <option *ngFor="let artist of artistsSongs" value="{{artist.id}}">
+                            <option *ngFor="let artist of artistsSongs" value="{{artist.id}}" required placeholder="Enter artist">
                                 {{artist.name}}
                             </option> 
                         </select>
