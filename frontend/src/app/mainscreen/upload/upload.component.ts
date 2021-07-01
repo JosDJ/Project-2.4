@@ -46,7 +46,7 @@ export class UploadComponent implements OnInit {
     releaseDate: new FormControl(new Date(), [
       Validators.required
     ]),
-    artist: new FormControl(null, [
+    artist_id: new FormControl(null, [
       Validators.required
     ]),
     genre_id: new FormControl(null, [
@@ -68,6 +68,8 @@ export class UploadComponent implements OnInit {
   songToDelete: Song | null | undefined = null;
   UploadedCover: any = null;
   uploadedSongIds: number[] = [];
+  artist_ids: number[] = [];
+  artistAlbum_ids: number[] = [];
 
   title: string = '';
   artist: string = '';
@@ -90,7 +92,6 @@ export class UploadComponent implements OnInit {
   ) {
     http.get<Genre[]>(`${environment.apiUrl}/genres`).subscribe(genres => this.genres = genres);
     http.get<Artist[]>(`${environment.apiUrl}/artists`).subscribe(artists => this.artists = artists);
-    console.log(this.artists);
   }
 
   ngOnInit(): void {
@@ -151,11 +152,12 @@ export class UploadComponent implements OnInit {
   upload(): void {
     if (this.uploadAlbumForm.valid) {
       this.errorMsgg = '';
+      this.artistAlbum_ids = [];
       this.dataParser.uploadAlbumCover(this.getAlbumCover()).subscribe(uploadedFile => {
+        this.artistAlbum_ids.push(+this.getAlbumArtistID())
         const album: AlbumIn = {
           title: this.getAlbumTitle(),
-          // artist_id: this.getAlbumArtistID(),
-          artist_id: 1, // TODO: artist id uit de backend halen
+          artist_id: this.artistAlbum_ids[0], 
           release_date: this.getAlbumReleaseDate(),
           genre_id: this.getAlbumGenreID(),
           song_ids: this.uploadedSongIds,
@@ -171,16 +173,16 @@ export class UploadComponent implements OnInit {
   }
 
   addSong(event?: MouseEvent) {
-    console.log(this.getSongTitle());
     if (this.uploadSongForm.valid) {
       if (!this.uploadedSongs.find(s => s.title === this.getSongTitle())) {
         this.errorMsg = '';
-
+        this.artist_ids = [];
         this.dataParser.uploadSongFile(this.uploadSongForm.get('file')?.value).subscribe(uploadedFile => {
-          const artist_ids = [1]; // TODO: artiesten van de backend halen
+          this.artist_ids.push(+this.getSongArtist())
+          console.log('After = ' + this.artist_ids);
           const song: SongIn = {
             title: this.getSongTitle(),
-            artist_ids: artist_ids,
+            artist_ids: this.artist_ids,
             file_id: uploadedFile.id
           }
 

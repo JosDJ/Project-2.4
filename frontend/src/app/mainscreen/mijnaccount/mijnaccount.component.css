@@ -1,7 +1,18 @@
 .mygridlist {
-    height: 50%;
+    height: 75%;
 }
 
 .userText {
     font-size: 3vw;
 }
+
+input {
+  font-size: large;
+  width: 25vw;
+}
+
+select {
+  font-size: medium;
+  width: 25vw;
+}
+

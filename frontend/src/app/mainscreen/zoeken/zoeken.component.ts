@@ -18,23 +18,18 @@ export class ZoekenComponent implements OnInit {
   }
 
   search(): void {
-    //TODO de for loops moeten door alle bestaande waarden van de database loopen
     this.gevondenSongs = [];
     this.gevondenAlbums = [];
-    for (let i = 0; i < 15; i++) {
-      this.dataParser.getSongById(i).subscribe(song => {
-        if (song.title.toLowerCase( ).includes(this.zoekterm.toLowerCase( ))){
-          this.gevondenSongs.push(song.title);
-        }
-      });  
-    }
-    for (let i = 0; i < 15; i++) {
-      this.dataParser.getAlbumById(i).subscribe(album => {
-        if (album.title.toLowerCase( ).includes(this.zoekterm.toLowerCase( ))){
-          this.gevondenAlbums.push(album.title);
-        }
-      });  
-    }
+    this.dataParser.getallSongsByTitle(this.zoekterm).subscribe(songs => {
+      for(let i=0; i<songs.length; i++){
+        this.gevondenSongs.push(songs[i].title);
+      }
+    })
+    this.dataParser.getallAlbumsByTitle(this.zoekterm).subscribe(albums => {
+      for(let i=0; i<albums.length; i++){
+        this.gevondenAlbums.push(albums[i].title);
+      }
+    })
   }
 
 }
