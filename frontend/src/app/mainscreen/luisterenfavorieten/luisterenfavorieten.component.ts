@@ -10,11 +10,14 @@ import { Song } from 'src/app/interfaces/song';
   styleUrls: ['./luisterenfavorieten.component.css']
 })
 export class LuisterenfavorietenComponent implements OnInit {
-  songs: Song[] = [];
-  playlist: Playlist | null = null;
+  playlist: Playlist = {id: 0, title: 'Favorieten', songs: []};
 
   constructor(private http: HttpClient) {
-    this.http.get<Song[]>(`${environment.apiUrl}/favorites`).subscribe(songs => this.songs = songs);
+    this.http.get<Song[]>(`${environment.apiUrl}/favorites`).subscribe(songs => {
+      if (this.playlist){
+        this.playlist.songs = songs;
+      }
+    });
   }
 
   ngOnInit(): void {
