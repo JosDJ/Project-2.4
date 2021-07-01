@@ -366,6 +366,7 @@ def get_song_by_id(id: int) -> Optional[models.Song]:
 
     return song
 
+
 def get_songs_by_title(title: str) -> List[models.Album]:
     songs = session.query(models.Song).filter(func.lower(models.Song.title).contains(func.lower(title))).all()
 
@@ -413,6 +414,19 @@ def update_user_by_id(id: int, user: models.User) -> Optional[models.User]:
     return user_to_update
 
 
+def update_user_by_email(email: str, user: models.User) -> Optional[models.User]:
+    user_to_update = get_user_by_email(email)
+    if user_to_update:
+        user_to_update.email = user.email
+        user_to_update.birthday = user.birthday
+        user_to_update.country = user.country
+        user_to_update.hashed_password = user.hashed_password
+
+    session.commit()
+
+    return user_to_update
+
+
 def delete_user_by_id(id: int):
     session.query(models.User).filter_by(id=id).delete()
 
@@ -431,6 +445,7 @@ def get_album_by_id(id: int) -> Optional[models.Album]:
     album = session.query(models.Album).filter_by(id=id).first()
 
     return album
+
 
 def get_albums_by_title(title: str) -> List[models.Album]:
     albums = session.query(models.Album).filter(func.lower(models.Album.title).contains(func.lower(title))).all()
@@ -473,6 +488,7 @@ def get_genre_by_id(id: int) -> Optional[models.Genre]:
 
     return genre
 
+
 def get_genres() -> List[models.Genre]:
     genres = session.query(models.Genre).all()
 
@@ -509,10 +525,12 @@ def get_artist_by_id(id: int) -> Optional[models.Artist]:
 
     return artist
 
+
 def get_artists() -> List[models.Artist]:
     artists = session.query(models.Artist).all()
 
     return artists
+
 
 def get_artists_by_name(name: str) -> List[models.Artist]:
     artists = session.query(models.Artist).filter(func.lower(models.Artist.name).contains(func.lower(name))).all()
@@ -567,6 +585,7 @@ def get_playlist_by_id(id: int) -> Optional[models.Playlist]:
     playlist = session.query(models.Playlist).filter_by(id=id).first()
 
     return playlist
+
 
 def get_playlists() -> List[models.Playlist]:
     playlists = session.query(models.Playlist).all()

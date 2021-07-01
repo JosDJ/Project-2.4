@@ -6,6 +6,7 @@ import jwt_decode from 'jwt-decode';
 import {environment} from '../environment';
 import {AuthenticationResponse} from '../interfaces/authentication-response';
 import {JWTPayload} from '../interfaces/jwt-payload';
+import {User} from "../interfaces/user";
 
 @Injectable({
   providedIn: 'root',
@@ -67,5 +68,23 @@ export class AuthService {
       password
     };
     return this.http.post<any>(`${environment.apiUrl}/register`, postBody, httpOptions);
+  }
+
+  update(username: string, password: string, birthday: string, country: string, user: User): Observable<any>{
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/x-www-form-urlencoded',
+      }),
+    };
+    const putBody = {
+      email: username,
+      birthday,
+      country_id: country,
+      password
+    };
+    console.log(putBody);
+    const result = this.http.put<any>(`${environment.apiUrl}/users/email/${user.email}`, putBody, httpOptions);
+    // const result = this.http.put<any>(`${environment.apiUrl}/users/${user.email}`, putBody, httpOptions);
+    return result;
   }
 }

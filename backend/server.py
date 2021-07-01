@@ -565,6 +565,23 @@ def update_user_by_id(id: int, user: pydantic_schemas.UserIn, token: str = Depen
 
     return pydantic_schemas.User.from_orm(updated_user)
 
+@app.put('/users/email/{email}', response_model=pydantic_schemas.User, tags=['users'])
+def update_user_by_email(email: str, user: pydantic_schemas.UserIn, token: str = Depends(oauth2_scheme)):
+    country = database.get_country_by_id(user.country_id)
+    updated_user = database.update_user_by_email(email, models.User(
+        email=user.email,
+        hashed_password=database.get_password_hash(user.password),
+        birthday=user.birthday,
+        country=country
+    ))
+
+    if not updated_user:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not update user"
+        )
+
+    return pydantic_schemas.User.from_orm(updated_user)
+
 
 @app.get('/countries/', response_model=List[pydantic_schemas.Country], tags=['countries'])
 def get_countries() -> List[pydantic_schemas.Country]:
