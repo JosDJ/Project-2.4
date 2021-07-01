@@ -18,6 +18,8 @@ export class RegisterComponent implements OnInit {
   error!: string;
   loading = false;
   countries: Country[] = [];
+  succesRegistration = false;
+  message!: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -62,10 +64,19 @@ export class RegisterComponent implements OnInit {
     this.loading = true;
     this.authService
       .register(this.f.username.value, this.f.password.value, this.f.birthday.value, this.f.country.value)
-      .subscribe(
-        res => console.log(res),
-        err => console.log(err)
+      .subscribe( data => {
+        this.succesRegistration = true;
+        this.message = 'Registratie gelukt, je kan nu inloggen';
+      },
+        (error => {
+          this.succesRegistration = false;
+          this.error = error;
+          this.loading = false;
+          this.error = 'Registratie mislukt, probeer a.u.b. opnieuw';
+        })
     );
     this.loading = false;
+    this.submitted = false;
+    this.registerForm.reset();
   }
 }

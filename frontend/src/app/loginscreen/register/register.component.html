@@ -1,5 +1,5 @@
 <div>
-  <div [style.color]="'white'" *ngIf="error" class="alert alert-danger">{{error}}</div>
+  <div [style.color]="'white'" *ngIf="!succesRegistration" class="alert alert-danger">{{error}}</div>
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="username">E-mail</label>
@@ -39,5 +39,6 @@
         Registreer
       </button>
     </div>
+    <div [style.color]="'white'" *ngIf="succesRegistration">{{message}}</div>
   </form>
 </div>
