@@ -1,17 +1,18 @@
 <mat-grid-list cols="20" class="mygridlist" rowHeight="fit">
     <mat-grid-tile  class="zoekentile" colspan="20" rowspan="2">
         <mat-card>
-            <input class="zoekbalk" type="zoeken" [(ngModel)]="zoekterm" placeholder="Zoeken..." required>
-            <button class="zoekbutton" (click)="search()">zoeken</button>
+            <input class="zoekbalk" type="zoeken" [(ngModel)]="zoekterm" (keyup)="search()" placeholder="Zoeken..." required>
         </mat-card>
     </mat-grid-tile>
     <mat-grid-tile colspan="10" rowspan="20">
         <div class="container">
+            <div *ngIf="error">{{error}}</div>
             <button class="songbutton" *ngFor="let song of this.gevondenSongs">{{song}}</button>
         </div>
     </mat-grid-tile>
     <mat-grid-tile colspan="10" rowspan="20">
         <div class="container">
+            <div *ngIf="errorAlbums">{{errorAlbums}}</div>
             <button class="albumbutton" *ngFor="let album of this.gevondenAlbums">{{album}}</button>
         </div>
     </mat-grid-tile>
