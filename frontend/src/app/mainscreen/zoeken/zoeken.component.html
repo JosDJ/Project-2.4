@@ -7,13 +7,18 @@
     <mat-grid-tile colspan="10" rowspan="20">
         <div class="container">
             <div *ngIf="error">{{error}}</div>
-            <button class="songbutton" *ngFor="let song of this.gevondenSongs">{{song}}</button>
+            <button class="songbutton" *ngFor="let song of this.gevondenSongs" (click)="goToAlbum(song.album?.id)">
+                <div>{{song.title}}</div>
+            </button>
         </div>
     </mat-grid-tile>
     <mat-grid-tile colspan="10" rowspan="20">
         <div class="container">
             <div *ngIf="errorAlbums">{{errorAlbums}}</div>
-            <button class="albumbutton" *ngFor="let album of this.gevondenAlbums">{{album}}</button>
+            <button class="albumbutton" *ngFor="let album of this.gevondenAlbums" (click)="goToAlbum(album.id)">
+                <div><img src="{{environment.apiUrl}}/{{album.album_cover?.filepath}}" /></div>
+                <div>{{album.title}}</div>
+            </button>
         </div>
     </mat-grid-tile>
 </mat-grid-list>
