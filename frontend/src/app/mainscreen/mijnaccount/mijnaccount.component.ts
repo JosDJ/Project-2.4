@@ -60,6 +60,7 @@ export class MijnaccountComponent implements OnInit {
         res => console.log(res),
         err => console.log(err)
       );
+    this.loading = false;
   }
 
   formatDate(date: Date): string {
