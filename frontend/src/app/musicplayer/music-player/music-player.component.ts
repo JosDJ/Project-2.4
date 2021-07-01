@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { environment } from 'src/app/environment';
 import { CurrentSong } from 'src/app/interfaces/current-song';
 import { Song } from 'src/app/interfaces/song';
 import { StreamState } from 'src/app/interfaces/stream-state';
@@ -23,13 +25,24 @@ export class MusicPlayerComponent implements OnInit {
     error: false
   };
 
-  queue: Song[] = [];
+  isFavorite: boolean = false;
 
-  constructor(private audioService: AudioService, private fileService: ApiService) {
+  queue: Song[] = [];
+  environment = environment;
+
+  constructor(private audioService: AudioService, private apiService: ApiService, private router: Router) {
+
     this.audioService.getState().subscribe(state => {
       this.state = state;
 
+      if (this.state.currentSong && (this.state.currentTime == 0)) {
+        this.apiService.getFavoriteById(this.state.currentSong?.song?.id).subscribe(f => this.isFavorite = true, err => {
+          this.isFavorite = false;
+        });
+      }
+
       if (this.state.duration != 0) {
+
         if (this.state.currentTime == this.state.duration && !this.isLastPlaying()) {
           setTimeout(() => {
             this.next()
@@ -92,6 +105,30 @@ export class MusicPlayerComponent implements OnInit {
     console.log(value);
 
     this.audioService.seekTo(parseFloat(value));
+  }
+
+  goToAlbum(id: number) {
+    this.router.navigate([`/luisteren/albums/${id}`]);
+  }
+
+  addSongToFavorites(song: Song | undefined) {
+    if (song) {
+      this.isFavorite = true
+
+      this.apiService.addSongToFavoritesById(song.id).subscribe(s => {
+        console.log("added:" + s.title);
+      }, err => console.log(err));
+    }
+  }
+
+  removeSongFromFavorites(song: Song | undefined) {
+    if (song) {
+      this.isFavorite = false
+
+      this.apiService.removeSongFromFavoritesById(song.id).subscribe(() => {
+        console.log("removed: " + song.title);
+      }, err => console.log(err))
+    }
   }
 
 }

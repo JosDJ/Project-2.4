@@ -7,7 +7,7 @@
     <mat-grid-tile colspan="10" rowspan="20">
         <div class="container">
             <div *ngIf="error">{{error}}</div>
-            <button class="songbutton" *ngFor="let song of this.gevondenSongs" (click)="goToAlbum(song.album?.id)">
+            <button class="songbutton" *ngFor="let song of this.gevondenSongs" (click)="goToAlbum(song.album_id)">
                 <div>{{song.title}}</div>
             </button>
         </div>

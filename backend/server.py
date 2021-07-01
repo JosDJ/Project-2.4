@@ -591,6 +591,20 @@ def get_country_by_id(id: int) -> pydantic_schemas.Country:
 
     return pydantic_schemas.Country.from_orm(country)
 
+@app.post('/favorites/id/{id}', response_model=pydantic_schemas.Song, tags=['favorites'])
+def add_song_to_favorites_by_id(id: int, user: models.User = Depends(get_current_user)) -> pydantic_schemas.Song:
+    song = database.get_song_by_id(id)
+    u = database.get_user_by_id(user.id)
+
+    if not song:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Favorite not found.")
+
+    u.favorites.append(song)
+
+    database.session.commit()
+
+    return pydantic_schemas.Song.from_orm(song)
+
 
 @app.get('/favorites', response_model=List[pydantic_schemas.Song], tags=['favorites'])
 def get_favorites(user: models.User = Depends(get_current_user)) -> List[pydantic_schemas.Song]:
@@ -598,3 +612,24 @@ def get_favorites(user: models.User = Depends(get_current_user)) -> List[pydanti
         favorite) for favorite in user.favorites]
 
     return favorites
+
+@app.get('/favorites/id/{id}', response_model=pydantic_schemas.Song, tags=['favorites'])
+def get_favorite_by_id(id: int, user: models.User = Depends(get_current_user)) -> pydantic_schemas.Song:
+    favorite = next((f for f in user.favorites if f.id == id), None)
+
+    if not favorite:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Favorite not found.")
+
+    return pydantic_schemas.Song.from_orm(favorite)
+
+@app.delete('/favorites/id/{id}', response_model=pydantic_schemas.Song, tags=['favorites'])
+def remove_song_to_favorites_by_id(id: int, user: models.User = Depends(get_current_user)) -> pydantic_schemas.Song:
+    song = database.get_song_by_id(id)
+    u = database.get_user_by_id(user.id)
+
+    if not song:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Favorite not found.")
+
+    u.favorites.remove(song)
+
+    database.session.commit()

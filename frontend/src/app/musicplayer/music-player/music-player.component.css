@@ -72,3 +72,7 @@
 .media-buttons button:disabled {
     color: grey;
 }
+
+.song-title {
+    width: 200px;
+}

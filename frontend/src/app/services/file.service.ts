@@ -46,8 +46,22 @@ export class ApiService {
     return this.http.get<Playlist>(`${environment.apiUrl}/playlists/id/${id}`);
   }
 
-  getPlaylists() : Observable<Playlist[]> {
+  getPlaylists(): Observable<Playlist[]> {
     return this.http.get<Playlist[]>(`${environment.apiUrl}/playlists`);
+  }
+
+  getFavoriteById(id: number): Observable<Song> {
+    console.log(id);
+
+    return this.http.get<Song>(`${environment.apiUrl}/favorites/id/${id}`);
+  }
+
+  addSongToFavoritesById(id: number): Observable<Song> {
+    return this.http.post<Song>(`${environment.apiUrl}/favorites/id/${id}`, null)
+  }
+
+  removeSongFromFavoritesById(id: number): Observable<void> {
+    return this.http.delete<void>(`${environment.apiUrl}/favorites/id/${id}`)
   }
 
   uploadSongFile(songFile: File): Observable<FileUploaded> {
@@ -85,14 +99,14 @@ export class ApiService {
 
     return result;
   }
-  
-  deleteSong(id:number): Observable<any> {
+
+  deleteSong(id: number): Observable<any> {
     const result = this.http.delete<any>(`${environment.apiUrl}/songs/id/${id}`);
 
     return result
   }
 
-  getSongById(id:number): Observable<Song> {
+  getSongById(id: number): Observable<Song> {
     const result = this.http.get<Song>(`${environment.apiUrl}/songs/id/${id}`);
 
     return result
