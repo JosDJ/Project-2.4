@@ -82,9 +82,7 @@ export class AuthService {
       country_id: country,
       password
     };
-    console.log(putBody);
     const result = this.http.put<any>(`${environment.apiUrl}/users/email/${user.email}`, putBody, httpOptions);
-    // const result = this.http.put<any>(`${environment.apiUrl}/users/${user.email}`, putBody, httpOptions);
     return result;
   }
 }
