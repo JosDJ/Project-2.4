@@ -73,6 +73,8 @@ export class UploadComponent implements OnInit {
 
   title: string = '';
   artist: string = '';
+  zoektermArtistSongs: string = '';
+  zoektermArtistAlbum: string = '';
   titleAlbum: string = '';
   genreAlbum: string = '';
   artistAlbum: string = '';
@@ -82,6 +84,8 @@ export class UploadComponent implements OnInit {
 
   genres: Genre[] = [];
   artists:Artist[] = [];
+  artistsSongs: Artist[] = [];
+  artistsAlbum: Artist[] = [];
 
   message: string = "";
   selectedImage: File | null = null;
@@ -226,6 +230,24 @@ export class UploadComponent implements OnInit {
   onFileSelected(event: any) {
     this.uploadSongForm.patchValue({ file: event.target.files[0] });
     this.uploadSongForm.get('file')?.updateValueAndValidity();
+  }
+
+  getAvailableArtistsSongs(zoektermArtistSongs: any): void{
+    this.artistsSongs = [];
+    this.dataParser.getallArtistsByName(zoektermArtistSongs).subscribe(artistnames => {
+      for(let i=0; i<artistnames.length; i++){
+        this.artistsSongs.push(artistnames[i]);
+      }
+    })
+  }
+
+  getAvailableArtistsAlbums(zoektermArtistAlbum: any): void{
+    this.artistsAlbum = [];
+    this.dataParser.getallArtistsByName(zoektermArtistAlbum).subscribe(artistnames => {
+      for(let i=0; i<artistnames.length; i++){
+        this.artistsAlbum.push(artistnames[i]);
+      }
+    })
   }
 }
 

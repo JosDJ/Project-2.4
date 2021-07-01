@@ -12,7 +12,7 @@
                     <div>
                         <label class="item">Nieuw artiest</label>
                         <br>
-                        <input type="text" formControlName="newArtist" class="item" placeholder="Enter new Artist" required>
+                        <input type="text" formControlName="newArtist" class="item" placeholder="Enter new artist" required>
                         <br>
                         <button (click)="addArtist()">Add artist</button>
                     </div>
@@ -29,11 +29,13 @@
                         <input type="text" formControlName="title" class="item" placeholder="Enter title" required>
                     </div>
                     <div>
-                        <label class="item">Artiest</label>
+                        <label class="item">Artist</label>
                         <br>
-                        <select formControlName='artist' multiple style="width: 200px;" required placeholder="Enter artist">
-                            <option *ngFor="let artiest of artists" value="{{artiest.id}}">
-                                {{artiest.name}}
+                        <input type="text" formControlName="artist" class="item" [(ngModel)]="zoektermArtistSongs" (keyup)="getAvailableArtistsSongs(zoektermArtistSongs)" placeholder="Enter artist" required>
+                        <br>
+                        <select formControlName='artist' multiple style="width: 200px;">
+                            <option *ngFor="let artist of artistsSongs" value="{{artist.id}}">
+                                {{artist.name}}
                             </option> 
                         </select>
                     </div>
@@ -68,8 +70,10 @@
                     <div>
                         <label class="item">Artist album</label>
                         <br>
+                        <input type="text" formControlName="artist_id" class="item" [(ngModel)]="zoektermArtistAlbum" (keyup)="getAvailableArtistsAlbums(zoektermArtistAlbum)" placeholder="Enter artist" required>
+                        <br>
                         <select formControlName='artist_id' multiple style="width: 200px;">
-                            <option *ngFor="let artiest of artists" value="{{artiest.id}}">
+                            <option *ngFor="let artiest of artistsAlbum" value="{{artiest.id}}">
                                 {{artiest.name}}
                             </option> 
                         </select>
