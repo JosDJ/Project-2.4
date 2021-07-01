@@ -17,7 +17,6 @@ export class MijnaccountComponent implements OnInit {
   user!: User;
   updateForm!: FormGroup;
   submitted = false;
-  error!: string;
   loading = false;
   countries: Country[] = [];
 

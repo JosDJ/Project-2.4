@@ -1,60 +1,53 @@
-<mat-grid-list cols="10" class="mygridlist" rowHeight="fit">
-    <mat-grid-tile colspan="5" class="gridTile" [style.background]="'white'">
-        <label class="userText">Email:</label>
-    </mat-grid-tile>
-    <mat-grid-tile colspan="5" class="gridTile" [style.background]="'white'">
-        <label class="userText">{{user!.email}}</label>
-    </mat-grid-tile>
-    <mat-grid-tile colspan="5" class="gridTile" [style.background]="'white'">
-        <label class="userText">Geboortedatum:</label>
-    </mat-grid-tile>
-    <mat-grid-tile colspan="5" class="gridTile" [style.background]="'white'">
-        <label class="userText">{{formatDate(user!.birthday)}}</label>
-    </mat-grid-tile>
-    <mat-grid-tile colspan="5" class="gridTile" [style.background]="'white'">
-        <label class="userText">Land of regio:</label>
-    </mat-grid-tile>
-    <mat-grid-tile colspan="5" class="gridTile" [style.background]="'white'">
-        <label class="userText">{{user!.country.name}}</label>
-    </mat-grid-tile>
-  <mat-grid-tile colspan="5" rowspan="1.5" class="gridTile" [style.background]="'white'">
-    <div>
-      <p>Update Account</p>
-      <div [style.color]="'white'" *ngIf="error" class="alert alert-danger">{{error}}</div>
-      <form [formGroup]="updateForm" (ngSubmit)="onSubmit()">
-        <div class="form-group">
-          <label for="password">New Password: </label>
-          <br>
-          <input type="password" placeholder="new password" formControlName="password" class="form-control"
-                 [ngClass]="{ 'is-invalid': submitted && f.password.errors }"/>
-          <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-            <div [style.color]="'white'" *ngIf="f.password.errors.required">Password is required</div>
+<div class="container">
+  <mat-card class="account-card">
+    <mat-card-title class="account-card-title">{{user.email}}</mat-card-title>
+    <mat-card-content>
+      <div class="account-card-content-wrapper">
+        <div class="account-card-content">
+          <!-- <div>{{user.email}}</div> -->
+          <div>
+            <form class="updateForm" [formGroup]="updateForm" (ngSubmit)="onSubmit()">
+              <div class="form-group">
+                <label for="password">Nieuw wachtwoord: </label>
+                <br>
+                <input type="password" placeholder="Nieuw wachtwoord" formControlName="password" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+                <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                  <div [style.color]="'white'" *ngIf="f.password.errors.required">Dit veld is verplicht</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="birthday">Geboortedatum: </label>
+                <br>
+                <input type="date" [(ngModel)]="user.birthday" formControlName="birthday" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f.birthday.errors }" />
+                <div *ngIf="submitted && f.birthday.errors" class="invalid-feedback">
+                  <div [style.color]="'white'" *ngIf="f.birthday.errors.required">Dit veld is verplicht</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="country">Land of regio: </label>
+                <div><select class="item" type=country formControlName="country" class="form-control">
+                    <option *ngFor="let country of countries" value="{{country.id}}"
+                      [selected]="country | countriesEqual: user.country | selectIfTrue">
+                      {{country.name}}
+                    </option>
+                  </select>
+                </div>
+                <div *ngIf="submitted && f.country.errors" class="invalid-feedback">
+                  <div [style.color]="'white'" *ngIf="f.country.errors.required">Dit veld is verplicht</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <button [disabled]="loading" class="btn btn-primary">
+                  <span href="" *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                  Update account
+                </button>
+              </div>
+            </form>
           </div>
         </div>
-        <div class="form-group">
-          <label for="birthday">Birthday: </label>
-          <br>
-          <input type="date" [(ngModel)]="user.birthday" formControlName="birthday" class="form-control"
-                 [ngClass]="{ 'is-invalid': submitted && f.birthday.errors }"/>
-          <div *ngIf="submitted && f.birthday.errors" class="invalid-feedback">
-            <div [style.color]="'white'" *ngIf="f.birthday.errors.required">Birthday is required</div>
-          </div>
-        </div>
-        <label for="country">Country: </label>
-        <div class="form-group">
-          <select class="item" type=country formControlName="country" class="form-control">
-            <option *ngFor="let country of countries" value="{{country.id}}">
-              {{country.name}}
-            </option>
-          </select>
-        </div>
-        <div class="form-group">
-          <button [disabled]="loading" class="btn btn-primary">
-            <span href="" *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-            Update Account
-          </button>
-        </div>
-      </form>
-    </div>
-  </mat-grid-tile>
-</mat-grid-list>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

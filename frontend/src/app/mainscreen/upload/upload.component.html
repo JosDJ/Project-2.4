@@ -6,86 +6,96 @@
     </mat-card>
     <div class="upload-forms">
         <mat-card class="upload-artist-form">
-            <form [formGroup]="uploadArtistForm">
-                <div class="container">
-                    <div [style.color]="'white'" *ngIf="errorMsggg != ''">{{errorMsggg}}</div>
-                    <div>
-                        <label class="item">Nieuw artiest</label>
-                        <br>
-                        <input type="text" formControlName="newArtist" class="item" placeholder="Enter new artist" required>
-                        <br>
-                        <button (click)="addArtist()">Add artist</button>
+            <mat-card-title>Nieuwe artiest aanmaken</mat-card-title>
+
+            <mat-card-content>
+                <form [formGroup]="uploadArtistForm">
+                    <div class="container">
+                        <div [style.color]="'white'" *ngIf="errorMsggg != ''">{{errorMsggg}}</div>
+                        <div>
+                            <label class="item">Naam</label>
+                            <br>
+                            <input type="text" formControlName="newArtist" class="item" placeholder="Naam artiest" required>
+                            <br>
+                            <button (click)="addArtist()">Artiest aanmaken</button>
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </mat-card-content>
         </mat-card>
         <mat-card class="upload-song-form">
-            <form [formGroup]="uploadSongForm">
-                <div class="container">
-                    <div [style.color]="'white'" *ngIf="errorMsg != ''">{{errorMsg}}</div>
-                    <div>
-                        <label class="item">Titel</label>
-                        <br>
-                        <input type="text" formControlName="title" class="item" placeholder="Enter title" required>
+            <mat-card-title>Song toevoegen</mat-card-title>
+            <mat-card-content>
+                <form [formGroup]="uploadSongForm">
+                    <div class="container">
+                        <div [style.color]="'white'" *ngIf="errorMsg != ''">{{errorMsg}}</div>
+                        <div>
+                            <label class="item">Titel</label>
+                            <br>
+                            <input type="text" formControlName="title" class="item" placeholder="Titel" required>
+                        </div>
+                        <div>
+                            <label class="item">Artist</label>
+                            <br>
+                            <input type="text" formControlName="artist" class="item" [(ngModel)]="zoektermArtistSongs" (keyup)="getAvailableArtistsSongs(zoektermArtistSongs)" placeholder="Naam artiest" required>
+                            <br>
+                            <select formControlName='artist' multiple style="width: 200px;">
+                                <option *ngFor="let artist of artistsSongs" value="{{artist.id}}">
+                                    {{artist.name}}
+                                </option> 
+                            </select>
+                        </div>
+                        <div>
+                            <label class="item">Song</label>
+                            <br>
+                            <input #song class='audioFileInput' type="file" accept="audio/mpeg" (change)="onFileSelected($event)">
+                            <br>
+                            <button (click)="addSong()">Song toevoegen</button>
+                        </div>
                     </div>
-                    <div>
-                        <label class="item">Artist</label>
-                        <br>
-                        <input type="text" formControlName="artist" class="item" [(ngModel)]="zoektermArtistSongs" (keyup)="getAvailableArtistsSongs(zoektermArtistSongs)" placeholder="Enter artist" required>
-                        <br>
-                        <select formControlName='artist' multiple style="width: 200px;">
-                            <option *ngFor="let artist of artistsSongs" value="{{artist.id}}">
-                                {{artist.name}}
-                            </option> 
-                        </select>
-                    </div>
-                    <div>
-                        <label class="item">Liedje</label>
-                        <br>
-                        <input #song class='audioFileInput' type="file" accept="audio/mpeg" (change)="onFileSelected($event)">
-                        <br>
-                        <button (click)="addSong()">Add song</button>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </mat-card-content>
         </mat-card>
         <mat-card class="upload-album-form">
-            <form [formGroup]="uploadAlbumForm">
-                <div class="container">
-                    <div [style.color]="'white'" *ngIf="errorMsgg != ''">{{errorMsgg}}</div>
-                    <div>
-                        <label class="item">Title album </label>
-                        <br>
-                        <input class="item" type="text" formControlName="title" placeholder="Enter title" required>
+            <mat-card-title>Album</mat-card-title>
+            <mat-card-content>
+                <form [formGroup]="uploadAlbumForm">
+                    <div class="container">
+                        <div [style.color]="'white'" *ngIf="errorMsgg != ''">{{errorMsgg}}</div>
+                        <div>
+                            <label class="item">Title album </label>
+                            <br>
+                            <input class="item" type="text" formControlName="title" placeholder="Titel" required>
+                        </div>
+                        <div>
+                            <label class="item genre-label">Genre album</label>
+                            <br>
+                            <select class="item" formControlName="genre_id">
+                                <option *ngFor="let genre of genres" value="{{genre.id}}">
+                                    {{genre.title}}
+                                </option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="item">Artist album</label>
+                            <br>
+                            <input type="text" formControlName="artist_id" class="item" [(ngModel)]="zoektermArtistAlbum" (keyup)="getAvailableArtistsAlbums(zoektermArtistAlbum)" placeholder="Naam artiest" required>
+                            <br>
+                            <select formControlName='artist_id' multiple style="width: 200px;">
+                                <option *ngFor="let artiest of artistsAlbum" value="{{artiest.id}}">
+                                    {{artiest.name}}
+                                </option> 
+                            </select>
+                        </div>
+                        <div>
+                            <label class="item">Releasedatum</label>
+                            <br>
+                            <input class="item" type="date" formControlName="releaseDate" required>
+                        </div>
+                        <button class="uploadbutton" (click)='upload()'>Upload album</button>
                     </div>
-                    <div>
-                        <label class="item genre-label">Genre album</label>
-                        <br>
-                        <select class="item" formControlName="genre_id">
-                            <option *ngFor="let genre of genres" value="{{genre.id}}">
-                                {{genre.title}}
-                            </option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="item">Artist album</label>
-                        <br>
-                        <input type="text" formControlName="artist_id" class="item" [(ngModel)]="zoektermArtistAlbum" (keyup)="getAvailableArtistsAlbums(zoektermArtistAlbum)" placeholder="Enter artist" required>
-                        <br>
-                        <select formControlName='artist_id' multiple style="width: 200px;">
-                            <option *ngFor="let artiest of artistsAlbum" value="{{artiest.id}}">
-                                {{artiest.name}}
-                            </option> 
-                        </select>
-                    </div>
-                    <div>
-                        <label class="item">Releasedate album</label>
-                        <br>
-                        <input class="item" type="date" formControlName="releaseDate" required>
-                    </div>
-                    <button class="uploadbutton" (click)='upload()'>Upload album</button>
-                </div>
-            </form>
+                </form>
+            </mat-card-content>
         </mat-card>
     </div>
     <mat-card class="song-list">

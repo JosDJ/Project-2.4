@@ -12,6 +12,7 @@ import { Song } from 'src/app/interfaces/song';
 import { AlbumIn } from 'src/app/interfaces/albumin';
 import { ArtistIn } from 'src/app/interfaces/artistIn';
 import { Artist } from 'src/app/interfaces/artist';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-upload',
@@ -92,7 +93,8 @@ export class UploadComponent implements OnInit {
   imgURL = "assets/addimage.png";
 
   constructor(private http: HttpClient,
-    private dataParser: ApiService
+    private dataParser: ApiService,
+    private router: Router
   ) {
     http.get<Genre[]>(`${environment.apiUrl}/genres`).subscribe(genres => this.genres = genres);
     http.get<Artist[]>(`${environment.apiUrl}/artists`).subscribe(artists => this.artists = artists);
@@ -168,7 +170,11 @@ export class UploadComponent implements OnInit {
           album_cover_id: uploadedFile.id
         };
         
-        this.dataParser.uploadAlbum(album).subscribe((uploadedAlbum) => this.errorMsgg = 'Het album: ' + uploadedAlbum.title + ' is succesvol toegevoegd')
+        this.dataParser.uploadAlbum(album).subscribe((uploadedAlbum) => {
+          this.errorMsgg = 'Het album: ' + uploadedAlbum.title + ' is succesvol toegevoegd';
+
+          this.router.navigate([`/albums/${uploadedAlbum.id}`]);
+        });
       });
     }
     else {

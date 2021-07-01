@@ -1,7 +1,3 @@
-.mygridlist {
-    height: 75%;
-}
-
 .userText {
     font-size: 3vw;
 }
@@ -19,4 +15,37 @@ select {
 p {
   font-size: large;
   font-weight: bold;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+}
+
+.account-card {
+  width: 800px;
+  margin-top: 15px;
+  height: 250px;
+}
+
+.account-card-title {
+  text-align: center;
+}
+
+.account-card-content {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.account-card-content-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.updateForm > div {
+  margin-bottom: 15px;
 }

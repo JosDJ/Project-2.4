@@ -19,6 +19,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { FormatTimePipe } from '../pipes/format-time.pipe';
 import { GetTotalDurationPipe } from '../pipes/get-total-duration.pipe';
 import { GetFullYearPipe } from '../pipes/get-full-year.pipe';
+import { SelectIfTruePipe } from '../pipes/select-if-true.pipe';
+import { CountriesEqualPipe } from '../pipes/countries-equal.pipe';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,9 @@ import { GetFullYearPipe } from '../pipes/get-full-year.pipe';
     AlbumViewerComponent,
     FormatTimePipe,
     GetTotalDurationPipe,
-    GetFullYearPipe
+    GetFullYearPipe,
+    SelectIfTruePipe,
+    CountriesEqualPipe
   ],
   exports: [
     HomeComponent,
