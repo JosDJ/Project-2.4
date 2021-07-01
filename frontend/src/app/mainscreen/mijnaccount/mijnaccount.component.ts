@@ -34,7 +34,6 @@ export class MijnaccountComponent implements OnInit {
 
   ngOnInit(): void {
     this.updateForm = this.formBuilder.group({
-      username: ['', Validators.required],
       password: ['', Validators.required],
       country: ['', Validators.required],
       birthday: ['', Validators.required]
