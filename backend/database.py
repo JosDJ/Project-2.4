@@ -296,36 +296,45 @@ def create_dummy_data():
         birthday=datetime.date(1998, 5, 4),
         country=countries[0])
 
-    artist = models.Artist(name='Metallica')
+    # artist = models.Artist(name='Metallica')
 
-    genre = models.Genre(title='Metal')
+    # genre = models.Genre(title='Metal')
 
-    songs = [
-        models.Song(title='Enter Sandman', artists=[artist]),
-        models.Song(title='Sad but True', artists=[artist]),
-        models.Song(title='Holier Than Thou', artists=[artist]),
-        models.Song(title='The Unforgiven', artists=[artist]),
-        models.Song(title='Wherever I May Roam', artists=[artist]),
-        models.Song(title='Don\'t Tread on Me', artists=[artist]),
-        models.Song(title='Through the Never', artists=[artist]),
-        models.Song(title='Nothing Else Matters', artists=[artist]),
-        models.Song(title='Of Wolf and Man', artists=[artist]),
-        models.Song(title='The God That Failed', artists=[artist]),
-        models.Song(title='My Friend of Misery', artists=[artist]),
-        models.Song(title='The Struggle Within', artists=[artist]),
-    ]
+    # songs = [
+    #     models.Song(title='Enter Sandman', artists=[artist]),
+    #     models.Song(title='Sad but True', artists=[artist]),
+    #     models.Song(title='Holier Than Thou', artists=[artist]),
+    #     models.Song(title='The Unforgiven', artists=[artist]),
+    #     models.Song(title='Wherever I May Roam', artists=[artist]),
+    #     models.Song(title='Don\'t Tread on Me', artists=[artist]),
+    #     models.Song(title='Through the Never', artists=[artist]),
+    #     models.Song(title='Nothing Else Matters', artists=[artist]),
+    #     models.Song(title='Of Wolf and Man', artists=[artist]),
+    #     models.Song(title='The God That Failed', artists=[artist]),
+    #     models.Song(title='My Friend of Misery', artists=[artist]),
+    #     models.Song(title='The Struggle Within', artists=[artist]),
+    # ]
 
-    album = models.Album(title='Metallica', artist=artist,
-                         songs=songs, release_date=datetime.date(1991, 8, 12), genre=genre)
+    # album = models.Album(title='Metallica', artist=artist,
+    #                      songs=songs, release_date=datetime.date(1991, 8, 12), genre=genre)
 
-    user.favorites = songs
+    # user.favorites = songs
 
     session.add(user)
-    session.add(album)
+    # session.add(album)
 
-    song_with_no_album = models.Song(title='No Album!@#!@#', artists=[artist])
+    # song_with_no_album = models.Song(title='No Album!@#!@#', artists=[artist])
 
-    session.add(song_with_no_album)
+    # session.add(song_with_no_album)
+
+    genres = [
+        models.Genre(title='Metal'),
+        models.Genre(title='Rap'),
+        models.Genre(title='Pop'),
+        models.Genre(title='Country'),
+    ]
+
+    session.bulk_save_objects(genres)
 
     session.commit()
 

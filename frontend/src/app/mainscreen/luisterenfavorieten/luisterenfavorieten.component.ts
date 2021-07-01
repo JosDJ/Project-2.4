@@ -11,12 +11,22 @@ import { Song } from 'src/app/interfaces/song';
 })
 export class LuisterenfavorietenComponent implements OnInit {
   playlist: Playlist = {id: 0, title: 'Favorieten', songs: []};
+  hasError: boolean = false;
+  errorMsg: string = '';
 
   constructor(private http: HttpClient) {
     this.http.get<Song[]>(`${environment.apiUrl}/favorites`).subscribe(songs => {
       if (this.playlist){
         this.playlist.songs = songs;
+
+        if (this.playlist.songs.length == 0) {
+          this.hasError = true;
+          this.errorMsg = 'Geen favorieten gevonden.';
+        }
       }
+    }, err => {
+      this.hasError = true;
+      this.errorMsg = 'Geen favorieten gevonden.';
     });
   }
 

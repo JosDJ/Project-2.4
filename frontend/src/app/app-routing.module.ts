@@ -11,6 +11,7 @@ import { LuisterengenresComponent } from './mainscreen/luisterengenres/luisteren
 import { LuisterenplaylistsComponent } from './mainscreen/luisterenplaylists/luisterenplaylists.component';
 import { LuisterenrecentComponent } from './mainscreen/luisterenrecent/luisterenrecent.component';
 import { MijnaccountComponent } from './mainscreen/mijnaccount/mijnaccount.component';
+import { PlaylistViewerWrapperComponent } from './mainscreen/playlist-viewer-wrapper/playlist-viewer-wrapper.component';
 import { UploadComponent } from './mainscreen/upload/upload.component';
 import { ZoekenComponent } from './mainscreen/zoeken/zoeken.component';
 
@@ -24,7 +25,8 @@ const routes: Routes = [
   { path: 'luisteren/recent', component: LuisterenrecentComponent, canActivate: [AuthGuard] },
   { path: 'mijnaccount', component: MijnaccountComponent, canActivate: [AuthGuard] },
   { path: 'upload', component: UploadComponent, canActivate: [AuthGuard] },
-  { path: 'albums/:id', component: AlbumViewerComponent, canActivate: [AuthGuard]},
+  { path: 'luisteren/albums/:id', component: AlbumViewerComponent, canActivate: [AuthGuard]},
+  { path: 'luisteren/playlists/:id', component: PlaylistViewerWrapperComponent, canActivate: [AuthGuard]},
   { path: 'zoeken', component: ZoekenComponent, canActivate: [AuthGuard] },
 ];
 

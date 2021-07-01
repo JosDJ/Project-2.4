@@ -21,6 +21,7 @@ import { GetTotalDurationPipe } from '../pipes/get-total-duration.pipe';
 import { GetFullYearPipe } from '../pipes/get-full-year.pipe';
 import { SelectIfTruePipe } from '../pipes/select-if-true.pipe';
 import { CountriesEqualPipe } from '../pipes/countries-equal.pipe';
+import { PlaylistViewerWrapperComponent } from './playlist-viewer-wrapper/playlist-viewer-wrapper.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { CountriesEqualPipe } from '../pipes/countries-equal.pipe';
     GetTotalDurationPipe,
     GetFullYearPipe,
     SelectIfTruePipe,
-    CountriesEqualPipe
+    CountriesEqualPipe,
+    PlaylistViewerWrapperComponent
   ],
   exports: [
     HomeComponent,

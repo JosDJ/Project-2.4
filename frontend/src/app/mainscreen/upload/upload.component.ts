@@ -173,7 +173,7 @@ export class UploadComponent implements OnInit {
         this.dataParser.uploadAlbum(album).subscribe((uploadedAlbum) => {
           this.errorMsgg = 'Het album: ' + uploadedAlbum.title + ' is succesvol toegevoegd';
 
-          this.router.navigate([`/albums/${uploadedAlbum.id}`]);
+          this.router.navigate([`/luisteren/albums/${uploadedAlbum.id}`]);
         });
       });
     }

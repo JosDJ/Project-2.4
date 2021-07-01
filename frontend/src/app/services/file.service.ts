@@ -46,6 +46,10 @@ export class ApiService {
     return this.http.get<Playlist>(`${environment.apiUrl}/playlists/id/${id}`);
   }
 
+  getPlaylists() : Observable<Playlist[]> {
+    return this.http.get<Playlist[]>(`${environment.apiUrl}/playlists`);
+  }
+
   uploadSongFile(songFile: File): Observable<FileUploaded> {
     const body = new FormData();
     body.append('file', songFile);

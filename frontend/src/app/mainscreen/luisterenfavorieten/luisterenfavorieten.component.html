@@ -1,4 +1,5 @@
 <div class="container">
-  <app-playlist-viewer [playlist]="playlist"></app-playlist-viewer>
+  <app-playlist-viewer [playlist]="playlist" *ngIf="!hasError"></app-playlist-viewer>
+  <div *ngIf="hasError">{{errorMsg}}</div>
 </div>
 

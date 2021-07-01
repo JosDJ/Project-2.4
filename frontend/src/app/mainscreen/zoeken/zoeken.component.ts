@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { environment } from 'src/app/environment';
+import { Album } from 'src/app/interfaces/album';
+import { Song } from 'src/app/interfaces/song';
 import { ApiService } from 'src/app/services/file.service';
 
 @Component({
@@ -9,12 +13,14 @@ import { ApiService } from 'src/app/services/file.service';
 export class ZoekenComponent implements OnInit {
 
   zoekterm:string= '';
-  gevondenSongs:string[] = [];
-  gevondenAlbums:string[] = [];
+  gevondenSongs: Song[] = [];
+  gevondenAlbums: Album[] = [];
   error!: string;
   errorAlbums!: string;
 
-  constructor(private dataParser: ApiService) { }
+  environment = environment;
+
+  constructor(private dataParser: ApiService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -22,28 +28,28 @@ export class ZoekenComponent implements OnInit {
   search(): void {
     this.error = '';
     this.errorAlbums = '';
-    this.gevondenSongs = [];
+    this.gevondenSongs  = [];
     this.gevondenAlbums = [];
     if (this.zoekterm == ''){
 
     }else{
       this.dataParser.getallSongsByTitle(this.zoekterm).subscribe(songs => {
-        for(let i=0; i<songs.length; i++){
-          this.gevondenSongs.push(songs[i].title);
-        }
+        this.gevondenSongs = songs;
       },
       (error: string) => {
         this.error = 'no songs found';
       })
       this.dataParser.getallAlbumsByTitle(this.zoekterm).subscribe(albums => {
-        for(let i=0; i<albums.length; i++){
-          this.gevondenAlbums.push(albums[i].title);
-        }
+        this.gevondenAlbums = albums;
       },
       (errorAlbums: string) => {
         this.errorAlbums = 'no albums found';
       })
     }  
+  }
+
+  goToAlbum(id: number) {
+    this.router.navigate([`/luisteren/albums/${id}`]);
   }
 
 }

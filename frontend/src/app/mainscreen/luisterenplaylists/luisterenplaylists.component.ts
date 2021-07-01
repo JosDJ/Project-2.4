@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { environment } from 'src/app/environment';
 import { Playlist } from 'src/app/interfaces/playlist';
 import { Song } from 'src/app/interfaces/song';
+import { ApiService } from 'src/app/services/file.service';
 
 @Component({
   selector: 'app-luisterenplaylists',
@@ -12,23 +14,20 @@ import { Song } from 'src/app/interfaces/song';
 export class LuisterenplaylistsComponent implements OnInit {
   playlists: Playlist[] = [
   ];
+  errorMsg: string = '';
+  hasError: boolean = false;
 
-  // activePlaylist: Playlist | null = null;
-  activePlaylist: Playlist | null = null;
-
-  constructor(private http: HttpClient) { 
-    http.get<Playlist[]>(`${environment.apiUrl}/playlists`).subscribe(playlists => this.playlists = playlists);
+  constructor(private http: HttpClient, private router: Router, private apiService: ApiService) { 
+    this.apiService.getPlaylists().subscribe(playlists => this.playlists = playlists, err => {
+      this.errorMsg = 'Geen playlists gevonden.';
+      this.hasError = true;
+    });
   }
 
   ngOnInit(): void {
   }
 
-  openPlaylist(playlist: Playlist) {
-    this.activePlaylist = playlist;
+  goToPlaylist(id: number) {
+    this.router.navigate([`/luisteren/playlists/${id}`]);
   }
-
-  resetPlaylist() {
-    this.activePlaylist = null;
-  }
-
 }

@@ -89,6 +89,8 @@ export class MusicPlayerComponent implements OnInit {
   onSliderChangeEnd($event: Event) {
     const value: string = ($event.target as HTMLInputElement).value;
 
+    console.log(value);
+
     this.audioService.seekTo(parseFloat(value));
   }
 
