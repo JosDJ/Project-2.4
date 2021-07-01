@@ -99,4 +99,10 @@ export class ApiService {
 
     return result
   }
+
+  getallArtistsByName(name: any): Observable<any> {
+    const result = this.http.get<any>(`${environment.apiUrl}/artists/name/${name}`);
+
+    return result
+  }
 }
