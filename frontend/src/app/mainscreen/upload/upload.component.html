@@ -31,7 +31,6 @@
                     <div>
                         <label class="item">Artiest</label>
                         <br>
-                        <input type="text" formControlName="artist" class="item" placeholder="Enter artist" required>
                         <select formControlName='artist' multiple style="width: 200px;">
                             <option *ngFor="let artiest of artists" value="{{artiest.id}}">
                                 {{artiest.name}}
@@ -69,7 +68,11 @@
                     <div>
                         <label class="item">Artist album</label>
                         <br>
-                        <input class="item" type="text" formControlName="artist" placeholder="Enter artist" required>
+                        <select formControlName='artist_id' multiple style="width: 200px;">
+                            <option *ngFor="let artiest of artists" value="{{artiest.id}}">
+                                {{artiest.name}}
+                            </option> 
+                        </select>
                     </div>
                     <div>
                         <label class="item">Releasedate album</label>
