@@ -4,7 +4,8 @@
     <mat-card class="viewer">
         <mat-card-title-group class="title-group">
             <mat-card-title>{{album?.title}}</mat-card-title>
-            <mat-card-subtitle>{{album?.artist?.name}} | {{album?.release_date | getFullYear}} | {{album?.songs?.length}} songs, {{album?.songs | getTotalDuration | formatTime}}</mat-card-subtitle>
+            <mat-card-subtitle>{{album?.artist?.name}} | {{album?.release_date | getFullYear}} |
+                {{album?.songs?.length}} songs, {{album?.songs | getTotalDuration | formatTime}}</mat-card-subtitle>
             <!-- <mat-card-subtitle>{{album!.artist.name}} | {{album!.release_date.getFullYear()}} | {{album!.songs.length}} songs, {{album!.songs | getTotalDuration | formatTime}}</mat-card-subtitle> -->
             <img src="{{apiEndpoint}}/{{album?.album_cover?.filepath}}" mat-card-lg-image />
         </mat-card-title-group>
@@ -13,8 +14,10 @@
                 <div *ngFor="let song of album!.songs; index as i" class="song">
                     <span class="song-media-buttons">
                         <a href="javascript:void(0);" class="icon">
-                            <i class="fa fa-play" *ngIf="!state?.playing || currentSong != song" (click)="play(song)"></i>
-                            <i class="fa fa-pause" *ngIf="state?.playing && currentSong == song" (click)="pause()"></i>
+                            <i class="fa fa-play" *ngIf="!state!.playing || state!.currentSong?.song?.id != song.id"
+                                (click)="play(song)"></i>
+                            <i class="fa fa-pause" *ngIf="state!.playing && state!.currentSong?.song?.id == song.id"
+                                (click)="pause()"></i>
                         </a>
                     </span>
                     <span class="song-title">{{song.title}}</span>

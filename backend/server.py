@@ -264,8 +264,8 @@ def upload_song_file(file: UploadFile = File(None), token: str = Depends(oauth2_
 
 
 @app.get('/albums/id/{id}', response_model=pydantic_schemas.Album, tags=["albums"])
-def get_album_by_id(album_id: int, token: str = Depends(oauth2_scheme)) -> pydantic_schemas.Album:
-    album = database.get_album_by_id(album_id)
+def get_album_by_id(id: int, token: str = Depends(oauth2_scheme)) -> pydantic_schemas.Album:
+    album = database.get_album_by_id(id)
 
     if not album:
         raise HTTPException(
